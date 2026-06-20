@@ -1,1 +1,69 @@
 @import "tailwindcss";
+
+@tailwind utilities;
+
+.bg-background {
+    background-color: #0a0a0a;
+}
+.text-foreground {
+    color: #f9dcd9;
+}
+.bg-card {
+    background-color: #121212;
+}
+.popover {
+    background-color: #0a0a0a;
+}
+.popover-foreground {
+    color: #f9dcd9;
+}
+.bg-primary {
+    background-color: #ef4444;
+}
+.text-primary-foreground {
+    color: #ffffff;
+}
+.bg-secondary {
+    background-color: #27272a;
+}
+.text-secondary-foreground {
+    color: #fafafa;
+}
+.bg-muted {
+    background-color: #1c1c1c;
+}
+.muted {
+    color: #a1a1aa;
+}
+.bg-accent {
+    background-color: #27272a;
+}
+.accent {
+    color: #fafafa;
+}
+.bg-destructive {
+    background-color: #ef4444;
+}
+.text-destructive-foreground {
+    color: #f9dcd9;
+}
+.border-border {
+    border-color: #27272a;
+}
+.input-input {
+    background-color: #27272a;
+}
+.text-ring {
+    color: #ef4444;
+}
+.dark {
+    --background: #0a0a0a;
+    --foreground: #f9dcd9;
+    --card: #121212;
+    --primary: #ef4444;
+    --secondary: #27272a;
+    --muted: #1c1c1c;
+    --accent: #27272a;
+    --destructive: #ef4444;
+    --border: #27272a;
+}

@@ -1,0 +1,401 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#69d8d4",
+                        "on-primary-fixed": "#410004",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#00504e",
+                        "surface-container-highest": "#42302f",
+                        "on-secondary-fixed-variant": "#3d4756",
+                        "on-tertiary-fixed": "#00201f",
+                        "primary-fixed-dim": "#ffb3ad",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#69d8d4",
+                        "error": "#ffb4ab",
+                        "surface-tint": "#ffb3ad",
+                        "inverse-surface": "#f9dcd9",
+                        "surface-variant": "#42302f",
+                        "surface-container": "#2c1c1a",
+                        "on-primary-container": "#5c0008",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#bdc7d9",
+                        "surface-container-low": "#271816",
+                        "background": "#1e100e",
+                        "surface-container-high": "#372624",
+                        "on-surface-variant": "#e4beba",
+                        "on-secondary-container": "#afb9cb",
+                        "on-secondary-fixed": "#121c2a",
+                        "secondary-fixed": "#d9e3f6",
+                        "outline": "#ab8986",
+                        "surface-container-lowest": "#180a09",
+                        "on-secondary": "#27313f",
+                        "tertiary-container": "#24a09d",
+                        "on-primary": "#68000a",
+                        "inverse-primary": "#b91a24",
+                        "surface": "#1e100e",
+                        "surface-bright": "#473533",
+                        "secondary": "#bdc7d9",
+                        "on-primary-fixed-variant": "#930013",
+                        "on-background": "#f9dcd9",
+                        "surface-dim": "#1e100e",
+                        "inverse-on-surface": "#3e2c2b",
+                        "tertiary-fixed": "#87f4f0",
+                        "primary": "#ffb3ad",
+                        "on-surface": "#f9dcd9",
+                        "on-tertiary": "#003736",
+                        "primary-container": "#ff5451",
+                        "outline-variant": "#5b403e",
+                        "on-tertiary-container": "#00302e",
+                        "secondary-container": "#404a59",
+                        "primary-fixed": "#ffdad7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "lg": "24px",
+                        "container-max": "1280px",
+                        "sm": "8px",
+                        "xl": "40px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "sidebar-width": "260px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Geist"],
+                        "label-mono": ["JetBrains Mono"],
+                        "code-block": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Geist"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Geist"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-mono": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "code-block": ["13px", {"lineHeight": "1.7", "fontWeight": "400"}],
+                        "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-sm": ["18px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #0a0a0a;
+            color: #f9dcd9;
+            overflow: hidden;
+        }
+        .code-syntax-keyword { color: #ffb3ad; }
+        .code-syntax-string { color: #69d8d4; }
+        .code-syntax-comment { color: #ab8986; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #2c1c1a; border-radius: 10px; }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary/30">
+<!-- Sidebar Component -->
+<aside class="fixed h-full w-sidebar-width left-0 top-0 bg-surface-container-lowest border-r border-outline-variant flex flex-col p-md gap-sm z-30">
+<div class="flex items-center gap-sm mb-lg px-xs">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">DevVault</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant opacity-60">v2.4.0</p>
+</div>
+</div>
+<nav class="flex flex-col gap-xs flex-1">
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-sm">inventory_2</span>
+<span class="">All Items</span>
+</a>
+<a class="flex items-center gap-md p-sm bg-secondary-container text-on-secondary-container font-medium rounded-lg transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">code</span>
+<span class="">Snippets</span>
+</a>
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-sm">terminal</span>
+<span class="">Prompts</span>
+</a>
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-sm">folder_special</span>
+<span class="">Collections</span>
+</a>
+<div class="mt-xl mb-xs px-sm">
+<span class="text-[10px] font-bold uppercase text-outline tracking-wider">Favorites</span>
+</div>
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 group" href="#">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="">Web Utilities</span>
+</a>
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 group" href="#">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="">Tailwind Snippets</span>
+</a>
+</nav>
+<button class="w-full bg-primary-container text-on-primary-container py-sm px-md font-bold rounded flex items-center justify-center gap-sm mb-md active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined">add</span>
+            New Collection
+        </button>
+<footer class="flex flex-col gap-xs border-t border-outline-variant pt-md">
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-sm">description</span>
+<span class="">Docs</span>
+</a>
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-sm">settings</span>
+<span class="">Settings</span>
+</a>
+<a class="flex items-center gap-md p-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-sm">logout</span>
+<span class="">Logout</span>
+</a>
+</footer>
+</aside>
+<!-- Top App Bar Component -->
+<header class="fixed top-0 right-0 w-[calc(100%-260px)] h-16 bg-surface border-b border-outline-variant flex items-center justify-between px-lg z-20">
+<div class="flex items-center gap-lg">
+<div class="relative">
+<span class="absolute left-md top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant pointer-events-none">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-xl pr-lg py-xs text-body-md w-80 focus:ring-1 focus:ring-primary placeholder:text-on-surface-variant/40" placeholder="Search Vault..." type="text">
+<div class="absolute right-md top-1/2 -translate-y-1/2 flex items-center gap-xs">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant text-[10px] font-label-mono opacity-50">⌘</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high border border-outline-variant text-[10px] font-label-mono opacity-50">K</span>
+</div>
+</div>
+<nav class="flex items-center gap-md">
+<a class="text-primary border-b-2 border-primary font-medium px-sm py-xs h-16 flex items-center" href="#">Recent</a>
+<a class="text-on-surface-variant hover:text-primary transition-all duration-200 px-sm py-xs" href="#">Pinned</a>
+<a class="text-on-surface-variant hover:text-primary transition-all duration-200 px-sm py-xs" href="#">Shared</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-surface-container-high text-on-surface p-sm rounded-full hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-sm cursor-pointer group">
+<div class="text-right">
+<p class="text-xs font-bold leading-tight">Alex Dev</p>
+<p class="text-[10px] text-on-surface-variant">Pro Plan</p>
+</div>
+<img alt="User Profile" class="w-8 h-8 rounded-full border border-outline-variant group-hover:border-primary transition-colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuiyBHgzY4YSqs2RPiVaeOGSY6HnCEQHRTImYi5iCykUikFbvnACPC6_CiQ7OWQ4DJTBRVjoDBHEg7b5o-pWN3uG3pBPcTF50Ijlg_tei2TtD-TsAh3py3-N1HXXHn9r416uw3iRNuMUG0k17vxLly1kESEDiGHuN_l2tGzgyacqlRBWBNEkbIsHt9K_3pNEaqc8NBVJRBqGemmmlalbc-JLgORMWrBPOVCkWZ4PZsFqRG2NOl-tDT34Kc6n01KW3UHvzIJRY9mnQ">
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-sidebar-width mt-16 p-lg h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar transition-all duration-300 pr-[calc(33.33%+24px)] opacity-60 pointer-events-none">
+<div class="max-w-container-max mx-auto space-y-lg">
+<section>
+<div class="flex items-center justify-between mb-md">
+<h2 class="font-headline-md text-headline-md text-on-surface">Recent Items</h2>
+<div class="flex gap-sm">
+<button class="p-xs hover:bg-surface-container rounded transition-colors"><span class="material-symbols-outlined">grid_view</span></button>
+<button class="p-xs hover:bg-surface-container rounded transition-colors"><span class="material-symbols-outlined">list</span></button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<!-- Card 1 -->
+<div class="bg-surface-container-low border-l-4 border-primary rounded-lg p-md hover:bg-surface-container-high transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-sm">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">code</span>
+<span class="text-[10px] font-label-mono px-xs py-0.5 rounded bg-surface-container-highest text-primary">JS</span>
+</div>
+<h3 class="font-bold mb-xs">Tailwind Config</h3>
+<p class="text-xs text-on-surface-variant line-clamp-2">The essential tailwind configuration for project scalability and custom theme tokens.</p>
+<div class="mt-md flex gap-xs">
+<span class="text-[10px] bg-secondary-container text-on-secondary-container px-1.5 py-0.5 rounded">#tailwind</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-low border-l-4 border-tertiary rounded-lg p-md hover:bg-surface-container-high transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-sm">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">terminal</span>
+<span class="text-[10px] font-label-mono px-xs py-0.5 rounded bg-surface-container-highest text-tertiary">BASH</span>
+</div>
+<h3 class="font-bold mb-xs">Docker Setup</h3>
+<p class="text-xs text-on-surface-variant line-clamp-2">Standard container setup for Next.js applications with hot-reloading.</p>
+<div class="mt-md flex gap-xs">
+<span class="text-[10px] bg-secondary-container text-on-secondary-container px-1.5 py-0.5 rounded">#docker</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-low border-l-4 border-on-tertiary-fixed rounded-lg p-md hover:bg-surface-container-high transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-sm">
+<span class="material-symbols-outlined text-on-tertiary-fixed" style="font-variation-settings: 'FILL' 1;">folder_special</span>
+<span class="text-[10px] font-label-mono px-xs py-0.5 rounded bg-surface-container-highest text-on-tertiary-fixed">DIR</span>
+</div>
+<h3 class="font-bold mb-xs">Project Assets</h3>
+<p class="text-xs text-on-surface-variant line-clamp-2">Central repository for all UI branding guidelines and raw SVG assets.</p>
+<div class="mt-md flex gap-xs">
+<span class="text-[10px] bg-secondary-container text-on-secondary-container px-1.5 py-0.5 rounded">#design</span>
+</div>
+</div>
+</div>
+</section>
+<section>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-md">Quick Actions</h2>
+<div class="flex flex-wrap gap-md">
+<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl flex-1 min-w-[200px] flex flex-col items-center justify-center gap-md hover:border-primary transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">add_circle</span>
+</div>
+<span class="font-bold">New Snippet</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl flex-1 min-w-[200px] flex flex-col items-center justify-center gap-md hover:border-tertiary transition-colors cursor-pointer group">
+<div class="w-12 h-12 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">terminal</span>
+</div>
+<span class="font-bold">New Prompt</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Detail Drawer Overlay/Drawer -->
+<div class="fixed top-16 right-0 w-1/3 h-[calc(100vh-64px)] border-l border-outline-variant z-40 flex flex-col shadow-2xl shadow-black/50 bg-surface" id="detail-drawer">
+<!-- Drawer Header -->
+<div class="p-lg border-b border-outline-variant bg-surface-container-lowest">
+<div class="flex items-center justify-between mb-sm">
+<div class="flex items-center gap-xs text-[10px] text-on-surface-variant tracking-wider uppercase font-medium">
+<span class="">Web Utilities</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="">Snippet</span>
+</div>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-xl">star</span></button>
+<button class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="text-on-surface-variant hover:text-error transition-colors" onclick="document.getElementById('detail-drawer').style.transform='translateX(100%)'"><span class="material-symbols-outlined text-xl">close</span></button>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">code</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Tailwind Config</h2>
+</div>
+</div>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-lg space-y-lg">
+<!-- Code Block -->
+<div class="space-y-sm">
+<div class="flex items-center justify-between px-xs">
+<span class="text-xs font-label-mono text-on-surface-variant/60">tailwind.config.js</span>
+<button class="flex items-center gap-xs text-xs font-medium text-primary hover:bg-primary/10 px-sm py-1 rounded transition-colors">
+<span class="material-symbols-outlined text-sm">content_copy</span>
+                        Copy
+                    </button>
+</div>
+<div class="bg-surface-container-lowest rounded border border-outline-variant p-md font-code-block text-code-block relative overflow-hidden">
+<pre class="custom-scrollbar overflow-x-auto"><code class="block"><span class="code-syntax-keyword">module</span>.<span class="code-syntax-keyword">exports</span> = {
+  content: [<span class="code-syntax-string">'./index.html'</span>, <span class="code-syntax-string">'./src/**/*.{js,ts}'</span>],
+  theme: {
+    extend: {
+      colors: {
+        primary: <span class="code-syntax-string">'#ef4444'</span>,
+        surface: <span class="code-syntax-string">'#0a0a0a'</span>,
+      },
+      fontFamily: {
+        sans: [<span class="code-syntax-string">'Inter'</span>, <span class="code-syntax-string">'sans-serif'</span>],
+      },
+    },
+  },
+  plugins: [
+    <span class="code-syntax-keyword">require</span>(<span class="code-syntax-string">'@tailwindcss/forms'</span>),
+  ],
+}</code></pre>
+</div>
+</div>
+<!-- Metadata Section -->
+<div class="space-y-md pt-md">
+<div class="grid grid-cols-2 gap-lg">
+<div class="space-y-xs">
+<label class="text-[10px] uppercase font-bold text-on-surface-variant/60">Collection</label>
+<div class="flex items-center justify-between p-sm rounded border border-outline-variant cursor-pointer hover:border-outline transition-colors bg-surface-container-low">
+<span class="text-sm font-medium">Web Utilities</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="text-[10px] uppercase font-bold text-on-surface-variant/60">Type</label>
+<div class="flex items-center gap-sm p-sm rounded border border-outline-variant cursor-pointer hover:border-outline transition-colors bg-surface-container-low">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">code</span>
+<span class="text-sm font-medium">Snippet</span>
+</div>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="text-[10px] uppercase font-bold text-on-surface-variant/60">Tags</label>
+<div class="flex flex-wrap gap-sm">
+<span class="px-sm py-1 rounded bg-secondary-container text-on-secondary-container text-xs font-medium">#tailwind</span>
+<span class="px-sm py-1 rounded bg-secondary-container text-on-secondary-container text-xs font-medium">#css</span>
+<span class="px-sm py-1 rounded bg-secondary-container text-on-secondary-container text-xs font-medium">#frontend</span>
+<button class="px-sm py-1 rounded border border-dashed border-outline-variant text-on-surface-variant text-xs hover:border-primary hover:text-primary transition-all flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">add</span>
+                            Add Tag
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<div class="p-lg border-t border-outline-variant flex items-center justify-between bg-surface">
+<div class="flex items-center gap-xs text-[10px] text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                Last modified 2 hours ago
+            </div>
+<button class="flex items-center gap-sm bg-error-container/20 text-error hover:bg-error-container/40 px-md py-sm rounded font-bold transition-colors">
+<span class="material-symbols-outlined text-sm">delete</span>
+                Delete Item
+            </button>
+</div>
+</div>
+<!-- Command Palette Backdrop (Simulated) -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-30 pointer-events-none opacity-100 transition-opacity duration-300" id="backdrop-overlay"></div>
+<script>
+        // Micro-interactions for keyboard hints or key indicators
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const drawer = document.getElementById('detail-drawer');
+                const backdrop = document.getElementById('backdrop-overlay');
+                drawer.style.transform = 'translateX(100%)';
+                backdrop.style.opacity = '0';
+                setTimeout(() => {
+                    backdrop.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        // Simple button active state simulation
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+            btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+            btn.addEventListener('mouseleave', () => btn.classList.remove('scale-95'));
+        });
+    </script>
+
+
+</body></html>
