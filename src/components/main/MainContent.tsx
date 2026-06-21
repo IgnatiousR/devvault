@@ -142,31 +142,8 @@ function Drawer({ title, type }: { title: string; type: string }) {
 
 export function MainContent() {
   return (
-    <main className="pl-64 pt-16 min-h-screen">
-      <div className="max-w-7xl mx-auto px-8 py-10 space-y-12">
-        {/* Collections Section */}
-        <section>
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight">Collections</h2>
-              <p className="text-sm text-gray-400 mt-1">
-                Organize your resources by project or technology.
-              </p>
-            </div>
-            <a
-              href="#"
-              className="text-xs font-medium text-gray-400 hover:text-red-500 transition-colors"
-            >
-              View all collections
-            </a>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {collections.map((collection) => (
-              <CollectionCard key={collection.name} collection={collection} />
-            ))}
-          </div>
-        </section>
-
+    <main className="pl-64 pt-16 min-h-screen bg-[#0a0a0a]">
+      <div className="max-w-3xl mx-auto px-8 py-10">
         {/* Recent Items Section */}
         <section>
           <div className="flex items-center justify-between mb-6">
@@ -180,10 +157,25 @@ export function MainContent() {
               </button>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {items.map((item) => (
               <ItemCard key={item.id} item={item} />
             ))}
+          </div>
+        </section>
+
+        {/* Quick Actions Section */}
+        <section>
+          <h2 className="text-xl font-semibold mb-6">Quick Actions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <button className="inline-flex items-center justify-center h-[58px] w-full px-4 text-sm font-medium border border-[#27272a] bg-[#121212] hover:bg-[#1c1c1c]/50 transition-colors rounded-lg">
+              <span className="text-3xl mr-2">+</span>
+              New Snippet
+            </button>
+            <button className="inline-flex items-center justify-center h-[58px] w-full px-4 text-sm font-medium bg-red-500 text-white hover:bg-red-600/90 transition-colors rounded-lg shadow-sm">
+              <span className="text-3xl mr-2">⬢</span>
+              New Prompt
+            </button>
           </div>
         </section>
       </div>

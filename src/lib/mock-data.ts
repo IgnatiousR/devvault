@@ -1,5 +1,8 @@
 // Import the dashboard types for alignment
-import { Collection, Item, ItemType, User } from "./constants/types";
+// import { Collection, Item, ItemType, User } from "./types";
+// import { dashboard } from "./dashboard";
+import { Collection, Item, ItemType } from "./constants/types";
+import { User } from "./types";
 
 export const collections: Collection[] = [
   { id: "1", name: "Web Utilities", resourceCount: 12, isFavorite: true },
@@ -74,8 +77,12 @@ export const currentUser: User = {
   role: "user",
 };
 
-export const mockData: {
-  user: User;
-  collections: Collection[];
-  items: Item[];
-} = { user: currentUser, collections: collections, items: items };
+// export const mockData: {
+//   user: User;
+//   collections: Collection[];
+//   items: Item[];
+// } = { user: currentUser, collections: collections, items: items };
+
+// export const Dashboard = () => (
+//   <dashboard />
+// );

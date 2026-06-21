@@ -91,6 +91,8 @@ export function Sidebar() {
             {currentUser.image && (
               <Image
                 alt={currentUser.name}
+                width={32}
+                height={32}
                 className="w-8 h-8 rounded-full border border-[#27272a]"
                 src={currentUser.image}
               />

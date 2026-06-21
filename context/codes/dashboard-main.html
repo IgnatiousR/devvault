@@ -13,31 +13,29 @@
             theme: {
                 extend: {
                     "colors": {
-                        "background": "#0a0a0a",
-                        "foreground": "#f9dcd9",
-                        "card": "#121212",
-                        "card-foreground": "#f9dcd9",
-                        "popover": "#0a0a0a",
-                        "popover-foreground": "#f9dcd9",
-                        "primary": "#ef4444",
-                        "primary-foreground": "#ffffff",
-                        "secondary": "#27272a",
-                        "secondary-foreground": "#fafafa",
-                        "muted": "#1c1c1c",
-                        "muted-foreground": "#a1a1aa",
-                        "accent": "#27272a",
-                        "accent-foreground": "#fafafa",
-                        "destructive": "#7f1d1d",
-                        "destructive-foreground": "#f9dcd9",
-                        "border": "#27272a",
-                        "input": "#27272a",
-                        "ring": "#ef4444",
+                        "background": "hsl(240 10% 3.9%)",
+                        "foreground": "hsl(0 0% 98%)",
+                        "card": "hsl(240 10% 3.9%)",
+                        "card-foreground": "hsl(0 0% 98%)",
+                        "popover": "hsl(240 10% 3.9%)",
+                        "popover-foreground": "hsl(0 0% 98%)",
+                        "primary": "hsl(0 84.2% 60.2%)",
+                        "primary-foreground": "hsl(0 0% 98%)",
+                        "secondary": "hsl(240 3.7% 15.9%)",
+                        "secondary-foreground": "hsl(0 0% 98%)",
+                        "muted": "hsl(240 3.7% 15.9%)",
+                        "muted-foreground": "hsl(240 5% 64.9%)",
+                        "accent": "hsl(240 3.7% 15.9%)",
+                        "accent-foreground": "hsl(0 0% 98%)",
+                        "destructive": "hsl(0 62.8% 30.6%)",
+                        "destructive-foreground": "hsl(0 0% 98%)",
+                        "border": "hsl(240 3.7% 15.9%)",
+                        "input": "hsl(240 3.7% 15.9%)",
+                        "ring": "hsl(240 4.9% 83.9%)",
                         "brand-red": "#ef4444",
-                        "on-surface-variant": "#e4beba",
-                        "outline-variant": "#27272a"
                     },
                     "borderRadius": {
-                        "DEFAULT": "0.5rem",
+                        "DEFAULT": "calc(0.5rem - 2px)",
                         "lg": "0.5rem",
                         "xl": "0.75rem",
                         "full": "9999px"
@@ -53,7 +51,7 @@
                         "base": "4px"
                     },
                     "fontFamily": {
-                        "body": ["Geist", "Inter", "sans-serif"],
+                        "body": ["Inter", "Geist", "sans-serif"],
                         "headline": ["Geist", "sans-serif"],
                         "mono": ["JetBrains Mono", "monospace"]
                     }
@@ -63,267 +61,244 @@
     </script>
 <style>
         body {
-            background-color: #0a0a0a;
-            color: #f9dcd9;
-            font-family: 'Geist', sans-serif;
+            background-color: hsl(240 10% 3.9%);
+            color: hsl(0 0% 98%);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
         .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
             font-size: 20px;
         }
         .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
+            width: 6px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
             background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #27272a;
+            background: hsl(240 3.7% 15.9%);
             border-radius: 10px;
         }
         .sheet-drawer {
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        /* Shadcn Button Patterns */
+        .btn-ghost { @apply hover:bg-accent hover:text-accent-foreground transition-colors; }
+        .btn-outline { @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors; }
+        .btn-primary { @apply bg-brand-red text-primary-foreground hover:bg-brand-red/90 transition-colors shadow-sm; }
     </style>
 </head>
-<body class="selection:bg-brand-red selection:text-white">
+<body class="selection:bg-brand-red/30 selection:text-white">
 <!-- Sidebar -->
 <aside class="fixed inset-y-0 left-0 w-sidebar-width bg-background border-r border-border flex flex-col z-50">
-<div class="h-16 flex items-center px-6 border-b border-border">
+<div class="h-16 flex items-center px-6">
 <div class="flex items-center gap-2">
-<div class="w-6 h-6 bg-primary rounded-md flex items-center justify-center">
+<div class="w-6 h-6 bg-brand-red rounded-md flex items-center justify-center">
 <span class="material-symbols-outlined text-white text-[14px]" style="font-variation-settings: 'FILL' 1;">security</span>
 </div>
-<span class="font-semibold text-lg tracking-tight">DevVault</span>
+<span class="font-semibold text-sm tracking-tight">DevVault</span>
 </div>
 </div>
-<nav class="flex-1 px-4 py-6 space-y-1">
+<div class="px-3 py-2">
+<nav class="space-y-1">
 <a class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md bg-accent text-accent-foreground" href="#">
-<span class="material-symbols-outlined">dashboard</span>
+<span class="material-symbols-outlined opacity-70">dashboard</span>
 <span>All Items</span>
 </a>
-<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors" href="#">
-<span class="material-symbols-outlined">code</span>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground transition-all" href="#">
+<span class="material-symbols-outlined opacity-70">code</span>
 <span>Snippets</span>
 </a>
-<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors" href="#">
-<span class="material-symbols-outlined">terminal</span>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground transition-all" href="#">
+<span class="material-symbols-outlined opacity-70">terminal</span>
 <span>Prompts</span>
 </a>
-<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors" href="#">
-<span class="material-symbols-outlined">folder</span>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground transition-all" href="#">
+<span class="material-symbols-outlined opacity-70">folder</span>
 <span>Collections</span>
 </a>
-<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors" href="#">
-<span class="material-symbols-outlined">archive</span>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground transition-all" href="#">
+<span class="material-symbols-outlined opacity-70">archive</span>
 <span>Archive</span>
 </a>
 </nav>
-<div class="p-4 border-t border-border">
-<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/50 transition-colors mb-4" href="#">
-<span class="material-symbols-outlined">description</span>
+</div>
+<div class="mt-auto p-3 space-y-4">
+<div class="px-3">
+<a class="flex items-center gap-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors" href="#">
+<span class="material-symbols-outlined opacity-70">description</span>
 <span>Documentation</span>
 </a>
-<div class="flex items-center justify-between p-2 rounded-lg bg-muted border border-border">
-<div class="flex items-center gap-3">
-<img alt="Alex Rivera" class="w-8 h-8 rounded-full border border-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs9YJawiYwdd6UN9IFmhsgJTh7f2YoILTyO-SGIC_qViqIyjrmLDMfCrMAoCpPcwopOsds8mtaBU_cxVH5bbN3DkeZ526PN5zWVgvL8pEFdtmyvyInO0EVnQyTjDoYhinTbKtuwW0pcbLTzpVts7afCAccj7NMzPPxQd1iiaLrUO1DCks6cFJcv96oTKdLsHhbAxon3F_pvxIJMzMrrLIrjXMkbfwCY6SnWw7DYaxDXBCPhOzQcOZtaBLDYTRKf6FSIYdQQGnF9uA"/>
-<div class="flex flex-col">
-<span class="text-xs font-semibold">Alex Rivera</span>
-<span class="text-[10px] text-muted-foreground">Pro Plan</span>
+</div>
+<div class="border-t border-border pt-4">
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer">
+<div class="flex items-center gap-3 min-w-0">
+<img alt="Alex Rivera" class="w-8 h-8 rounded-md object-cover border border-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs9YJawiYwdd6UN9IFmhsgJTh7f2YoILTyO-SGIC_qViqIyjrmLDMfCrMAoCpPcwopOsds8mtaBU_cxVH5bbN3DkeZ526PN5zWVgvL8pEFdtmyvyInO0EVnQyTjDoYhinTbKtuwW0pcbLTzpVts7afCAccj7NMzPPxQd1iiaLrUO1DCks6cFJcv96oTKdLsHhbAxon3F_pvxIJMzMrrLIrjXMkbfwCY6SnWw7DYaxDXBCPhOzQcOZtaBLDYTRKf6FSIYdQQGnF9uA"/>
+<div class="flex flex-col min-w-0">
+<span class="text-xs font-semibold truncate">Alex Rivera</span>
+<span class="text-[10px] text-muted-foreground truncate">v2.4.0 • Pro</span>
 </div>
 </div>
-<button class="p-1 hover:bg-background rounded-md transition-colors">
-<span class="material-symbols-outlined text-muted-foreground">more_vert</span>
-</button>
+<span class="material-symbols-outlined text-muted-foreground text-sm">unfold_more</span>
+</div>
 </div>
 </div>
 </aside>
 <!-- Header -->
-<header class="fixed top-0 right-0 left-sidebar-width h-16 border-b border-border bg-background/80 backdrop-blur-md z-40 flex items-center justify-between px-8">
+<header class="fixed top-0 right-0 left-sidebar-width h-16 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-40 flex items-center justify-between px-8">
 <div class="flex-1 max-w-md relative">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">search</span>
-<input class="w-full h-9 bg-muted border border-input rounded-md pl-10 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary transition-all" placeholder="Search Vault... (⌘+K)" type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">search</span>
+<input class="w-full h-9 bg-muted/50 border border-input rounded-md pl-9 pr-4 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring transition-all" placeholder="Search... (⌘K)" type="text"/>
 </div>
-<div class="flex items-center gap-4">
-<div class="hidden md:flex items-center gap-6 mr-4">
-<a class="text-foreground text-sm font-medium border-b-2 border-primary h-16 flex items-center" href="#">Recent</a>
-<a class="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium" href="#">Pinned</a>
-<a class="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium" href="#">Shared</a>
+<div class="flex items-center gap-3">
+<div class="hidden md:flex items-center gap-1 mr-2">
+<a class="px-3 py-1.5 text-sm font-medium rounded-md bg-accent text-accent-foreground" href="#">Recent</a>
+<a class="px-3 py-1.5 text-sm font-medium rounded-md text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground transition-all" href="#">Pinned</a>
+<a class="px-3 py-1.5 text-sm font-medium rounded-md text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground transition-all" href="#">Shared</a>
 </div>
-<button class="inline-flex items-center justify-center h-9 px-4 text-sm font-medium border border-input bg-background hover:bg-accent transition-colors rounded-md">
+<button class="h-9 px-4 text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors rounded-md inline-flex items-center justify-center">
                 New Collection
             </button>
-<button class="inline-flex items-center justify-center h-9 px-4 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors rounded-md shadow-sm">
+<button class="h-9 px-4 text-sm font-medium bg-brand-red text-white hover:bg-brand-red/90 transition-colors rounded-md shadow inline-flex items-center justify-center">
                 New Item
             </button>
-<div class="h-6 w-px bg-border mx-2"></div>
-<button class="p-2 text-muted-foreground hover:text-foreground transition-colors relative">
-<span class="material-symbols-outlined">notifications</span>
-<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+<div class="h-4 w-px bg-border mx-1"></div>
+<button class="w-9 h-9 flex items-center justify-center rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors relative">
+<span class="material-symbols-outlined text-lg">notifications</span>
+<span class="absolute top-2 right-2.5 w-1.5 h-1.5 bg-brand-red rounded-full"></span>
 </button>
 </div>
 </header>
 <!-- Main Content -->
 <main class="pl-sidebar-width pt-16 min-h-screen">
 <div class="max-w-7xl mx-auto px-8 py-10 space-y-12">
-<!-- Collections -->
+<!-- Collections Section -->
 <section>
-<div class="flex items-center justify-between mb-6">
+<div class="flex items-center justify-between mb-8">
 <div>
-<h2 class="text-2xl font-bold tracking-tight">Collections</h2>
-<p class="text-sm text-muted-foreground">Organize your resources by project or technology.</p>
+<h2 class="text-2xl font-semibold tracking-tight text-foreground">Collections</h2>
+<p class="text-sm text-muted-foreground mt-1">Organize your resources by project or technology.</p>
 </div>
-<a class="text-xs font-medium text-muted-foreground hover:text-primary transition-colors" href="#">View all collections</a>
+<button class="text-xs font-medium text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition-colors">
+                        View all <span class="material-symbols-outlined text-xs">chevron_right</span>
+</button>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 <!-- Web Utilities -->
-<div class="group relative bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-all cursor-pointer">
-<div class="absolute left-0 top-6 bottom-6 w-1 bg-primary rounded-r-full"></div>
-<div class="flex justify-between items-start mb-10">
-<div>
-<h3 class="font-semibold text-lg">Web Utilities</h3>
-<p class="text-xs text-muted-foreground mt-1">12 resources</p>
+<div class="group relative bg-card border border-border rounded-xl p-5 hover:bg-accent/20 transition-all cursor-pointer">
+<div class="absolute inset-y-4 left-0 w-1 bg-brand-red rounded-r-full"></div>
+<div class="flex justify-between items-start mb-8">
+<div class="pl-2">
+<h3 class="font-semibold text-base">Web Utilities</h3>
+<p class="text-[12px] text-muted-foreground mt-0.5">12 resources</p>
 </div>
-<span class="material-symbols-outlined text-muted-foreground group-hover:text-primary transition-colors">arrow_forward</span>
+<span class="material-symbols-outlined text-muted-foreground group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
 </div>
-<div class="flex gap-2">
-<span class="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
+<div class="flex gap-2 pl-2">
+<span class="w-7 h-7 rounded border border-border bg-muted/30 flex items-center justify-center">
 <span class="material-symbols-outlined text-brand-red text-sm">code</span>
 </span>
-<span class="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
-<span class="material-symbols-outlined text-yellow-400 text-sm">notes</span>
+<span class="w-7 h-7 rounded border border-border bg-muted/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-yellow-500 text-sm">notes</span>
 </span>
-<span class="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
-<span class="material-symbols-outlined text-emerald-400 text-sm">link</span>
+<span class="w-7 h-7 rounded border border-border bg-muted/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-emerald-500 text-sm">link</span>
 </span>
 </div>
 </div>
 <!-- ML Prompts -->
-<div class="group relative bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-all cursor-pointer">
-<div class="absolute left-0 top-6 bottom-6 w-1 bg-orange-500 rounded-r-full"></div>
-<div class="flex justify-between items-start mb-10">
-<div>
-<h3 class="font-semibold text-lg">ML Prompts</h3>
-<p class="text-xs text-muted-foreground mt-1">8 resources</p>
+<div class="group relative bg-card border border-border rounded-xl p-5 hover:bg-accent/20 transition-all cursor-pointer">
+<div class="absolute inset-y-4 left-0 w-1 bg-orange-500 rounded-r-full"></div>
+<div class="flex justify-between items-start mb-8">
+<div class="pl-2">
+<h3 class="font-semibold text-base">ML Prompts</h3>
+<p class="text-[12px] text-muted-foreground mt-0.5">8 resources</p>
 </div>
-<span class="material-symbols-outlined text-muted-foreground group-hover:text-orange-500 transition-colors">arrow_forward</span>
+<span class="material-symbols-outlined text-muted-foreground">arrow_forward</span>
 </div>
-<div class="flex gap-2">
-<span class="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
-<span class="material-symbols-outlined text-orange-400 text-sm">terminal</span>
+<div class="flex gap-2 pl-2">
+<span class="w-7 h-7 rounded border border-border bg-muted/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-orange-500 text-sm">terminal</span>
 </span>
 </div>
 </div>
 <!-- CLI Tools -->
-<div class="group relative bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-all cursor-pointer">
-<div class="absolute left-0 top-6 bottom-6 w-1 bg-amber-500 rounded-r-full"></div>
-<div class="flex justify-between items-start mb-10">
-<div>
-<h3 class="font-semibold text-lg">CLI Tools</h3>
-<p class="text-xs text-muted-foreground mt-1">5 resources</p>
+<div class="group relative bg-card border border-border rounded-xl p-5 hover:bg-accent/20 transition-all cursor-pointer">
+<div class="absolute inset-y-4 left-0 w-1 bg-amber-500 rounded-r-full"></div>
+<div class="flex justify-between items-start mb-8">
+<div class="pl-2">
+<h3 class="font-semibold text-base">CLI Tools</h3>
+<p class="text-[12px] text-muted-foreground mt-0.5">5 resources</p>
 </div>
-<span class="material-symbols-outlined text-muted-foreground group-hover:text-amber-500 transition-colors">arrow_forward</span>
+<span class="material-symbols-outlined text-muted-foreground">arrow_forward</span>
 </div>
-<div class="flex gap-2">
-<span class="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
+<div class="flex gap-2 pl-2">
+<span class="w-7 h-7 rounded border border-border bg-muted/30 flex items-center justify-center">
 <span class="material-symbols-outlined text-amber-500 text-sm">keyboard_command_key</span>
 </span>
 </div>
 </div>
 </div>
 </section>
-<!-- All Items -->
+<!-- Items Section -->
 <section>
-<div class="flex items-center justify-between mb-6">
-<h2 class="text-2xl font-bold tracking-tight">Recent Items</h2>
-<div class="flex items-center gap-2 p-1 bg-muted rounded-md border border-border">
-<button class="px-3 py-1 text-[11px] font-semibold uppercase bg-background border border-border rounded shadow-sm">Grid</button>
-<button class="px-3 py-1 text-[11px] font-semibold uppercase text-muted-foreground hover:text-foreground transition-colors">List</button>
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-2xl font-semibold tracking-tight">Recent Items</h2>
+<div class="inline-flex items-center bg-muted/50 p-1 rounded-lg border border-border">
+<button class="px-3 py-1 text-[11px] font-medium uppercase tracking-wide bg-background text-foreground rounded shadow-sm border border-border">Grid</button>
+<button class="px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors">List</button>
 </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-<!-- Tailwind Config -->
-<div class="bg-card border border-border rounded-xl overflow-hidden hover:border-primary/50 hover:shadow-md transition-all cursor-pointer group" onclick="openDrawer('Tailwind Config', 'Snippet', 'Red', 'Web Utilities')">
+<!-- Tailwind Config Item -->
+<div class="bg-card border border-border rounded-xl overflow-hidden hover:ring-1 hover:ring-brand-red/50 hover:border-brand-red/30 transition-all cursor-pointer group" onclick="openDrawer('Tailwind Config', 'Snippet', 'Red', 'Web Utilities')">
 <div class="p-6">
-<div class="flex items-center justify-between mb-4">
-<div class="w-8 h-8 rounded bg-brand-red/10 flex items-center justify-center">
+<div class="flex items-center justify-between mb-5">
+<div class="w-8 h-8 rounded border border-border bg-brand-red/10 flex items-center justify-center">
 <span class="material-symbols-outlined text-brand-red text-[16px]" style="font-variation-settings: 'FILL' 1;">code</span>
 </div>
-<span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Snippet</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Snippet</span>
 </div>
-<h4 class="font-semibold mb-2 text-foreground group-hover:text-primary transition-colors">Tailwind Config</h4>
+<h4 class="font-semibold mb-2 group-hover:text-brand-red transition-colors">Tailwind Config</h4>
 <p class="text-muted-foreground text-sm leading-relaxed line-clamp-2">Enterprise level configuration including custom theme tokens for responsive design systems.</p>
 <div class="mt-6 flex items-center justify-between">
-<span class="text-[11px] font-medium bg-muted px-2 py-0.5 rounded border border-border">Web Utilities</span>
+<span class="text-[10px] font-semibold bg-muted/50 px-2 py-0.5 rounded-full border border-border text-muted-foreground uppercase tracking-tight">Web Utilities</span>
 <span class="text-[11px] text-muted-foreground">2h ago</span>
 </div>
 </div>
 </div>
-<!-- System Architect Prompt -->
-<div class="bg-card border border-border rounded-xl overflow-hidden hover:border-orange-500/50 hover:shadow-md transition-all cursor-pointer group" onclick="openDrawer('System Architect Prompt', 'Prompt', 'Orange', 'ML Prompts')">
+<!-- System Architect Item -->
+<div class="bg-card border border-border rounded-xl overflow-hidden hover:ring-1 hover:ring-orange-500/50 hover:border-orange-500/30 transition-all cursor-pointer group" onclick="openDrawer('System Architect Prompt', 'Prompt', 'Orange', 'ML Prompts')">
 <div class="p-6">
-<div class="flex items-center justify-between mb-4">
-<div class="w-8 h-8 rounded bg-orange-500/10 flex items-center justify-center">
+<div class="flex items-center justify-between mb-5">
+<div class="w-8 h-8 rounded border border-border bg-orange-500/10 flex items-center justify-center">
 <span class="material-symbols-outlined text-orange-500 text-[16px]">terminal</span>
 </div>
-<span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Prompt</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Prompt</span>
 </div>
-<h4 class="font-semibold mb-2 text-foreground group-hover:text-orange-400 transition-colors">System Architect Prompt</h4>
+<h4 class="font-semibold mb-2 group-hover:text-orange-400 transition-colors">System Architect Prompt</h4>
 <p class="text-muted-foreground text-sm leading-relaxed line-clamp-2">Specialized prompt for designing distributed microservices architectures with Kubernetes.</p>
 <div class="mt-6 flex items-center justify-between">
-<span class="text-[11px] font-medium bg-muted px-2 py-0.5 rounded border border-border">ML Prompts</span>
+<span class="text-[10px] font-semibold bg-muted/50 px-2 py-0.5 rounded-full border border-border text-muted-foreground uppercase tracking-tight">ML Prompts</span>
 <span class="text-[11px] text-muted-foreground">5h ago</span>
 </div>
 </div>
 </div>
-<!-- Docker Cleanup -->
-<div class="bg-card border border-border rounded-xl overflow-hidden hover:border-amber-500/50 hover:shadow-md transition-all cursor-pointer group" onclick="openDrawer('Docker Cleanup', 'Command', 'Amber', 'CLI Tools')">
+<!-- Docker Cleanup Item -->
+<div class="bg-card border border-border rounded-xl overflow-hidden hover:ring-1 hover:ring-amber-500/50 hover:border-amber-500/30 transition-all cursor-pointer group" onclick="openDrawer('Docker Cleanup', 'Command', 'Amber', 'CLI Tools')">
 <div class="p-6">
-<div class="flex items-center justify-between mb-4">
-<div class="w-8 h-8 rounded bg-amber-500/10 flex items-center justify-center">
+<div class="flex items-center justify-between mb-5">
+<div class="w-8 h-8 rounded border border-border bg-amber-500/10 flex items-center justify-center">
 <span class="material-symbols-outlined text-amber-500 text-[16px]">keyboard_command_key</span>
 </div>
-<span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Command</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Command</span>
 </div>
-<h4 class="font-semibold mb-2 text-foreground group-hover:text-amber-400 transition-colors">Docker Cleanup</h4>
+<h4 class="font-semibold mb-2 group-hover:text-amber-400 transition-colors">Docker Cleanup</h4>
 <p class="text-muted-foreground text-sm leading-relaxed line-clamp-2">Shell script to purge unused docker volumes, containers, and dangling images.</p>
 <div class="mt-6 flex items-center justify-between">
-<span class="text-[11px] font-medium bg-muted px-2 py-0.5 rounded border border-border">CLI Tools</span>
+<span class="text-[10px] font-semibold bg-muted/50 px-2 py-0.5 rounded-full border border-border text-muted-foreground uppercase tracking-tight">CLI Tools</span>
 <span class="text-[11px] text-muted-foreground">Yesterday</span>
-</div>
-</div>
-</div>
-<!-- React Query Notes -->
-<div class="bg-card border border-border rounded-xl overflow-hidden hover:border-yellow-400/50 hover:shadow-md transition-all cursor-pointer group" onclick="openDrawer('React Query Notes', 'Note', 'Yellow', 'Web Utilities')">
-<div class="p-6">
-<div class="flex items-center justify-between mb-4">
-<div class="w-8 h-8 rounded bg-yellow-400/10 flex items-center justify-center">
-<span class="material-symbols-outlined text-yellow-400 text-[16px]">notes</span>
-</div>
-<span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Note</span>
-</div>
-<h4 class="font-semibold mb-2 text-foreground group-hover:text-yellow-300 transition-colors">React Query Notes</h4>
-<p class="text-muted-foreground text-sm leading-relaxed line-clamp-2">Best practices for mutation handling and automatic query invalidation strategies.</p>
-<div class="mt-6 flex items-center justify-between">
-<span class="text-[11px] font-medium bg-muted px-2 py-0.5 rounded border border-border">Web Utilities</span>
-<span class="text-[11px] text-muted-foreground">Sep 12</span>
-</div>
-</div>
-</div>
-<!-- Design System Link -->
-<div class="bg-card border border-border rounded-xl overflow-hidden hover:border-emerald-400/50 hover:shadow-md transition-all cursor-pointer group" onclick="openDrawer('Design System Link', 'Link', 'Emerald', 'Web Utilities')">
-<div class="p-6">
-<div class="flex items-center justify-between mb-4">
-<div class="w-8 h-8 rounded bg-emerald-400/10 flex items-center justify-center">
-<span class="material-symbols-outlined text-emerald-400 text-[16px]">link</span>
-</div>
-<span class="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Link</span>
-</div>
-<h4 class="font-semibold mb-2 text-foreground group-hover:text-emerald-300 transition-colors">Design System Link</h4>
-<p class="text-muted-foreground text-sm leading-relaxed line-clamp-2">Master Figma file for the corporate design system and UI components.</p>
-<div class="mt-6 flex items-center justify-between">
-<span class="text-[11px] font-medium bg-muted px-2 py-0.5 rounded border border-border">Web Utilities</span>
-<span class="text-[11px] text-muted-foreground">Sep 10</span>
 </div>
 </div>
 </div>
@@ -331,42 +306,42 @@
 </section>
 </div>
 </main>
-<!-- Sheet Drawer Overlay -->
-<div class="fixed inset-0 bg-background/60 backdrop-blur-[2px] z-[60] hidden" id="drawer-overlay" onclick="closeDrawer()"></div>
-<!-- Sheet Drawer Panel (Slide-over) -->
-<div class="fixed top-0 right-0 h-full w-full max-w-[480px] bg-background border-l border-border shadow-2xl z-[70] translate-x-full sheet-drawer flex flex-col" id="item-drawer">
+<!-- Drawer Overlay -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] hidden transition-opacity" id="drawer-overlay" onclick="closeDrawer()"></div>
+<!-- Drawer Panel (Shadcn Sheet Style) -->
+<div class="fixed top-0 right-0 h-full w-full max-w-md bg-background border-l border-border shadow-2xl z-[70] translate-x-full sheet-drawer flex flex-col" id="item-drawer">
 <div class="flex items-center justify-between px-6 py-4 border-b border-border">
 <div class="flex items-center gap-3">
-<span class="material-symbols-outlined text-primary" id="drawer-type-icon">code</span>
+<span class="material-symbols-outlined text-brand-red" id="drawer-type-icon">code</span>
 <div>
 <h3 class="text-base font-semibold leading-none" id="drawer-title">Tailwind Config</h3>
-<p class="text-[11px] text-muted-foreground mt-1" id="drawer-breadcrumb">Web Utilities / Snippet</p>
+<p class="text-[11px] text-muted-foreground mt-1.5" id="drawer-breadcrumb">Web Utilities / Snippet</p>
 </div>
 </div>
 <div class="flex items-center gap-1">
-<button class="p-2 hover:bg-accent rounded-md transition-colors text-muted-foreground hover:text-foreground">
-<span class="material-symbols-outlined">star</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors">
+<span class="material-symbols-outlined text-lg">star</span>
 </button>
-<button class="p-2 hover:bg-accent rounded-md transition-colors text-muted-foreground hover:text-foreground">
-<span class="material-symbols-outlined">edit</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors">
+<span class="material-symbols-outlined text-lg">edit</span>
 </button>
-<button class="p-2 hover:bg-accent rounded-md transition-colors text-muted-foreground hover:text-foreground" onclick="closeDrawer()">
-<span class="material-symbols-outlined">close</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors" onclick="closeDrawer()">
+<span class="material-symbols-outlined text-lg">close</span>
 </button>
 </div>
 </div>
 <div class="flex-1 overflow-y-auto p-6 custom-scrollbar space-y-8">
 <section>
-<h5 class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Content</h5>
-<div class="bg-muted border border-border rounded-lg overflow-hidden font-mono">
-<div class="flex items-center justify-between px-4 py-2 border-b border-border bg-accent/30">
-<span class="text-[10px] text-muted-foreground">tailwind.config.js</span>
-<button class="text-[10px] font-semibold text-primary flex items-center gap-1 hover:underline">
+<h5 class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-4">Content</h5>
+<div class="bg-muted/30 border border-border rounded-lg overflow-hidden font-mono">
+<div class="flex items-center justify-between px-4 py-2.5 border-b border-border bg-muted/50">
+<span class="text-[10px] text-muted-foreground font-medium">tailwind.config.js</span>
+<button class="text-[10px] font-bold text-brand-red flex items-center gap-1.5 hover:opacity-80 transition-opacity">
 <span class="material-symbols-outlined text-xs">content_copy</span>
                             COPY
                         </button>
 </div>
-<pre class="p-4 text-[13px] leading-relaxed overflow-x-auto"><code class="text-emerald-400">module</code>.<code class="text-yellow-400">exports</code> = {
+<pre class="p-5 text-[12px] leading-relaxed overflow-x-auto"><code class="text-emerald-400">module</code>.<code class="text-yellow-400">exports</code> = {
   <code class="text-muted-foreground">content: ["./src/**/*.{html,js}"],</code>
   <code class="text-muted-foreground">theme: {</code>
     <code class="text-muted-foreground">extend: {</code>
@@ -380,35 +355,35 @@
 }</pre>
 </div>
 </section>
-<div class="grid grid-cols-2 gap-4">
+<div class="grid grid-cols-2 gap-6">
 <div>
-<h5 class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Collection</h5>
-<div class="flex items-center gap-2 bg-muted px-3 py-2 rounded-md border border-border" id="drawer-collection">
-<span class="material-symbols-outlined text-xs text-muted-foreground">folder</span>
+<h5 class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Collection</h5>
+<div class="flex items-center gap-2.5 bg-muted/30 px-3 py-2.5 rounded-lg border border-border" id="drawer-collection">
+<span class="material-symbols-outlined text-sm text-muted-foreground">folder</span>
 <span class="text-sm font-medium">Web Utilities</span>
 </div>
 </div>
 <div>
-<h5 class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Type</h5>
-<div class="flex items-center gap-2 bg-muted px-3 py-2 rounded-md border border-border" id="drawer-type-label">
-<span class="material-symbols-outlined text-xs text-primary" id="drawer-type-icon-inner">code</span>
+<h5 class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Type</h5>
+<div class="flex items-center gap-2.5 bg-muted/30 px-3 py-2.5 rounded-lg border border-border" id="drawer-type-label">
+<span class="material-symbols-outlined text-sm text-brand-red" id="drawer-type-icon-inner">code</span>
 <span class="text-sm font-medium">Snippet</span>
 </div>
 </div>
 </div>
 <section>
-<h5 class="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-3">Tags</h5>
+<h5 class="text-[11px] font-bold uppercase tracking-widest text-muted-foreground mb-4">Tags</h5>
 <div class="flex flex-wrap gap-2">
-<span class="px-2 py-1 bg-muted border border-border rounded text-[11px] font-medium text-muted-foreground">#tailwind</span>
-<span class="px-2 py-1 bg-muted border border-border rounded text-[11px] font-medium text-muted-foreground">#css</span>
-<span class="px-2 py-1 bg-muted border border-border rounded text-[11px] font-medium text-muted-foreground">#frontend</span>
-<button class="px-2 py-1 border border-dashed border-border rounded text-[11px] font-medium text-muted-foreground hover:border-primary hover:text-primary transition-all">+ Add Tag</button>
+<span class="px-2.5 py-1 bg-muted/50 border border-border rounded-md text-[11px] font-medium text-muted-foreground">#tailwind</span>
+<span class="px-2.5 py-1 bg-muted/50 border border-border rounded-md text-[11px] font-medium text-muted-foreground">#css</span>
+<span class="px-2.5 py-1 bg-muted/50 border border-border rounded-md text-[11px] font-medium text-muted-foreground">#frontend</span>
+<button class="px-2.5 py-1 border border-dashed border-border rounded-md text-[11px] font-medium text-muted-foreground hover:border-brand-red hover:text-brand-red transition-all">+ Add Tag</button>
 </div>
 </section>
 </div>
-<div class="p-6 border-t border-border bg-muted/20 flex items-center justify-between">
-<span class="text-xs text-muted-foreground italic">Last modified 2 hours ago</span>
-<button class="inline-flex items-center justify-center h-9 px-4 text-sm font-medium text-destructive hover:bg-destructive/10 transition-colors rounded-md border border-destructive/20">
+<div class="p-6 border-t border-border bg-muted/10 flex items-center justify-between mt-auto">
+<span class="text-[11px] text-muted-foreground font-medium italic">Last updated: 2h ago</span>
+<button class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-red-500 hover:bg-red-500/10 transition-colors rounded-md border border-red-500/20">
                 Delete Item
             </button>
 </div>
@@ -438,34 +413,37 @@
             };
             
             const colorMap = {
-                'Red': 'text-primary',
+                'Red': 'text-brand-red',
                 'Orange': 'text-orange-500',
                 'Amber': 'text-amber-500',
-                'Yellow': 'text-yellow-400',
-                'Emerald': 'text-emerald-400'
+                'Yellow': 'text-yellow-500',
+                'Emerald': 'text-emerald-500'
             };
 
             typeIcon.innerText = iconMap[type] || 'description';
             typeIconInner.innerText = iconMap[type] || 'description';
             
-            // Cleanup and Apply colors
             Object.values(colorMap).forEach(cls => {
                 typeIcon.classList.remove(cls);
                 typeIconInner.classList.remove(cls);
             });
-            const selectedColor = colorMap[color] || 'text-primary';
+            const selectedColor = colorMap[color] || 'text-brand-red';
             typeIcon.classList.add(selectedColor);
             typeIconInner.classList.add(selectedColor);
 
             overlay.classList.remove('hidden');
-            drawer.classList.remove('translate-x-full');
+            setTimeout(() => {
+                drawer.classList.remove('translate-x-full');
+            }, 10);
         }
 
         function closeDrawer() {
             const drawer = document.getElementById('item-drawer');
             const overlay = document.getElementById('drawer-overlay');
             drawer.classList.add('translate-x-full');
-            overlay.classList.add('hidden');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 300);
         }
 
         window.addEventListener('keydown', (e) => {
