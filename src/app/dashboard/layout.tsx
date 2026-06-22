@@ -1,5 +1,6 @@
 import { TopBar } from "@/components/dashboard/TopBar";
 import { Sidebar } from "@/components/sidebar/Sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default function DashboardLayout({
   children,
@@ -7,18 +8,20 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-full w-full">
-      <Sidebar />
+    <SidebarProvider>
+      <div className="flex h-full w-full">
+        <Sidebar />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col">
-        <TopBar />
-        <main className="pl-sidebar-width pt-16 min-h-screen">
-          <div className="max-w-container-max mx-auto px-8 py-10">
-            {children}
-          </div>
-        </main>
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col min-w-0">
+          <TopBar />
+          <main className="pt-16 min-h-screen">
+            <div className="max-w-[var(--spacing-container-max)] mx-auto px-8 py-10">
+              {children}
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }

@@ -3,10 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { currentUser } from "@/lib/mock-data";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export function Sidebar() {
+export function AppSidebar() {
   const pathname = usePathname();
 
   const menuItems = [
@@ -18,9 +28,9 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="fixed inset-y-0 left-0 w-[var(--spacing-sidebar-width)] bg-background border-r border-border flex flex-col z-50">
-      <div className="h-16 flex items-center px-6">
-        <div className="flex items-center gap-2">
+    <Sidebar>
+      <SidebarHeader className="h-16 px-6 border-b border-border flex items-center justify-center">
+        <div className="flex items-center gap-2 w-full">
           <div className="w-6 h-6 bg-[var(--color-brand-red)] rounded-md flex items-center justify-center">
             <span
               className="material-symbols-outlined text-white text-[14px]"
@@ -31,32 +41,38 @@ export function Sidebar() {
           </div>
           <span className="font-semibold text-sm tracking-tight">DevVault</span>
         </div>
-      </div>
-      <div className="px-3 py-2">
-        <nav className="space-y-1">
-          {menuItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-all",
-                  isActive
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
-                )}
-              >
-                <span className="material-symbols-outlined opacity-70">
-                  {item.icon}
-                </span>
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
-      <div className="mt-auto p-3 space-y-4">
+      </SidebarHeader>
+
+      <SidebarContent className="px-3 py-2">
+        <SidebarGroup>
+          <SidebarMenu className="space-y-1">
+            {menuItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <SidebarMenuItem key={item.label}>
+                  <SidebarMenuButton
+                    render={<Link href={item.href} />}
+                    isActive={isActive}
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-all h-auto",
+                      isActive
+                        ? "bg-accent text-accent-foreground"
+                        : "text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground"
+                    )}
+                  >
+                    <span className="material-symbols-outlined opacity-70">
+                      {item.icon}
+                    </span>
+                    <span>{item.label}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            })}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+
+      <SidebarFooter className="p-3 space-y-4 mt-auto">
         <div className="px-3">
           <Link
             href="/documentation"
@@ -71,13 +87,12 @@ export function Sidebar() {
         <div className="border-t border-border pt-4">
           <div className="flex items-center justify-between p-2 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer">
             <div className="flex items-center gap-3 min-w-0">
-              <Image
-                alt={currentUser.name}
-                width={32}
-                height={32}
-                className="w-8 h-8 rounded-md object-cover border border-border"
-                src={currentUser.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuCs9YJawiYwdd6UN9IFmhsgJTh7f2YoILTyO-SGIC_qViqIyjrmLDMfCrMAoCpPcwopOsds8mtaBU_cxVH5bbN3DkeZ526PN5zWVgvL8pEFdtmyvyInO0EVnQyTjDoYhinTbKtuwW0pcbLTzpVts7afCAccj7NMzPPxQd1iiaLrUO1DCks6cFJcv96oTKdLsHhbAxon3F_pvxIJMzMrrLIrjXMkbfwCY6SnWw7DYaxDXBCPhOzQcOZtaBLDYTRKf6FSIYdQQGnF9uA"}
-              />
+              <Avatar className="w-8 h-8 rounded-md border border-border">
+                <AvatarImage src={currentUser.image} alt={currentUser.name} />
+                <AvatarFallback className="rounded-md">
+                  {currentUser.name.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
               <div className="flex flex-col min-w-0">
                 <span className="text-xs font-semibold truncate">
                   {currentUser.name}
@@ -92,7 +107,10 @@ export function Sidebar() {
             </span>
           </div>
         </div>
-      </div>
-    </aside>
+      </SidebarFooter>
+    </Sidebar>
   );
 }
+
+// Keep the export name the same as what layout expects, but redirect it
+export { AppSidebar as Sidebar };
