@@ -1,7 +1,4 @@
-// Import the dashboard types for alignment
-// import { Collection, Item, ItemType, User } from "./types";
-// import { dashboard } from "./dashboard";
-import { Collection, Item, ItemType } from "./constants/types";
+import { Collection, Item, ItemType } from "./types";
 import { User } from "./types";
 
 export const collections: Collection[] = [
@@ -18,7 +15,7 @@ export const items: Item[] = [
       "Enterprise level configuration including custom theme tokens for responsive layouts",
     itemType: ItemType.Snippet,
     collectionId: "1",
-    tags: ["#tailwind", "#css"],
+    tags: ["#tailwind", "#css", "#frontend"],
     updatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
     relativeTime: "2h ago",
   },
@@ -37,7 +34,7 @@ export const items: Item[] = [
     id: "item-3",
     title: "Docker Cleanup",
     description:
-      "Shell script to purge unused docker containers and dangling images",
+      "Shell script to purge unused docker volumes, containers, and dangling images",
     itemType: ItemType.Command,
     collectionId: "3",
     tags: ["#docker", "#bash"],
@@ -73,16 +70,6 @@ export const currentUser: User = {
   name: "Alex Rivera",
   email: "alex.dev@devvault.com",
   image:
-    "https://images.unsplash.com/photo-1472099645b8af2f34a0a95e950c25d?w=100&h=100&fit=crop",
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuCs9YJawiYwdd6UN9IFmhsgJTh7f2YoILTyO-SGIC_qViqIyjrmLDMfCrMAoCpPcwopOsds8mtaBU_cxVH5bbN3DkeZ526PN5zWVgvL8pEFdtmyvyInO0EVnQyTjDoYhinTbKtuwW0pcbLTzpVts7afCAccj7NMzPPxQd1iiaLrUO1DCks6cFJcv96oTKdLsHhbAxon3F_pvxIJMzMrrLIrjXMkbfwCY6SnWw7DYaxDXBCPhOzQcOZtaBLDYTRKf6FSIYdQQGnF9uA",
   role: "user",
 };
-
-// export const mockData: {
-//   user: User;
-//   collections: Collection[];
-//   items: Item[];
-// } = { user: currentUser, collections: collections, items: items };
-
-// export const Dashboard = () => (
-//   <dashboard />
-// );

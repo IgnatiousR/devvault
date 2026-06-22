@@ -21,14 +21,6 @@ function CloseIcon() {
   );
 }
 
-function StarIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor">
-      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-    </svg>
-  );
-}
-
 function FolderIcon() {
   return (
     <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor">
@@ -45,40 +37,19 @@ function LinkIcon() {
   );
 }
 
-function CodeIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor">
-      <path d="M9.41 16.75l-3.5-3.5a4.08 4.08 0 011.58-6.58L12 3v14.5zM20.6 6.85l-3.5-3.5A4.1 4.1 0 0013.5 9.5V21l3.5-3.5a4.1 4.1 0 00-6.4-5.7z"/>
-    </svg>
-  );
-}
 
-function formatCode(code: string, indent?: number): React.ReactNode {
-  const lines = code.split("\n");
-  if (indent === undefined) {
-    return <pre className="p-4 text-[13px] leading-relaxed overflow-x-auto">{lines.map((line, i) => (
-      <div key={i} className="text-gray-400 flex">
-        <span className="text-red-500 w-6 mr-2">{i + 1}</span>
-        {line.split(/(?<=[{;])/).map((segment, idx) => (
-          segment.includes("=") ? (
-            <span key={idx} className="flex">
-              <span className="text-yellow-400 w-6 mr-2">{i + 1}</span>
-              <span className="w-6 ml-2 flex"><span className="w-1 h-[1px] bg-gray-400"></span></span>
-            </span>
-          ) : (
-            <span key={idx} className="flex">
-              <span className="text-yellow-400 w-6 mr-2">{i + 1}</span>
-              {segment}
-            </span>
-          )
-        ))}
-      </div>
-    ))}</pre>
-  );
+interface DrawerProps {
+  isOpen: boolean;
+  onClose: () => void;
+  item: {
+    itemType: string;
+    title: string;
+    tags: string[];
+  };
 }
 
 export function Drawer({ isOpen, onClose, item }: DrawerProps) {
-  const color: ItemColors = typeColors[item.itemType] as ItemColors;
+  const color: ItemColors = (item?.itemType ? typeColors[item.itemType as keyof typeof typeColors] : "red") as ItemColors;
 
   if (!isOpen) return null;
 
@@ -162,7 +133,7 @@ export function Drawer({ isOpen, onClose, item }: DrawerProps) {
           <section>
             <h5 className="text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-3">Tags</h5>
             <div className="flex flex-wrap gap-2">
-              {item.tags.map((tag, i) => (
+              {item?.tags?.map((tag: string, i: number) => (
                 <span key={i} className={`px-2 py-1 bg-[#1c1c1c] border border-[#27272a] rounded text-[11px] font-medium text-gray-400 #${tag}`}>
                   {tag}
                 </span>

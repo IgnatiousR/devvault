@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-page-custom-font */
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
@@ -28,10 +29,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", "dark", geistSans.variable, geistMono.variable, "font-mono", jetbrainsMono.variable)}
+      className={cn("h-full", "antialiased", "dark", geistSans.variable, geistMono.variable, jetbrainsMono.variable)}
     >
-      <body className="bg-[#0a0a0a] min-h-full flex flex-col">
-        <div className="fixed inset-0 bg-background/80"></div>
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+      </head>
+      <body className="min-h-full flex flex-col selection:bg-brand-red/30 selection:text-white font-sans">
         {children}
       </body>
     </html>

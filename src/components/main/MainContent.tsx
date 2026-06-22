@@ -1,70 +1,56 @@
 "use client";
 
-import { Collection, Item } from "@/lib/constants/types";
-// import { type Item, type Collection } from "@/lib/mock-data";
+import { Collection, Item, ItemType } from "@/lib/types";
 import { collections, items } from "@/lib/mock-data";
 
-function ArrowRightIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="w-5 h-5"
-      fill="none"
-      stroke="currentColor"
-    >
-      <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
-  );
+function getCollectionColor(collectionId: string) {
+  const map: Record<string, string> = {
+    "1": "bg-[var(--color-brand-red)]",
+    "2": "bg-orange-500",
+    "3": "bg-amber-500",
+  };
+  return map[collectionId] || "bg-blue-500";
 }
 
-function CodeIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="w-4 h-4"
-      fill="none"
-      stroke="currentColor"
-    >
-      <path d="M9.41 16.75l-3.5-3.5a4.08 4.08 0 011.58-6.58L12 3v14.5zM20.6 6.85l-3.5-3.5A4.1 4.1 0 0013.5 9.5V21l3.5-3.5a4.1 4.1 0 00-6.4-5.7z" />
-    </svg>
-  );
+function getCollectionIconColor(collectionId: string) {
+  const map: Record<string, string> = {
+    "1": "text-[var(--color-brand-red)]",
+    "2": "text-orange-500",
+    "3": "text-amber-500",
+  };
+  return map[collectionId] || "text-blue-500";
 }
 
-function CloseIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      className="w-5 h-5"
-      fill="none"
-      stroke="currentColor"
-    >
-      <path d="M18 6L6 18M6 6l12 12" />
-    </svg>
-  );
+function getCollectionIcons(collectionId: string) {
+  if (collectionId === "1") return ["code", "notes", "link"];
+  if (collectionId === "2") return ["terminal"];
+  if (collectionId === "3") return ["keyboard_command_key"];
+  return ["description"];
 }
 
 function CollectionCard({ collection }: { collection: Collection }) {
+  const colorClass = getCollectionColor(collection.id);
+  const iconColorClass = getCollectionIconColor(collection.id);
+  const icons = getCollectionIcons(collection.id);
+
   return (
-    <div className="group relative bg-[#121212] border border-[#27272a] rounded-xl p-6 hover:shadow-lg transition-all cursor-pointer">
-      <div className="absolute left-0 top-6 bottom-6 w-1 bg-red-500 rounded-r-full"></div>
-      <div className="flex justify-between items-start mb-10">
-        <div>
-          <h3 className="font-semibold text-lg">{collection.name}</h3>
-          <p className="text-xs text-gray-400 mt-1">
-            {collection.resourceCount} resources
-          </p>
+    <div className="group relative bg-card border border-border rounded-xl p-5 hover:bg-accent/20 transition-all cursor-pointer">
+      <div className={`absolute inset-y-4 left-0 w-1 ${colorClass} rounded-r-full`}></div>
+      <div className="flex justify-between items-start mb-8">
+        <div className="pl-2">
+          <h3 className="font-semibold text-base">{collection.name}</h3>
+          <p className="text-[12px] text-muted-foreground mt-0.5">{collection.resourceCount} resources</p>
         </div>
-        <span className="text-gray-400 group-hover:text-red-500 transition-colors">
-          <ArrowRightIcon />
+        <span className="material-symbols-outlined text-muted-foreground group-hover:translate-x-0.5 transition-transform">
+          arrow_forward
         </span>
       </div>
-      <div className="flex gap-2">
-        {[...Array(3)].map((_, i) => (
-          <span
-            key={i}
-            className="w-8 h-8 rounded-md bg-[#1c1c1c] flex items-center justify-center"
-          >
-            <CodeIcon />
+      <div className="flex gap-2 pl-2">
+        {icons.map((icon, i) => (
+          <span key={i} className="w-7 h-7 rounded border border-border bg-muted/30 flex items-center justify-center">
+            <span className={`material-symbols-outlined text-sm ${i === 1 && icon === 'notes' ? 'text-yellow-500' : i === 2 && icon === 'link' ? 'text-emerald-500' : iconColorClass}`}>
+              {icon}
+            </span>
           </span>
         ))}
       </div>
@@ -72,113 +58,96 @@ function CollectionCard({ collection }: { collection: Collection }) {
   );
 }
 
-function ItemCard({ item }: { item: Item }) {
-  return (
-    <div
-      className="bg-[#121212] border border-[#27272a] rounded-xl overflow-hidden hover:border-red-500/50 hover:shadow-md transition-all cursor-pointer group"
-      // onclick={(() => {}) as any}
-    >
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div
-            className={`w-8 h-8 rounded ${item.itemType === "Snippet" ? "bg-red-500/10 flex items-center justify-center" : ""}`}
-          >
-            {item.itemType === "Snippet" ? (
-              <span className="text-red-500 font-bold text-xs">s</span>
-            ) : (
-              <span className="text-orange-500 font-bold text-xs">
-                {item.itemType[0]}
-              </span>
-            )}
-          </div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
-            Snippet
-          </span>
-        </div>
-        <h4 className="font-semibold mb-2 text-white group-hover:text-red-500 transition-colors">
-          Tailwind Config
-        </h4>
-        <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">
-          Enterprise level configuration including custom theme tokens for
-          responsive design systems.
-        </p>
-        <div className="mt-6 flex items-center justify-between">
-          <span className="text-[11px] font-medium bg-[#1c1c1c] px-2 py-0.5 rounded border border-[#27272a]">
-            {/*{collection.name}*/}test
-          </span>
-          <span className="text-[11px] text-gray-400">2h ago</span>
-        </div>
-      </div>
-    </div>
-  );
+function getItemTypeIcon(type: ItemType) {
+  const map: Record<string, string> = {
+    [ItemType.Snippet]: "code",
+    [ItemType.Prompt]: "terminal",
+    [ItemType.Command]: "keyboard_command_key",
+    [ItemType.Note]: "notes",
+    [ItemType.Link]: "link",
+  };
+  return map[type] || "description";
 }
 
-function Drawer({ title, type }: { title: string; type: string }) {
-  const typeColor = {
-    snippet: "bg-red-500/10",
-    prompt: "bg-orange-500/10",
-    command: "bg-amber-500/10",
-    note: "bg-yellow-400/10",
-    link: "bg-emerald-400/10",
+function getItemColorClasses(type: ItemType) {
+  const map: Record<string, { bg: string; text: string; hoverBorder: string; hoverText: string }> = {
+    [ItemType.Snippet]: { bg: "bg-[var(--color-brand-red)]/10", text: "text-[var(--color-brand-red)]", hoverBorder: "hover:border-[var(--color-brand-red)]/30", hoverText: "group-hover:text-[var(--color-brand-red)]" },
+    [ItemType.Prompt]: { bg: "bg-orange-500/10", text: "text-orange-500", hoverBorder: "hover:border-orange-500/30", hoverText: "group-hover:text-orange-400" },
+    [ItemType.Command]: { bg: "bg-amber-500/10", text: "text-amber-500", hoverBorder: "hover:border-amber-500/30", hoverText: "group-hover:text-amber-400" },
+    [ItemType.Note]: { bg: "bg-yellow-500/10", text: "text-yellow-500", hoverBorder: "hover:border-yellow-500/30", hoverText: "group-hover:text-yellow-400" },
+    [ItemType.Link]: { bg: "bg-emerald-500/10", text: "text-emerald-500", hoverBorder: "hover:border-emerald-500/30", hoverText: "group-hover:text-emerald-400" },
   };
+  return map[type] || { bg: "bg-blue-500/10", text: "text-blue-500", hoverBorder: "hover:border-blue-500/30", hoverText: "group-hover:text-blue-400" };
+}
+
+function ItemCard({ item, collectionName }: { item: Item, collectionName: string }) {
+  const colors = getItemColorClasses(item.itemType);
+  const icon = getItemTypeIcon(item.itemType);
 
   return (
-    <div className="fixed top-0 right-0 h-full w-full max-w-[480px] bg-[#0a0a0a] border-l border-[#27272a] shadow-2xl z-50 translate-x-full sheet-drawer flex flex-col">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-[#27272a]">
-        <div className="flex items-center gap-3">
-          {/*{typeColor[type]}*/} test
-          <span className="text-white">{title}</span>
+    <div className={`bg-card border border-border rounded-xl overflow-hidden hover:ring-1 hover:ring-${colors.text.split('-')[1]}/50 ${colors.hoverBorder} transition-all cursor-pointer group`}>
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-5">
+          <div className={`w-8 h-8 rounded border border-border ${colors.bg} flex items-center justify-center`}>
+            <span className={`material-symbols-outlined ${colors.text} text-[16px]`} style={item.itemType === ItemType.Snippet ? {fontVariationSettings: "'FILL' 1"} : {}}>
+              {icon}
+            </span>
+          </div>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+            {item.itemType}
+          </span>
         </div>
-        <button
-          // onClick={() => ({}) as any}
-          className="p-2 hover:bg-[#27272a] rounded-md transition-colors text-gray-400 hover:text-white"
-        >
-          <CloseIcon />
-        </button>
+        <h4 className={`font-semibold mb-2 ${colors.hoverText} transition-colors`}>{item.title}</h4>
+        <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">
+          {item.description}
+        </p>
+        <div className="mt-6 flex items-center justify-between">
+          <span className="text-[10px] font-semibold bg-muted/50 px-2 py-0.5 rounded-full border border-border text-muted-foreground uppercase tracking-tight">
+            {collectionName}
+          </span>
+          <span className="text-[11px] text-muted-foreground">{item.relativeTime}</span>
+        </div>
       </div>
     </div>
   );
 }
 
 export function MainContent() {
-  return (
-    <main className="pl-64 pt-16 min-h-screen bg-[#0a0a0a]">
-      <div className="max-w-3xl mx-auto px-8 py-10">
-        {/* Recent Items Section */}
-        <section>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold tracking-tight">Recent Items</h2>
-            <div className="flex items-center gap-2 p-1 bg-[#1c1c1c] rounded-md border border-[#27272a]">
-              <button className="px-3 py-1 text-[11px] font-semibold uppercase bg-[#0a0a0a] border border-[#27272a] rounded shadow-sm">
-                Grid
-              </button>
-              <button className="px-3 py-1 text-[11px] font-semibold uppercase text-gray-400 hover:text-white transition-colors">
-                List
-              </button>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {items.map((item) => (
-              <ItemCard key={item.id} item={item} />
-            ))}
-          </div>
-        </section>
+  const getCollectionName = (id: string) => collections.find(c => c.id === id)?.name || "Unknown";
 
-        {/* Quick Actions Section */}
-        <section>
-          <h2 className="text-xl font-semibold mb-6">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <button className="inline-flex items-center justify-center h-[58px] w-full px-4 text-sm font-medium border border-[#27272a] bg-[#121212] hover:bg-[#1c1c1c]/50 transition-colors rounded-lg">
-              <span className="text-3xl mr-2">+</span>
-              New Snippet
-            </button>
-            <button className="inline-flex items-center justify-center h-[58px] w-full px-4 text-sm font-medium bg-red-500 text-white hover:bg-red-600/90 transition-colors rounded-lg shadow-sm">
-              <span className="text-3xl mr-2">⬢</span>
-              New Prompt
-            </button>
+  return (
+    <div className="space-y-12">
+      <section>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Collections</h2>
+            <p className="text-sm text-muted-foreground mt-1">Organize your resources by project or technology.</p>
           </div>
-        </section>
-      </div>
-    </main>
+          <button className="text-xs font-medium text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition-colors">
+            View all <span className="material-symbols-outlined text-xs">chevron_right</span>
+          </button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {collections.map(collection => (
+            <CollectionCard key={collection.id} collection={collection} />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-semibold tracking-tight">Recent Items</h2>
+          <div className="inline-flex items-center bg-muted/50 p-1 rounded-lg border border-border">
+            <button className="px-3 py-1 text-[11px] font-medium uppercase tracking-wide bg-background text-foreground rounded shadow-sm border border-border">Grid</button>
+            <button className="px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors">List</button>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {items.slice(0, 3).map(item => (
+            <ItemCard key={item.id} item={item} collectionName={getCollectionName(item.collectionId)} />
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }
