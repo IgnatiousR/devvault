@@ -1,0 +1,189 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── BetterAuth Models ────────────────────────────────────────────────
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  name          String?
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  isPro                Boolean @default(false)
+  stripeCustomerId     String? @unique
+  stripeSubscriptionId String? @unique
+
+  accounts      Account[]
+  sessions      Session[]
+  items         Item[]
+  collections   Collection[]
+  itemTypes     ItemType[]
+  authenticator Authenticator[]
+
+  @@map("users")
+}
+
+model Account {
+  id         String @id @default(cuid())
+  accountId  String
+  providerId String
+  userId     String
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([accountId, providerId])
+  @@map("accounts")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ipAddress String?
+  userAgent String?
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([identifier, value])
+  @@map("verification_tokens")
+}
+
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String?
+  credentialBackedUp   Boolean @default(false)
+  transports           String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, credentialID])
+  @@map("authenticators")
+}
+
+// ─── Application Models ──────────────────────────────────────────────
+
+model ItemType {
+  id       String  @id @default(cuid())
+  name     String
+  icon     String
+  color    String
+  isSystem Boolean @default(false)
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items Item[]
+
+  @@map("item_types")
+}
+
+model Item {
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+  content     String?
+  url         String?
+  fileUrl     String?
+  fileName    String?
+  fileSize    Int?
+  language    String?
+  isFavorite  Boolean @default(false)
+  isPinned    Boolean @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  itemTypeId String
+  itemType   ItemType @relation(fields: [itemTypeId], references: [id], onDelete: Restrict)
+
+  tags        Tag[]
+  collections ItemCollection[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([itemTypeId])
+  @@index([isFavorite])
+  @@index([isPinned])
+  @@map("items")
+}
+
+model Collection {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  isFavorite  Boolean @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items ItemCollection[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("collections")
+}
+
+model ItemCollection {
+  itemId       String
+  collectionId String
+
+  item       Item       @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  addedAt DateTime @default(now())
+
+  @@id([itemId, collectionId])
+  @@map("item_collections")
+}
+
+model Tag {
+  id   String @id @default(cuid())
+  name String @unique
+
+  items Item[]
+
+  @@map("tags")
+}
