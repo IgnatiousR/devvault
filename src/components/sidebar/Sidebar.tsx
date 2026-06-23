@@ -28,7 +28,7 @@ function SidebarLogo() {
   return (
     <SidebarHeader className="h-16 px-6 group-data-[collapsible=icon]:px-2 border-b border-border flex items-center justify-center">
       <div className="flex items-center gap-2 w-full group-data-[collapsible=icon]:justify-center">
-        <div className="w-6 h-6 shrink-0 bg-[var(--color-brand-red)] rounded-md flex items-center justify-center">
+        <div className="w-6 h-6 shrink-0 `bg-brand-red rounded-md flex items-center justify-center">
           <span
             className="material-symbols-outlined text-white text-[14px]"
             style={{ fontVariationSettings: "'FILL' 1" }}
@@ -36,7 +36,9 @@ function SidebarLogo() {
             security
           </span>
         </div>
-        <span className="font-semibold text-sm tracking-tight group-data-[collapsible=icon]:hidden">DevVault</span>
+        <span className="font-semibold text-sm tracking-tight group-data-[collapsible=icon]:hidden">
+          DevVault
+        </span>
       </div>
     </SidebarHeader>
   );
@@ -58,7 +60,9 @@ function NavigationMenu() {
                 tooltip={item.label}
                 className={cn(
                   "font-medium text-sm transition-all",
-                  isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+                  isActive
+                    ? "bg-accent text-accent-foreground"
+                    : "text-muted-foreground",
                 )}
               >
                 <span className="material-symbols-outlined opacity-70 shrink-0">
@@ -79,7 +83,9 @@ function FavoritesMenu() {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">Favorites</SidebarGroupLabel>
+      <SidebarGroupLabel className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
+        Favorites
+      </SidebarGroupLabel>
       <SidebarMenu>
         {favorites.map((collection) => (
           <SidebarMenuItem key={collection.id}>
@@ -88,7 +94,7 @@ function FavoritesMenu() {
               tooltip={collection.name}
               className="font-medium text-sm transition-all text-muted-foreground"
             >
-              <span className="w-2 h-2 shrink-0 rounded-full bg-[var(--color-brand-red)]"></span>
+              <span className="w-2 h-2 shrink-0 rounded-full `bg-brand-red"></span>
               <span>{collection.name}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -103,7 +109,9 @@ function RecentCollectionsMenu() {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">Recent Collections</SidebarGroupLabel>
+      <SidebarGroupLabel className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
+        Recent Collections
+      </SidebarGroupLabel>
       <SidebarMenu>
         {recent.map((collection) => (
           <SidebarMenuItem key={collection.id}>
@@ -112,7 +120,9 @@ function RecentCollectionsMenu() {
               tooltip={collection.name}
               className="font-medium text-sm transition-all text-muted-foreground"
             >
-              <span className="material-symbols-outlined opacity-70 text-sm shrink-0">folder</span>
+              <span className="material-symbols-outlined opacity-70 text-sm shrink-0">
+                folder
+              </span>
               <span>{collection.name}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -133,7 +143,9 @@ function UserFooter() {
           <span className="material-symbols-outlined opacity-70 shrink-0">
             description
           </span>
-          <span className="group-data-[collapsible=icon]:hidden">Documentation</span>
+          <span className="group-data-[collapsible=icon]:hidden">
+            Documentation
+          </span>
         </Link>
       </div>
       <div className="border-t border-border pt-4">
@@ -176,5 +188,3 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-
-export { AppSidebar };

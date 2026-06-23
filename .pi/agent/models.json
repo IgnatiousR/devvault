@@ -10,7 +10,7 @@
       },
       "models": [
         {
-          "id": "qwen3.5-4b-mtp"
+          "id": "unsloth/qwen3.5-4b"
         }
       ]
     }
