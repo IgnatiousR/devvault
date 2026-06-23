@@ -115,12 +115,39 @@ function ItemCard({ item, collectionName }: { item: Item, collectionName: string
 export function MainContent() {
   const getCollectionName = (id: string) => collections.find(c => c.id === id)?.name || "Unknown";
 
+  const totalItems = items.length;
+  const totalCollections = collections.length;
+  const favoriteItems = items.filter(i => i.isFavorite).length;
+  const favoriteCollections = collections.filter(c => c.isFavorite).length;
+
+  const pinnedItems = items.filter(i => i.isPinned);
+
   return (
     <div className="space-y-12">
+      {/* Stats Cards Section */}
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
+          <p className="text-sm font-medium text-muted-foreground mb-1">Total Items</p>
+          <p className="text-2xl font-bold">{totalItems}</p>
+        </div>
+        <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
+          <p className="text-sm font-medium text-muted-foreground mb-1">Total Collections</p>
+          <p className="text-2xl font-bold">{totalCollections}</p>
+        </div>
+        <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
+          <p className="text-sm font-medium text-muted-foreground mb-1">Favorite Items</p>
+          <p className="text-2xl font-bold">{favoriteItems}</p>
+        </div>
+        <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
+          <p className="text-sm font-medium text-muted-foreground mb-1">Favorite Collections</p>
+          <p className="text-2xl font-bold">{favoriteCollections}</p>
+        </div>
+      </section>
+
       <section>
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Collections</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Recent Collections</h2>
             <p className="text-sm text-muted-foreground mt-1">Organize your resources by project or technology.</p>
           </div>
           <button className="text-xs font-medium text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition-colors">
@@ -134,6 +161,19 @@ export function MainContent() {
         </div>
       </section>
 
+      {pinnedItems.length > 0 && (
+        <section>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-semibold tracking-tight">Pinned Items</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {pinnedItems.map(item => (
+              <ItemCard key={item.id} item={item} collectionName={getCollectionName(item.collectionId)} />
+            ))}
+          </div>
+        </section>
+      )}
+
       <section>
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-semibold tracking-tight">Recent Items</h2>
@@ -143,7 +183,7 @@ export function MainContent() {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.slice(0, 3).map(item => (
+          {items.slice(0, 10).map(item => (
             <ItemCard key={item.id} item={item} collectionName={getCollectionName(item.collectionId)} />
           ))}
         </div>

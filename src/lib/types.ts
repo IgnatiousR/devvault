@@ -4,32 +4,6 @@ export const Note = "Note" as const;
 export const Link = "Link" as const;
 export const Snippet = "Snippet" as const;
 
-export interface Item {
-  id: string;
-  title: string;
-  description: string;
-  itemType: ItemType;
-  collectionId: string;
-  tags: string[];
-  updatedAt: Date;
-  relativeTime: string;
-}
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  image: string;
-  role: "admin" | "user";
-}
-
-export interface Collection {
-  id: string;
-  name: string;
-  resourceCount: number;
-  isFavorite?: boolean;
-}
-
 export enum ItemType {
   Snippet = "Snippet",
   Prompt = "Prompt",
@@ -55,6 +29,8 @@ export interface Item {
   updatedAt: Date;
   relativeTime: string;
   typeColor?: string;
+  isPinned?: boolean;
+  isFavorite?: boolean;
 }
 
 export interface User {

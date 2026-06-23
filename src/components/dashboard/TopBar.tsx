@@ -4,14 +4,14 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export function TopBar() {
   return (
-    <header className="fixed top-0 right-0 left-0 md:left-[var(--sidebar-width,0px)] h-16 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-40 flex items-center justify-between px-4 md:px-8 transition-[left] ease-linear duration-200">
+    <header className="sticky top-0 h-16 shrink-0 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-40 flex items-center justify-between px-4 md:px-8 transition-all ease-linear duration-200">
       <div className="flex items-center gap-2 flex-1 max-w-md relative">
-        <SidebarTrigger className="md:hidden" />
-        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm ml-8 md:ml-0">
+        <SidebarTrigger />
+        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm ml-8">
           search
         </span>
         <Input
-          className="w-full h-9 bg-muted/50 border-input rounded-md pl-9 pr-4 ml-8 md:ml-0 text-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring transition-all"
+          className="w-full h-9 bg-muted/50 border-input rounded-md pl-9 pr-4 ml-8 text-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring transition-all"
           placeholder="Search... (⌘K)"
           type="text"
         />
