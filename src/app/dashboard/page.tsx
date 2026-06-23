@@ -1,6 +1,7 @@
 import { MainContent } from "@/components/main/MainContent";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "DevVault | Dashboard",
 };
 

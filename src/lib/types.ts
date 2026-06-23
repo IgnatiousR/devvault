@@ -1,9 +1,3 @@
-export const Prompt = "Prompt" as const;
-export const Command = "Command" as const;
-export const Note = "Note" as const;
-export const Link = "Link" as const;
-export const Snippet = "Snippet" as const;
-
 export enum ItemType {
   Snippet = "Snippet",
   Prompt = "Prompt",

@@ -28,6 +28,22 @@ function getCollectionIcons(collectionId: string) {
   return ["description"];
 }
 
+const ICON_COLORS: Record<string, string> = {
+  "1-notes": "text-yellow-500",
+  "2-link": "text-emerald-500",
+};
+
+function IconBadge({ icon, index, colorClass }: { icon: string; index: number; colorClass: string }) {
+  const key = `${index}-${icon}`;
+  const specialColor = ICON_COLORS[key] || colorClass;
+
+  return (
+    <span className="w-7 h-7 rounded border border-border bg-muted/30 flex items-center justify-center">
+      <span className={`material-symbols-outlined text-sm ${specialColor}`}>{icon}</span>
+    </span>
+  );
+}
+
 function CollectionCard({ collection }: { collection: Collection }) {
   const colorClass = getCollectionColor(collection.id);
   const iconColorClass = getCollectionIconColor(collection.id);
@@ -47,11 +63,7 @@ function CollectionCard({ collection }: { collection: Collection }) {
       </div>
       <div className="flex gap-2 pl-2">
         {icons.map((icon, i) => (
-          <span key={i} className="w-7 h-7 rounded border border-border bg-muted/30 flex items-center justify-center">
-            <span className={`material-symbols-outlined text-sm ${i === 1 && icon === 'notes' ? 'text-yellow-500' : i === 2 && icon === 'link' ? 'text-emerald-500' : iconColorClass}`}>
-              {icon}
-            </span>
-          </span>
+          <IconBadge key={i} icon={icon} index={i} colorClass={iconColorClass} />
         ))}
       </div>
     </div>
