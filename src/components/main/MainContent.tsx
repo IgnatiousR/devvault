@@ -1,57 +1,51 @@
 "use client";
 
 import { Collection, Item, ItemType } from "@/lib/types";
-import { collections, items } from "@/lib/mock-data";
+import { items } from "@/lib/mock-data";
 
-function getCollectionColor(collectionId: string) {
+function colorToBgClass(color: string): string {
   const map: Record<string, string> = {
-    "1": "bg-[var(--color-brand-red)]",
-    "2": "bg-orange-500",
-    "3": "bg-amber-500",
+    "#ef4444": "bg-[var(--color-brand-red)]",
+    "#f97316": "bg-orange-500",
+    "#f59e0b": "bg-amber-500",
+    "#fde047": "bg-yellow-500",
+    "#6b7280": "bg-gray-500",
+    "#ec4899": "bg-pink-500",
+    "#10b981": "bg-emerald-500",
   };
-  return map[collectionId] || "bg-blue-500";
+  return map[color] || "bg-blue-500";
 }
 
-function getCollectionIconColor(collectionId: string) {
+function colorToTextClass(color: string): string {
   const map: Record<string, string> = {
-    "1": "text-[var(--color-brand-red)]",
-    "2": "text-orange-500",
-    "3": "text-amber-500",
+    "#ef4444": "text-[var(--color-brand-red)]",
+    "#f97316": "text-orange-500",
+    "#f59e0b": "text-amber-500",
+    "#fde047": "text-yellow-500",
+    "#6b7280": "text-gray-500",
+    "#ec4899": "text-pink-500",
+    "#10b981": "text-emerald-500",
   };
-  return map[collectionId] || "text-blue-500";
+  return map[color] || "text-blue-500";
 }
 
-function getCollectionIcons(collectionId: string) {
-  if (collectionId === "1") return ["code", "notes", "link"];
-  if (collectionId === "2") return ["terminal"];
-  if (collectionId === "3") return ["keyboard_command_key"];
-  return ["description"];
-}
-
-const ICON_COLORS: Record<string, string> = {
-  "1-notes": "text-yellow-500",
-  "2-link": "text-emerald-500",
-};
-
-function IconBadge({ icon, index, colorClass }: { icon: string; index: number; colorClass: string }) {
-  const key = `${index}-${icon}`;
-  const specialColor = ICON_COLORS[key] || colorClass;
-
+function IconBadge({ icon, colorClass }: { icon: string; colorClass: string }) {
   return (
     <span className="w-7 h-7 rounded border border-border bg-muted/30 flex items-center justify-center">
-      <span className={`material-symbols-outlined text-sm ${specialColor}`}>{icon}</span>
+      <span className={`material-symbols-outlined text-sm ${colorClass}`}>{icon}</span>
     </span>
   );
 }
 
 function CollectionCard({ collection }: { collection: Collection }) {
-  const colorClass = getCollectionColor(collection.id);
-  const iconColorClass = getCollectionIconColor(collection.id);
-  const icons = getCollectionIcons(collection.id);
+  const borderBgClass = collection.mostUsedType
+    ? colorToBgClass(collection.mostUsedType.color)
+    : "bg-blue-500";
+  const icons = collection.typeIcons || [];
 
   return (
     <div className="group relative bg-card border border-border rounded-xl p-5 hover:bg-accent/20 transition-all cursor-pointer">
-      <div className={`absolute inset-y-4 left-0 w-1 ${colorClass} rounded-r-full`}></div>
+      <div className={`absolute inset-y-4 left-0 w-1 ${borderBgClass} rounded-r-full`}></div>
       <div className="flex justify-between items-start mb-8">
         <div className="pl-2">
           <h3 className="font-semibold text-base">{collection.name}</h3>
@@ -62,8 +56,8 @@ function CollectionCard({ collection }: { collection: Collection }) {
         </span>
       </div>
       <div className="flex gap-2 pl-2">
-        {icons.map((icon, i) => (
-          <IconBadge key={i} icon={icon} index={i} colorClass={iconColorClass} />
+        {icons.map((t, i) => (
+          <IconBadge key={i} icon={t.icon} colorClass={colorToTextClass(t.color)} />
         ))}
       </div>
     </div>
@@ -124,7 +118,7 @@ function ItemCard({ item, collectionName }: { item: Item, collectionName: string
   );
 }
 
-export function MainContent() {
+export function MainContent({ collections }: { collections: Collection[] }) {
   const getCollectionName = (id: string) => collections.find(c => c.id === id)?.name || "Unknown";
 
   const totalItems = items.length;

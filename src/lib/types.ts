@@ -11,6 +11,12 @@ export interface Collection {
   name: string;
   resourceCount: number;
   isFavorite?: boolean;
+  mostUsedType?: {
+    name: string;
+    icon: string;
+    color: string;
+  } | null;
+  typeIcons?: { icon: string; color: string }[];
 }
 
 export interface Item {
