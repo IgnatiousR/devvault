@@ -73,9 +73,9 @@ function CollectionCard({ collection }: { collection: Collection }) {
 function getItemTypeIcon(type: ItemType) {
   const map: Record<string, string> = {
     [ItemType.Snippet]: "code",
-    [ItemType.Prompt]: "terminal",
-    [ItemType.Command]: "keyboard_command_key",
-    [ItemType.Note]: "notes",
+    [ItemType.Prompt]: "auto_awesome",
+    [ItemType.Command]: "terminal",
+    [ItemType.Note]: "sticky_note_2",
     [ItemType.Link]: "link",
   };
   return map[type] || "description";

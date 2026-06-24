@@ -7,8 +7,8 @@
 Read the following to get the full context of the project:
 
 - @context/project-overview.md
-- @agents/skills/coding-standards.md
-- @agents/skills/ai-interaction.md
+- @agents/coding-standards.md
+- @agents/ai-interaction.md
 - @context/current-feature.md
 
 ## Commands

@@ -18,9 +18,9 @@ Create a seed script (`prisma/seed.ts`) to populate the database with sample dat
 
 | Name    | Icon       | Color   |
 | ------- | ---------- | ------- |
-| snippet | Code       | #3b82f6 |
-| prompt  | Sparkles   | #8b5cf6 |
-| command | Terminal   | #f97316 |
+| snippet | Code       | #ef4444 |
+| prompt  | Sparkles   | #f97316 |
+| command | Terminal   | #f59e0b |
 | note    | StickyNote | #fde047 |
 | file    | File       | #6b7280 |
 | image   | Image      | #ec4899 |
