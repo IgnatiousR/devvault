@@ -1,7 +1,7 @@
 "use client";
 
-import { Collection, Item, ItemType } from "@/lib/types";
-import { items } from "@/lib/mock-data";
+import { Collection } from "@/lib/types";
+import { DashboardItem } from "@/lib/db/items";
 
 function colorToBgClass(color: string): string {
   const map: Record<string, string> = {
@@ -37,6 +37,19 @@ function IconBadge({ icon, colorClass }: { icon: string; colorClass: string }) {
   );
 }
 
+function formatRelativeTime(date: Date): string {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return diffDays === 1 ? "Yesterday" : `${diffDays} days ago`;
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
 function CollectionCard({ collection }: { collection: Collection }) {
   const borderBgClass = collection.mostUsedType
     ? colorToBgClass(collection.mostUsedType.color)
@@ -64,43 +77,33 @@ function CollectionCard({ collection }: { collection: Collection }) {
   );
 }
 
-function getItemTypeIcon(type: ItemType) {
-  const map: Record<string, string> = {
-    [ItemType.Snippet]: "code",
-    [ItemType.Prompt]: "auto_awesome",
-    [ItemType.Command]: "terminal",
-    [ItemType.Note]: "sticky_note_2",
-    [ItemType.Link]: "link",
-  };
-  return map[type] || "description";
-}
-
-function getItemColorClasses(type: ItemType) {
+function getItemColorClasses(typeName: string) {
   const map: Record<string, { bg: string; text: string; hoverBorder: string; hoverText: string }> = {
-    [ItemType.Snippet]: { bg: "bg-[var(--color-brand-red)]/10", text: "text-[var(--color-brand-red)]", hoverBorder: "hover:border-[var(--color-brand-red)]/30", hoverText: "group-hover:text-[var(--color-brand-red)]" },
-    [ItemType.Prompt]: { bg: "bg-orange-500/10", text: "text-orange-500", hoverBorder: "hover:border-orange-500/30", hoverText: "group-hover:text-orange-400" },
-    [ItemType.Command]: { bg: "bg-amber-500/10", text: "text-amber-500", hoverBorder: "hover:border-amber-500/30", hoverText: "group-hover:text-amber-400" },
-    [ItemType.Note]: { bg: "bg-yellow-500/10", text: "text-yellow-500", hoverBorder: "hover:border-yellow-500/30", hoverText: "group-hover:text-yellow-400" },
-    [ItemType.Link]: { bg: "bg-emerald-500/10", text: "text-emerald-500", hoverBorder: "hover:border-emerald-500/30", hoverText: "group-hover:text-emerald-400" },
+    "Snippet": { bg: "bg-[var(--color-brand-red)]/10", text: "text-[var(--color-brand-red)]", hoverBorder: "hover:border-[var(--color-brand-red)]/30", hoverText: "group-hover:text-[var(--color-brand-red)]" },
+    "Prompt": { bg: "bg-orange-500/10", text: "text-orange-500", hoverBorder: "hover:border-orange-500/30", hoverText: "group-hover:text-orange-400" },
+    "Command": { bg: "bg-amber-500/10", text: "text-amber-500", hoverBorder: "hover:border-amber-500/30", hoverText: "group-hover:text-amber-400" },
+    "Note": { bg: "bg-yellow-500/10", text: "text-yellow-500", hoverBorder: "hover:border-yellow-500/30", hoverText: "group-hover:text-yellow-400" },
+    "Link": { bg: "bg-emerald-500/10", text: "text-emerald-500", hoverBorder: "hover:border-emerald-500/30", hoverText: "group-hover:text-emerald-400" },
   };
-  return map[type] || { bg: "bg-blue-500/10", text: "text-blue-500", hoverBorder: "hover:border-blue-500/30", hoverText: "group-hover:text-blue-400" };
+  return map[typeName] || { bg: "bg-blue-500/10", text: "text-blue-500", hoverBorder: "hover:border-blue-500/30", hoverText: "group-hover:text-blue-400" };
 }
 
-function ItemCard({ item, collectionName }: { item: Item, collectionName: string }) {
-  const colors = getItemColorClasses(item.itemType);
-  const icon = getItemTypeIcon(item.itemType);
+function ItemCard({ item }: { item: DashboardItem }) {
+  const colors = getItemColorClasses(item.itemType.name);
+  const icon = item.itemType.icon;
+  const relativeTime = formatRelativeTime(item.updatedAt);
 
   return (
     <div className={`bg-card border border-border rounded-xl overflow-hidden hover:ring-1 hover:ring-${colors.text.split('-')[1]}/50 ${colors.hoverBorder} transition-all cursor-pointer group`}>
       <div className="p-6">
         <div className="flex items-center justify-between mb-5">
           <div className={`w-8 h-8 rounded border border-border ${colors.bg} flex items-center justify-center`}>
-            <span className={`material-symbols-outlined ${colors.text} text-[16px]`} style={item.itemType === ItemType.Snippet ? {fontVariationSettings: "'FILL' 1"} : {}}>
+            <span className={`material-symbols-outlined ${colors.text} text-[16px]`}>
               {icon}
             </span>
           </div>
           <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-            {item.itemType}
+            {item.itemType.name}
           </span>
         </div>
         <h4 className={`font-semibold mb-2 ${colors.hoverText} transition-colors`}>{item.title}</h4>
@@ -108,26 +111,39 @@ function ItemCard({ item, collectionName }: { item: Item, collectionName: string
           {item.description}
         </p>
         <div className="mt-6 flex items-center justify-between">
-          <span className="text-[10px] font-semibold bg-muted/50 px-2 py-0.5 rounded-full border border-border text-muted-foreground uppercase tracking-tight">
-            {collectionName}
-          </span>
-          <span className="text-[11px] text-muted-foreground">{item.relativeTime}</span>
+          {item.collectionName ? (
+            <span className="text-[10px] font-semibold bg-muted/50 px-2 py-0.5 rounded-full border border-border text-muted-foreground uppercase tracking-tight">
+              {item.collectionName}
+            </span>
+          ) : (
+            <span />
+          )}
+          <span className="text-[11px] text-muted-foreground">{relativeTime}</span>
         </div>
       </div>
     </div>
   );
 }
 
-export function MainContent({ collections }: { collections: Collection[] }) {
-  const getCollectionName = (id: string) => collections.find(c => c.id === id)?.name || "Unknown";
+interface MainContentProps {
+  collections: Collection[];
+  pinnedItems: DashboardItem[];
+  recentItems: DashboardItem[];
+  totalItems: number;
+  totalCollections: number;
+  favoriteItems: number;
+  favoriteCollections: number;
+}
 
-  const totalItems = items.length;
-  const totalCollections = collections.length;
-  const favoriteItems = items.filter(i => i.isFavorite).length;
-  const favoriteCollections = collections.filter(c => c.isFavorite).length;
-
-  const pinnedItems = items.filter(i => i.isPinned);
-
+export function MainContent({
+  collections,
+  pinnedItems,
+  recentItems,
+  totalItems,
+  totalCollections,
+  favoriteItems,
+  favoriteCollections,
+}: MainContentProps) {
   return (
     <div className="space-y-12">
       {/* Stats Cards Section */}
@@ -174,7 +190,7 @@ export function MainContent({ collections }: { collections: Collection[] }) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {pinnedItems.map(item => (
-              <ItemCard key={item.id} item={item} collectionName={getCollectionName(item.collectionId)} />
+              <ItemCard key={item.id} item={item} />
             ))}
           </div>
         </section>
@@ -189,8 +205,8 @@ export function MainContent({ collections }: { collections: Collection[] }) {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.slice(0, 10).map(item => (
-            <ItemCard key={item.id} item={item} collectionName={getCollectionName(item.collectionId)} />
+          {recentItems.map(item => (
+            <ItemCard key={item.id} item={item} />
           ))}
         </div>
       </section>
