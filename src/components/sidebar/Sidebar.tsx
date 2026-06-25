@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { currentUser, collections } from "@/lib/mock-data";
-import { cn } from "@/lib/utils";
+import { useState } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -16,19 +14,27 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import type { ItemTypeCount } from "@/lib/db/items";
+import type { CollectionWithStats } from "@/lib/db/collections";
 
-const MENU_ITEMS = [
-  { icon: "inventory_2", label: "All Items", href: "/items" },
-  { icon: "code", label: "Snippets", href: "/items/snippets" },
-  { icon: "terminal", label: "Prompts", href: "/items/prompts" },
-  { icon: "folder_special", label: "Collections", href: "/collections" },
-];
+interface User {
+  id: string;
+  name: string | null;
+  email: string;
+  image: string | null;
+}
+
+interface AppSidebarProps {
+  user: User | null;
+  collections: CollectionWithStats[];
+  itemTypes: ItemTypeCount[];
+}
 
 function SidebarLogo() {
   return (
     <SidebarHeader className="h-16 px-6 group-data-[collapsible=icon]:px-2 border-b border-border flex items-center justify-center">
       <div className="flex items-center gap-2 w-full group-data-[collapsible=icon]:justify-center">
-        <div className="w-6 h-6 shrink-0 `bg-brand-red rounded-md flex items-center justify-center">
+        <div className="w-6 h-6 shrink-0 bg-brand-red rounded-md flex items-center justify-center">
           <span
             className="material-symbols-outlined text-white text-[14px]"
             style={{ fontVariationSettings: "'FILL' 1" }}
@@ -44,48 +50,16 @@ function SidebarLogo() {
   );
 }
 
-function NavigationMenu() {
-  const pathname = usePathname();
-
-  return (
-    <SidebarGroup>
-      <SidebarMenu>
-        {MENU_ITEMS.map((item) => {
-          const isActive = pathname === item.href;
-          return (
-            <SidebarMenuItem key={item.label}>
-              <SidebarMenuButton
-                render={<Link href={item.href} />}
-                isActive={isActive}
-                tooltip={item.label}
-                className={cn(
-                  "font-medium text-sm transition-all",
-                  isActive
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground",
-                )}
-              >
-                <span className="material-symbols-outlined opacity-70 shrink-0">
-                  {item.icon}
-                </span>
-                <span>{item.label}</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          );
-        })}
-      </SidebarMenu>
-    </SidebarGroup>
-  );
-}
-
-function FavoritesMenu() {
+function FavoritesSection({ collections }: { collections: CollectionWithStats[] }) {
   const favorites = collections.filter((c) => c.isFavorite);
 
+  if (favorites.length === 0) return null;
+
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
+    <div className="mb-2">
+      <span className="px-2 text-[9px] font-medium text-muted-foreground/70 uppercase tracking-wider group-data-[collapsible=icon]:hidden">
         Favorites
-      </SidebarGroupLabel>
+      </span>
       <SidebarMenu>
         {favorites.map((collection) => (
           <SidebarMenuItem key={collection.id}>
@@ -94,24 +68,26 @@ function FavoritesMenu() {
               tooltip={collection.name}
               className="font-medium text-sm transition-all text-muted-foreground"
             >
-              <span className="w-2 h-2 shrink-0 rounded-full `bg-brand-red"></span>
+              <span className="w-2 h-2 shrink-0 rounded-full bg-brand-red"></span>
               <span>{collection.name}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
       </SidebarMenu>
-    </SidebarGroup>
+    </div>
   );
 }
 
-function RecentCollectionsMenu() {
+function RecentCollectionsSection({ collections }: { collections: CollectionWithStats[] }) {
   const recent = collections.slice(0, 3);
 
+  if (recent.length === 0) return null;
+
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
-        Recent Collections
-      </SidebarGroupLabel>
+    <div>
+      <span className="px-2 text-[9px] font-medium text-muted-foreground/70 uppercase tracking-wider group-data-[collapsible=icon]:hidden">
+        Recent
+      </span>
       <SidebarMenu>
         {recent.map((collection) => (
           <SidebarMenuItem key={collection.id}>
@@ -120,10 +96,92 @@ function RecentCollectionsMenu() {
               tooltip={collection.name}
               className="font-medium text-sm transition-all text-muted-foreground"
             >
-              <span className="material-symbols-outlined opacity-70 text-sm shrink-0">
-                folder
-              </span>
+              <span
+                className="w-2 h-2 shrink-0 rounded-full"
+                style={{ backgroundColor: collection.mostUsedType?.color || '#6b7280' }}
+              ></span>
               <span>{collection.name}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            render={<Link href="/collections" />}
+            tooltip="View all collections"
+            className="font-medium text-sm transition-all text-muted-foreground"
+          >
+            <span className="material-symbols-outlined opacity-70 text-sm shrink-0">
+              arrow_forward
+            </span>
+            <span>View all collections</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    </div>
+  );
+}
+
+function CollectionsMenu({ collections }: { collections: CollectionWithStats[] }) {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <SidebarGroup>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center justify-between w-full px-2 py-1 text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden hover:text-foreground transition-colors"
+      >
+        <span>Collections</span>
+        <span className="material-symbols-outlined text-sm">
+          {isOpen ? "expand_less" : "expand_more"}
+        </span>
+      </button>
+      {isOpen && (
+        <>
+          <FavoritesSection collections={collections} />
+          <RecentCollectionsSection collections={collections} />
+        </>
+      )}
+    </SidebarGroup>
+  );
+}
+
+function pluralize(name: string): string {
+  const map: Record<string, string> = {
+    Snippet: "Snippets",
+    Prompt: "Prompts",
+    Command: "Commands",
+    Note: "Notes",
+    File: "Files",
+    Image: "Images",
+    Link: "Links",
+  };
+  return map[name] || name;
+}
+
+function ItemTypesMenu({ itemTypes }: { itemTypes: ItemTypeCount[] }) {
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
+        Types
+      </SidebarGroupLabel>
+      <SidebarMenu>
+        {itemTypes.map((itemType) => (
+          <SidebarMenuItem key={itemType.name}>
+            <SidebarMenuButton
+              render={<Link href={`/items/${itemType.name.toLowerCase()}`} />}
+              tooltip={`${pluralize(itemType.name)} (${itemType.count})`}
+              className="font-medium text-sm transition-all text-muted-foreground"
+            >
+              <span
+                className="material-symbols-outlined opacity-70 text-sm shrink-0"
+                style={{ color: itemType.color }}
+              >
+                {itemType.icon}
+              </span>
+              <span>{pluralize(itemType.name)}</span>
+              <span className="ml-auto text-xs text-muted-foreground">
+                {itemType.count}
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
@@ -132,7 +190,9 @@ function RecentCollectionsMenu() {
   );
 }
 
-function UserFooter() {
+function UserFooter({ user }: { user: User | null }) {
+  if (!user) return null;
+
   return (
     <SidebarFooter className="p-3 space-y-4 mt-auto group-data-[collapsible=icon]:px-2">
       <div className="px-3 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
@@ -152,14 +212,14 @@ function UserFooter() {
         <div className="flex items-center justify-between p-2 group-data-[collapsible=icon]:p-0 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer w-full group-data-[collapsible=icon]:justify-center">
           <div className="flex items-center gap-3 min-w-0 group-data-[collapsible=icon]:gap-0">
             <Avatar className="w-8 h-8 rounded-md border border-border shrink-0">
-              <AvatarImage src={currentUser.image} alt={currentUser.name} />
+              <AvatarImage src={user.image || undefined} alt={user.name || 'User'} />
               <AvatarFallback className="rounded-md">
-                {currentUser.name.charAt(0)}
+                {user.name?.charAt(0) || 'U'}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col min-w-0 group-data-[collapsible=icon]:hidden">
               <span className="text-xs font-semibold truncate">
-                {currentUser.name}
+                {user.name || 'User'}
               </span>
               <span className="text-[10px] text-muted-foreground truncate">
                 v2.4.0 • Pro
@@ -175,16 +235,16 @@ function UserFooter() {
   );
 }
 
-export function AppSidebar() {
+export function AppSidebar({ user, collections, itemTypes }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon">
       <SidebarLogo />
       <SidebarContent>
-        <NavigationMenu />
-        <FavoritesMenu />
-        <RecentCollectionsMenu />
+        <ItemTypesMenu itemTypes={itemTypes} />
+        <div className="mx-4 h-px bg-border" />
+        <CollectionsMenu collections={collections} />
       </SidebarContent>
-      <UserFooter />
+      <UserFooter user={user} />
     </Sidebar>
   );
 }

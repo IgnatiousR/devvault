@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Collection } from "@/lib/types";
 import { DashboardItem } from "@/lib/db/items";
 
@@ -50,6 +51,47 @@ function formatRelativeTime(date: Date): string {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
+function getItemColorClasses(typeName: string) {
+  const map: Record<string, { bg: string; text: string; hoverBorder: string; hoverText: string }> = {
+    "Snippet": { bg: "bg-[var(--color-brand-red)]/10", text: "text-[var(--color-brand-red)]", hoverBorder: "hover:border-[var(--color-brand-red)]/30", hoverText: "group-hover:text-[var(--color-brand-red)]" },
+    "Prompt": { bg: "bg-orange-500/10", text: "text-orange-500", hoverBorder: "hover:border-orange-500/30", hoverText: "group-hover:text-orange-400" },
+    "Command": { bg: "bg-amber-500/10", text: "text-amber-500", hoverBorder: "hover:border-amber-500/30", hoverText: "group-hover:text-amber-400" },
+    "Note": { bg: "bg-yellow-500/10", text: "text-yellow-500", hoverBorder: "hover:border-yellow-500/30", hoverText: "group-hover:text-yellow-400" },
+    "Link": { bg: "bg-emerald-500/10", text: "text-emerald-500", hoverBorder: "hover:border-emerald-500/30", hoverText: "group-hover:text-emerald-400" },
+  };
+  return map[typeName] || { bg: "bg-blue-500/10", text: "text-blue-500", hoverBorder: "hover:border-blue-500/30", hoverText: "group-hover:text-blue-400" };
+}
+
+interface StatsCardsProps {
+  totalItems: number;
+  totalCollections: number;
+  favoriteItems: number;
+  favoriteCollections: number;
+}
+
+function StatsCards({ totalItems, totalCollections, favoriteItems, favoriteCollections }: StatsCardsProps) {
+  return (
+    <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
+        <p className="text-sm font-medium text-muted-foreground mb-1">Total Items</p>
+        <p className="text-2xl font-bold">{totalItems}</p>
+      </div>
+      <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
+        <p className="text-sm font-medium text-muted-foreground mb-1">Total Collections</p>
+        <p className="text-2xl font-bold">{totalCollections}</p>
+      </div>
+      <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
+        <p className="text-sm font-medium text-muted-foreground mb-1">Favorite Items</p>
+        <p className="text-2xl font-bold">{favoriteItems}</p>
+      </div>
+      <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
+        <p className="text-sm font-medium text-muted-foreground mb-1">Favorite Collections</p>
+        <p className="text-2xl font-bold">{favoriteCollections}</p>
+      </div>
+    </section>
+  );
+}
+
 function CollectionCard({ collection }: { collection: Collection }) {
   const borderBgClass = collection.mostUsedType
     ? colorToBgClass(collection.mostUsedType.color)
@@ -77,15 +119,56 @@ function CollectionCard({ collection }: { collection: Collection }) {
   );
 }
 
-function getItemColorClasses(typeName: string) {
-  const map: Record<string, { bg: string; text: string; hoverBorder: string; hoverText: string }> = {
-    "Snippet": { bg: "bg-[var(--color-brand-red)]/10", text: "text-[var(--color-brand-red)]", hoverBorder: "hover:border-[var(--color-brand-red)]/30", hoverText: "group-hover:text-[var(--color-brand-red)]" },
-    "Prompt": { bg: "bg-orange-500/10", text: "text-orange-500", hoverBorder: "hover:border-orange-500/30", hoverText: "group-hover:text-orange-400" },
-    "Command": { bg: "bg-amber-500/10", text: "text-amber-500", hoverBorder: "hover:border-amber-500/30", hoverText: "group-hover:text-amber-400" },
-    "Note": { bg: "bg-yellow-500/10", text: "text-yellow-500", hoverBorder: "hover:border-yellow-500/30", hoverText: "group-hover:text-yellow-400" },
-    "Link": { bg: "bg-emerald-500/10", text: "text-emerald-500", hoverBorder: "hover:border-emerald-500/30", hoverText: "group-hover:text-emerald-400" },
-  };
-  return map[typeName] || { bg: "bg-blue-500/10", text: "text-blue-500", hoverBorder: "hover:border-blue-500/30", hoverText: "group-hover:text-blue-400" };
+interface RecentCollectionsSectionProps {
+  collections: Collection[];
+}
+
+function RecentCollectionsSection({ collections }: RecentCollectionsSectionProps) {
+  return (
+    <section>
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight text-foreground">Recent Collections</h2>
+          <p className="text-sm text-muted-foreground mt-1">Organize your resources by project or technology.</p>
+        </div>
+        <button className="text-xs font-medium text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition-colors">
+          View all <span className="material-symbols-outlined text-xs">chevron_right</span>
+        </button>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {collections.map(collection => (
+          <CollectionCard key={collection.id} collection={collection} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode: "grid" | "list") => void }) {
+  return (
+    <div className="inline-flex items-center bg-muted/50 p-1 rounded-lg border border-border">
+      <button
+        onClick={() => onChange("grid")}
+        className={`px-3 py-1 text-[11px] font-medium uppercase tracking-wide rounded transition-colors ${
+          mode === "grid"
+            ? "bg-background text-foreground shadow-sm border border-border"
+            : "text-muted-foreground hover:text-foreground"
+        }`}
+      >
+        Grid
+      </button>
+      <button
+        onClick={() => onChange("list")}
+        className={`px-3 py-1 text-[11px] font-medium uppercase tracking-wide rounded transition-colors ${
+          mode === "list"
+            ? "bg-background text-foreground shadow-sm border border-border"
+            : "text-muted-foreground hover:text-foreground"
+        }`}
+      >
+        List
+      </button>
+    </div>
+  );
 }
 
 function ItemCard({ item }: { item: DashboardItem }) {
@@ -125,6 +208,68 @@ function ItemCard({ item }: { item: DashboardItem }) {
   );
 }
 
+function ListItem({ item }: { item: DashboardItem }) {
+  const colors = getItemColorClasses(item.itemType.name);
+  const icon = item.itemType.icon;
+  const relativeTime = formatRelativeTime(item.updatedAt);
+
+  return (
+    <div className={`bg-card border border-border rounded-xl p-4 hover:ring-1 hover:ring-${colors.text.split('-')[1]}/50 ${colors.hoverBorder} transition-all cursor-pointer group flex items-center gap-4`}>
+      <div className={`w-10 h-10 rounded border border-border ${colors.bg} flex items-center justify-center shrink-0`}>
+        <span className={`material-symbols-outlined ${colors.text} text-[18px]`}>
+          {icon}
+        </span>
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <h4 className={`font-semibold ${colors.hoverText} transition-colors truncate`}>{item.title}</h4>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground shrink-0">
+            {item.itemType.name}
+          </span>
+        </div>
+        <p className="text-muted-foreground text-sm line-clamp-1 mt-0.5">
+          {item.description}
+        </p>
+      </div>
+      <div className="flex items-center gap-3 shrink-0">
+        {item.collectionName && (
+          <span className="text-[10px] font-semibold bg-muted/50 px-2 py-0.5 rounded-full border border-border text-muted-foreground uppercase tracking-tight hidden md:inline-block">
+            {item.collectionName}
+          </span>
+        )}
+        <span className="text-[11px] text-muted-foreground whitespace-nowrap">{relativeTime}</span>
+      </div>
+    </div>
+  );
+}
+
+interface ItemsSectionProps {
+  title: string;
+  items: DashboardItem[];
+}
+
+function ItemsSection({ title, items }: ItemsSectionProps) {
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
+  return (
+    <section>
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+        <ViewToggle mode={viewMode} onChange={setViewMode} />
+      </div>
+      <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "flex flex-col gap-3"}>
+        {items.map(item => (
+          viewMode === "grid" ? (
+            <ItemCard key={item.id} item={item} />
+          ) : (
+            <ListItem key={item.id} item={item} />
+          )
+        ))}
+      </div>
+    </section>
+  );
+}
+
 interface MainContentProps {
   collections: Collection[];
   pinnedItems: DashboardItem[];
@@ -146,70 +291,17 @@ export function MainContent({
 }: MainContentProps) {
   return (
     <div className="space-y-12">
-      {/* Stats Cards Section */}
-      <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
-          <p className="text-sm font-medium text-muted-foreground mb-1">Total Items</p>
-          <p className="text-2xl font-bold">{totalItems}</p>
-        </div>
-        <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
-          <p className="text-sm font-medium text-muted-foreground mb-1">Total Collections</p>
-          <p className="text-2xl font-bold">{totalCollections}</p>
-        </div>
-        <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
-          <p className="text-sm font-medium text-muted-foreground mb-1">Favorite Items</p>
-          <p className="text-2xl font-bold">{favoriteItems}</p>
-        </div>
-        <div className="bg-card border border-border rounded-xl p-5 shadow-sm">
-          <p className="text-sm font-medium text-muted-foreground mb-1">Favorite Collections</p>
-          <p className="text-2xl font-bold">{favoriteCollections}</p>
-        </div>
-      </section>
-
-      <section>
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Recent Collections</h2>
-            <p className="text-sm text-muted-foreground mt-1">Organize your resources by project or technology.</p>
-          </div>
-          <button className="text-xs font-medium text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition-colors">
-            View all <span className="material-symbols-outlined text-xs">chevron_right</span>
-          </button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {collections.map(collection => (
-            <CollectionCard key={collection.id} collection={collection} />
-          ))}
-        </div>
-      </section>
-
+      <StatsCards
+        totalItems={totalItems}
+        totalCollections={totalCollections}
+        favoriteItems={favoriteItems}
+        favoriteCollections={favoriteCollections}
+      />
+      <RecentCollectionsSection collections={collections} />
       {pinnedItems.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-semibold tracking-tight">Pinned Items</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {pinnedItems.map(item => (
-              <ItemCard key={item.id} item={item} />
-            ))}
-          </div>
-        </section>
+        <ItemsSection title="Pinned Items" items={pinnedItems} />
       )}
-
-      <section>
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-semibold tracking-tight">Recent Items</h2>
-          <div className="inline-flex items-center bg-muted/50 p-1 rounded-lg border border-border">
-            <button className="px-3 py-1 text-[11px] font-medium uppercase tracking-wide bg-background text-foreground rounded shadow-sm border border-border">Grid</button>
-            <button className="px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-colors">List</button>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {recentItems.map(item => (
-            <ItemCard key={item.id} item={item} />
-          ))}
-        </div>
-      </section>
+      <ItemsSection title="Recent Items" items={recentItems} />
     </div>
   );
 }

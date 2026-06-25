@@ -97,3 +97,37 @@ export async function getItemCounts(userId: string) {
 
   return { totalItems, favoriteItems };
 }
+
+export interface ItemTypeCount {
+  name: string;
+  icon: string;
+  color: string;
+  count: number;
+}
+
+const ITEM_TYPE_ORDER = ['snippet', 'prompt', 'command', 'note', 'file', 'image', 'link'];
+
+export async function getItemsByTypeCount(userId: string): Promise<ItemTypeCount[]> {
+  const itemTypes = await prisma.itemType.findMany({
+    where: { isSystem: true },
+  });
+
+  const counts = await prisma.item.groupBy({
+    by: ['itemTypeId'],
+    where: { userId },
+    _count: true,
+  });
+
+  const countMap = new Map(counts.map(c => [c.itemTypeId, c._count]));
+
+  return itemTypes.map(itemType => ({
+    name: itemType.name,
+    icon: itemType.icon,
+    color: itemType.color,
+    count: countMap.get(itemType.id) || 0,
+  })).sort((a, b) => {
+    const aIndex = ITEM_TYPE_ORDER.indexOf(a.name.toLowerCase());
+    const bIndex = ITEM_TYPE_ORDER.indexOf(b.name.toLowerCase());
+    return aIndex - bIndex;
+  });
+}
