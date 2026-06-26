@@ -164,109 +164,199 @@ Future:
 
 ---
 
-# 🗄 Prisma Schema (Draft)
+# 🗄 Prisma Schema
+
+> Generated client output: `../generated/prisma`
+> Datasource: PostgreSQL (Neon) via `@prisma/adapter-pg` (serverless driver)
 
 ```prisma
-model User {
-  id                    String @id @default(cuid())
-  email                 String @unique
-  name                  String?
-  image                 String?
-
-  isPro                 Boolean @default(false)
-
-  stripeCustomerId      String?
-  stripeSubscriptionId  String?
-
-  items                 Item[]
-  collections           Collection[]
-  itemTypes             ItemType[]
-
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
 }
 
-model Item {
-  id            String @id @default(cuid())
+datasource db {
+  provider = "postgresql"
+}
 
-  title         String
-  description   String?
+// ─── BetterAuth Models ────────────────────────────────────────────────
 
-  content       String?
-  url           String?
-
-  fileUrl       String?
-  fileName      String?
-  fileSize      Int?
-
-  language      String?
-
-  isFavorite    Boolean @default(false)
-  isPinned      Boolean @default(false)
-
-  userId        String
-  user          User @relation(fields:[userId], references:[id])
-
-  itemTypeId    String
-  itemType      ItemType @relation(fields:[itemTypeId], references:[id])
-
-  tags          Tag[]
-
-  collections   ItemCollection[]
-
+model user {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  name          String?
+  image         String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+
+  isPro                Boolean @default(false)
+  stripeCustomerId     String? @unique
+  stripeSubscriptionId String? @unique
+
+  accounts      account[]
+  sessions      session[]
+  items         item[]
+  collections   collection[]
+  itemTypes     itemType[]
+  authenticator authenticator[]
 }
 
-model ItemType {
-  id          String @id @default(cuid())
+model account {
+  id         String @id @default(cuid())
+  accountId  String
+  providerId String
+  userId     String
+  user       user   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([accountId, providerId])
+}
+
+model session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ipAddress String?
+  userAgent String?
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([identifier, value])
+}
+
+model authenticator {
+  credentialID         String  @unique
+  userId               String
+  user                 user    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String?
+  credentialBackedUp   Boolean @default(false)
+  transports           String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, credentialID])
+  @@map("authenticators")
+}
+
+// ─── Application Models ──────────────────────────────────────────────
+
+model itemType {
+  id       String  @id @default(cuid())
+  name     String
+  icon     String
+  color    String
+  isSystem Boolean @default(false)
+
+  userId String?
+  user   user?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items item[]
+
+  @@map("item_types")
+}
+
+model item {
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+  content     String?
+  url         String?
+  fileUrl     String?
+  fileName    String?
+  fileSize    Int?
+  language    String?
+  isFavorite  Boolean @default(false)
+  isPinned    Boolean @default(false)
+
+  userId String
+  user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  itemTypeId String
+  itemType   itemType @relation(fields: [itemTypeId], references: [id], onDelete: Restrict)
+
+  tags        tag[]
+  collections itemCollection[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([itemTypeId])
+  @@index([isFavorite])
+  @@index([isPinned])
+  @@index([userId, isPinned])
+  @@index([userId, updatedAt])
+  @@index([userId, itemTypeId])
+  @@map("items")
+}
+
+model collection {
+  id          String  @id @default(cuid())
   name        String
-  icon        String
-  color       String
+  description String?
+  isFavorite  Boolean @default(false)
 
-  isSystem    Boolean @default(false)
+  userId String
+  user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  userId      String?
-  user        User? @relation(fields:[userId], references:[id])
+  items itemCollection[]
 
-  items       Item[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("collections")
 }
 
-model Collection {
-  id            String @id @default(cuid())
+model itemCollection {
+  itemId       String
+  collectionId String
 
-  name          String
-  description   String?
+  item       item       @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  collection collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
 
-  isFavorite    Boolean @default(false)
-
-  userId        String
-  user          User @relation(fields:[userId], references:[id])
-
-  items         ItemCollection[]
-
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-model ItemCollection {
-  itemId        String
-  collectionId  String
-
-  item          Item @relation(fields:[itemId], references:[id])
-  collection    Collection @relation(fields:[collectionId], references:[id])
-
-  addedAt       DateTime @default(now())
+  addedAt DateTime @default(now())
 
   @@id([itemId, collectionId])
+  @@index([itemId])
+  @@index([collectionId])
+  @@map("item_collections")
 }
 
-model Tag {
-  id        String @id @default(cuid())
-  name      String @unique
+model tag {
+  id   String @id @default(cuid())
+  name String @unique
 
-  items     Item[]
+  items item[]
+
+  @@map("tags")
 }
 ```
 
@@ -274,12 +364,20 @@ model Tag {
 
 # 🔐 Authentication
 
-## Better Auth
+## Better Auth (Implemented)
 
 Providers:
 
-- Email & Password
-- GitHub OAuth
+- GitHub OAuth ✅
+- Email & Password (planned)
+
+Features:
+
+- Session-based auth (not JWT)
+- Prisma adapter with custom output path
+- nextCookies plugin for Next.js
+- Proxy-based route protection for `/dashboard/*`
+- Sign-in page with GitHub button
 
 Future:
 
@@ -292,17 +390,17 @@ Future:
 
 ```text
 /
-/dashboard
+/dashboard          (protected - proxy)
+/sign-in            (GitHub OAuth)
 
 /items
-/items/snippets
-/items/prompts
-/items/notes
-/items/commands
-/items/links
+/items/[type]       (dynamic: snippets, prompts, notes, commands, links)
 
 /collections
 /collections/[id]
+
+/api/dashboard      (API route - returns all dashboard data)
+/api/auth/*         (Better Auth API routes)
 
 /settings
 /billing

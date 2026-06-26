@@ -1,23 +1,14 @@
-# Current Feature: 
-Auth Setup - Better Auth + GitHub Provider (Prisma v7)
+# Current Feature:
 
 ## Status
 <!-- Not Started|In Progress|Completed -->
-Completed
 
 ## Goals
 <!-- Goals & requirements -->
-1. Install Better Auth and Prisma adapter packages
-2. Configure Better Auth with GitHub OAuth provider
-3. Set up Prisma v7 client singleton and schema
-4. Create auth API route handler
-5. Create client-side auth utilities
-6. Protect `/dashboard/*` routes using Next.js 16 Proxy
-7. Redirect unauthenticated users to sign-in page
-8. Implement server-side session validation
 
 ## References
 - @context/features/auth-phase-1-spec.md
+- @context/features/auth-phase-2-spec.md
 - @context/features/stats-sidebar-spec.md
 - @context/features/database-spec.md
 - @context/features/seed-spec.md
@@ -35,14 +26,14 @@ Completed
 
 ## Notes
 <!-- Any extra notes -->
-- Neon PostgreSQL with serverless driver
-- Prisma 7 has breaking changes - must review upgrade guide
+- Neon PostgreSQL with serverless driver (`@prisma/adapter-pg`)
+- Prisma client output: `../generated/prisma`
 - Development and production branches for database
 - Always create migrations, never push directly unless specified
-- Better Auth uses Prisma v7 with custom output path (`../src/generated/prisma`)
 - Better Auth session management (not JWT)
 - GitHub OAuth via `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` env vars
 - Named export for proxy (not default export)
+- Model names are lowercase (user, item, etc.) with `@@map` for table names
 
 ## History
 <!-- Keep this updated. Earliest to latest -->
@@ -58,3 +49,4 @@ Completed
 - **Phase 10 Completed**: Client-side data fetching with skeleton loading. Created `/api/dashboard` API route returning all dashboard data. Converted `AppSidebar` and `MainContent` to self-fetching client components using `useDashboard` hook. Added skeleton loading states. Simplified server components to render shells only (no data fetching).
 - **Phase 11 Started**: Auth setup with Better Auth + GitHub Provider. Configuring Prisma v7 adapter, GitHub OAuth, route protection via Next.js 16 Proxy, and session management.
 - **Phase 11 Completed**: Better Auth configured with Prisma adapter, GitHub OAuth provider, and nextCookies plugin. Created API route handler, client auth utilities, proxy-based route protection for `/dashboard/*`, and sign-in page with GitHub button. Updated `.env.example` with correct env var names.
+- **Phase 12 Completed**: Email/Password authentication — updated sign-in page with email/password form, created sign-up page with registration form, added logout functionality in TopBar with user avatar dropdown, exported signUp from auth client. API route now fetches session user with isPro status. Spec: auth-phase-2-spec.md.

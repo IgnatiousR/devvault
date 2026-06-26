@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import {
   getPinnedItems,
   getRecentItems,
@@ -9,8 +11,16 @@ import {
 import { getCollectionsWithStats } from "@/lib/db/collections";
 
 export async function GET() {
-  const user = await prisma.user.findFirst({
-    where: { email: "demo@devvault.io" },
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
   });
 
   if (!user) {
@@ -34,6 +44,7 @@ export async function GET() {
       name: user.name,
       email: user.email,
       image: user.image,
+      isPro: user.isPro,
     },
     collections,
     pinnedItems: pinnedItems.map((item) => ({

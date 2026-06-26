@@ -3,6 +3,7 @@ export interface DashboardUser {
   name: string | null;
   email: string;
   image: string | null;
+  isPro: boolean;
 }
 
 export interface DashboardItemType {

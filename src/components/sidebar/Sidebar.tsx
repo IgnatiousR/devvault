@@ -263,7 +263,7 @@ function UserFooter({ user }: { user: DashboardUser | null }) {
                 {user.name || 'User'}
               </span>
               <span className="text-[10px] text-muted-foreground truncate">
-                v2.4.0 • Pro
+                {user.isPro ? 'Pro' : 'Free'}
               </span>
             </div>
           </div>
