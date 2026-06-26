@@ -14,21 +14,9 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import type { ItemTypeCount } from "@/lib/db/items";
-import type { CollectionWithStats } from "@/lib/db/collections";
-
-interface User {
-  id: string;
-  name: string | null;
-  email: string;
-  image: string | null;
-}
-
-interface AppSidebarProps {
-  user: User | null;
-  collections: CollectionWithStats[];
-  itemTypes: ItemTypeCount[];
-}
+import { Skeleton } from "@/components/ui/skeleton";
+import { useDashboard } from "@/hooks/use-dashboard";
+import type { DashboardUser, ItemTypeCount, CollectionWithStats } from "@/lib/types/dashboard";
 
 function SidebarLogo() {
   return (
@@ -190,7 +178,60 @@ function ItemTypesMenu({ itemTypes }: { itemTypes: ItemTypeCount[] }) {
   );
 }
 
-function UserFooter({ user }: { user: User | null }) {
+function SidebarSkeleton() {
+  return (
+    <Sidebar collapsible="icon">
+      <SidebarLogo />
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
+            Types
+          </SidebarGroupLabel>
+          <SidebarMenu>
+            {Array.from({ length: 7 }).map((_, i) => (
+              <SidebarMenuItem key={i}>
+                <div className="flex items-center gap-2 px-2 py-1.5">
+                  <Skeleton className="w-4 h-4 rounded" />
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-3 w-6 ml-auto" />
+                </div>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+        <div className="mx-4 h-px bg-border" />
+        <SidebarGroup>
+          <button className="flex items-center justify-between w-full px-2 py-1 text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
+            <span>Collections</span>
+          </button>
+          <SidebarMenu>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <SidebarMenuItem key={i}>
+                <div className="flex items-center gap-2 px-2 py-1.5">
+                  <Skeleton className="w-2 h-2 rounded-full" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter className="p-3 space-y-4 mt-auto group-data-[collapsible=icon]:px-2">
+        <div className="border-t border-border pt-4">
+          <div className="flex items-center gap-3 p-2">
+            <Skeleton className="w-8 h-8 rounded-md" />
+            <div className="flex flex-col gap-1">
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-2 w-16" />
+            </div>
+          </div>
+        </div>
+      </SidebarFooter>
+    </Sidebar>
+  );
+}
+
+function UserFooter({ user }: { user: DashboardUser | null }) {
   if (!user) return null;
 
   return (
@@ -235,16 +276,22 @@ function UserFooter({ user }: { user: User | null }) {
   );
 }
 
-export function AppSidebar({ user, collections, itemTypes }: AppSidebarProps) {
+export function AppSidebar() {
+  const { data, isLoading } = useDashboard();
+
+  if (isLoading || !data) {
+    return <SidebarSkeleton />;
+  }
+
   return (
     <Sidebar collapsible="icon">
       <SidebarLogo />
       <SidebarContent>
-        <ItemTypesMenu itemTypes={itemTypes} />
+        <ItemTypesMenu itemTypes={data.itemTypesByCount} />
         <div className="mx-4 h-px bg-border" />
-        <CollectionsMenu collections={collections} />
+        <CollectionsMenu collections={data.collections} />
       </SidebarContent>
-      <UserFooter user={user} />
+      <UserFooter user={data.user} />
     </Sidebar>
   );
 }

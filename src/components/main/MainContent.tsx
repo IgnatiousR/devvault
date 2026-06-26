@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Collection } from "@/lib/types";
-import { DashboardItem } from "@/lib/db/items";
+import { useDashboard } from "@/hooks/use-dashboard";
+import { DashboardContentSkeleton } from "@/components/ui/dashboard-skeletons";
+import type { CollectionWithStats, DashboardItem } from "@/lib/types/dashboard";
 
 function colorToBgClass(color: string): string {
   const map: Record<string, string> = {
@@ -38,7 +39,8 @@ function IconBadge({ icon, colorClass }: { icon: string; colorClass: string }) {
   );
 }
 
-function formatRelativeTime(date: Date): string {
+function formatRelativeTime(dateString: string): string {
+  const date = new Date(dateString);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMins = Math.floor(diffMs / (1000 * 60));
@@ -92,7 +94,7 @@ function StatsCards({ totalItems, totalCollections, favoriteItems, favoriteColle
   );
 }
 
-function CollectionCard({ collection }: { collection: Collection }) {
+function CollectionCard({ collection }: { collection: CollectionWithStats }) {
   const borderBgClass = collection.mostUsedType
     ? colorToBgClass(collection.mostUsedType.color)
     : "bg-blue-500";
@@ -120,7 +122,7 @@ function CollectionCard({ collection }: { collection: Collection }) {
 }
 
 interface RecentCollectionsSectionProps {
-  collections: Collection[];
+  collections: CollectionWithStats[];
 }
 
 function RecentCollectionsSection({ collections }: RecentCollectionsSectionProps) {
@@ -270,38 +272,26 @@ function ItemsSection({ title, items }: ItemsSectionProps) {
   );
 }
 
-interface MainContentProps {
-  collections: Collection[];
-  pinnedItems: DashboardItem[];
-  recentItems: DashboardItem[];
-  totalItems: number;
-  totalCollections: number;
-  favoriteItems: number;
-  favoriteCollections: number;
-}
+export function MainContent() {
+  const { data, isLoading } = useDashboard();
 
-export function MainContent({
-  collections,
-  pinnedItems,
-  recentItems,
-  totalItems,
-  totalCollections,
-  favoriteItems,
-  favoriteCollections,
-}: MainContentProps) {
+  if (isLoading || !data) {
+    return <DashboardContentSkeleton />;
+  }
+
   return (
     <div className="space-y-12">
       <StatsCards
-        totalItems={totalItems}
-        totalCollections={totalCollections}
-        favoriteItems={favoriteItems}
-        favoriteCollections={favoriteCollections}
+        totalItems={data.itemCounts.totalItems}
+        totalCollections={data.totalCollections}
+        favoriteItems={data.itemCounts.favoriteItems}
+        favoriteCollections={data.favoriteCollections}
       />
-      <RecentCollectionsSection collections={collections} />
-      {pinnedItems.length > 0 && (
-        <ItemsSection title="Pinned Items" items={pinnedItems} />
+      <RecentCollectionsSection collections={data.collections} />
+      {data.pinnedItems.length > 0 && (
+        <ItemsSection title="Pinned Items" items={data.pinnedItems} />
       )}
-      <ItemsSection title="Recent Items" items={recentItems} />
+      <ItemsSection title="Recent Items" items={data.recentItems} />
     </div>
   );
 }
