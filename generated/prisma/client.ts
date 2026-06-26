@@ -42,52 +42,52 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model User
+ * Model user
  * 
  */
-export type User = Prisma.UserModel
+export type user = Prisma.userModel
 /**
- * Model Account
+ * Model account
  * 
  */
-export type Account = Prisma.AccountModel
+export type account = Prisma.accountModel
 /**
- * Model Session
+ * Model session
  * 
  */
-export type Session = Prisma.SessionModel
+export type session = Prisma.sessionModel
 /**
- * Model VerificationToken
+ * Model verification
  * 
  */
-export type VerificationToken = Prisma.VerificationTokenModel
+export type verification = Prisma.verificationModel
 /**
- * Model Authenticator
+ * Model authenticator
  * 
  */
-export type Authenticator = Prisma.AuthenticatorModel
+export type authenticator = Prisma.authenticatorModel
 /**
- * Model ItemType
+ * Model itemType
  * 
  */
-export type ItemType = Prisma.ItemTypeModel
+export type itemType = Prisma.itemTypeModel
 /**
- * Model Item
+ * Model item
  * 
  */
-export type Item = Prisma.ItemModel
+export type item = Prisma.itemModel
 /**
- * Model Collection
+ * Model collection
  * 
  */
-export type Collection = Prisma.CollectionModel
+export type collection = Prisma.collectionModel
 /**
- * Model ItemCollection
+ * Model itemCollection
  * 
  */
-export type ItemCollection = Prisma.ItemCollectionModel
+export type itemCollection = Prisma.itemCollectionModel
 /**
- * Model Tag
+ * Model tag
  * 
  */
-export type Tag = Prisma.TagModel
+export type tag = Prisma.tagModel

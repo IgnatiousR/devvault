@@ -4,7 +4,7 @@
 // biome-ignore-all lint: generated file
 // @ts-nocheck 
 /*
- * This file exports the `Authenticator` model and its related types.
+ * This file exports the `authenticator` model and its related types.
  *
  * 🟢 You can import this file directly.
  */
@@ -13,10 +13,10 @@ import type * as $Enums from "../enums"
 import type * as Prisma from "../internal/prismaNamespace"
 
 /**
- * Model Authenticator
+ * Model authenticator
  * 
  */
-export type AuthenticatorModel = runtime.Types.Result.DefaultSelection<Prisma.$AuthenticatorPayload>
+export type authenticatorModel = runtime.Types.Result.DefaultSelection<Prisma.$authenticatorPayload>
 
 export type AggregateAuthenticator = {
   _count: AuthenticatorCountAggregateOutputType | null
@@ -125,37 +125,37 @@ export type AuthenticatorCountAggregateInputType = {
 
 export type AuthenticatorAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Filter which Authenticator to aggregate.
+   * Filter which authenticator to aggregate.
    */
-  where?: Prisma.AuthenticatorWhereInput
+  where?: Prisma.authenticatorWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of Authenticators to fetch.
+   * Determine the order of authenticators to fetch.
    */
-  orderBy?: Prisma.AuthenticatorOrderByWithRelationInput | Prisma.AuthenticatorOrderByWithRelationInput[]
+  orderBy?: Prisma.authenticatorOrderByWithRelationInput | Prisma.authenticatorOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
    * Sets the start position
    */
-  cursor?: Prisma.AuthenticatorWhereUniqueInput
+  cursor?: Prisma.authenticatorWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` Authenticators from the position of the cursor.
+   * Take `±n` authenticators from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` Authenticators.
+   * Skip the first `n` authenticators.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Count returned Authenticators
+   * Count returned authenticators
   **/
   _count?: true | AuthenticatorCountAggregateInputType
   /**
@@ -195,11 +195,11 @@ export type GetAuthenticatorAggregateType<T extends AuthenticatorAggregateArgs> 
 
 
 
-export type AuthenticatorGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AuthenticatorWhereInput
-  orderBy?: Prisma.AuthenticatorOrderByWithAggregationInput | Prisma.AuthenticatorOrderByWithAggregationInput[]
+export type authenticatorGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.authenticatorWhereInput
+  orderBy?: Prisma.authenticatorOrderByWithAggregationInput | Prisma.authenticatorOrderByWithAggregationInput[]
   by: Prisma.AuthenticatorScalarFieldEnum[] | Prisma.AuthenticatorScalarFieldEnum
-  having?: Prisma.AuthenticatorScalarWhereWithAggregatesInput
+  having?: Prisma.authenticatorScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: AuthenticatorCountAggregateInputType | true
@@ -227,7 +227,7 @@ export type AuthenticatorGroupByOutputType = {
   _max: AuthenticatorMaxAggregateOutputType | null
 }
 
-export type GetAuthenticatorGroupByPayload<T extends AuthenticatorGroupByArgs> = Prisma.PrismaPromise<
+export type GetAuthenticatorGroupByPayload<T extends authenticatorGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AuthenticatorGroupByOutputType, T['by']> &
       {
@@ -242,24 +242,24 @@ export type GetAuthenticatorGroupByPayload<T extends AuthenticatorGroupByArgs> =
 
 
 
-export type AuthenticatorWhereInput = {
-  AND?: Prisma.AuthenticatorWhereInput | Prisma.AuthenticatorWhereInput[]
-  OR?: Prisma.AuthenticatorWhereInput[]
-  NOT?: Prisma.AuthenticatorWhereInput | Prisma.AuthenticatorWhereInput[]
-  credentialID?: Prisma.StringFilter<"Authenticator"> | string
-  userId?: Prisma.StringFilter<"Authenticator"> | string
-  providerAccountId?: Prisma.StringFilter<"Authenticator"> | string
-  credentialPublicKey?: Prisma.StringFilter<"Authenticator"> | string
-  counter?: Prisma.IntFilter<"Authenticator"> | number
-  credentialDeviceType?: Prisma.StringNullableFilter<"Authenticator"> | string | null
-  credentialBackedUp?: Prisma.BoolFilter<"Authenticator"> | boolean
-  transports?: Prisma.StringNullableFilter<"Authenticator"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Authenticator"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Authenticator"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+export type authenticatorWhereInput = {
+  AND?: Prisma.authenticatorWhereInput | Prisma.authenticatorWhereInput[]
+  OR?: Prisma.authenticatorWhereInput[]
+  NOT?: Prisma.authenticatorWhereInput | Prisma.authenticatorWhereInput[]
+  credentialID?: Prisma.StringFilter<"authenticator"> | string
+  userId?: Prisma.StringFilter<"authenticator"> | string
+  providerAccountId?: Prisma.StringFilter<"authenticator"> | string
+  credentialPublicKey?: Prisma.StringFilter<"authenticator"> | string
+  counter?: Prisma.IntFilter<"authenticator"> | number
+  credentialDeviceType?: Prisma.StringNullableFilter<"authenticator"> | string | null
+  credentialBackedUp?: Prisma.BoolFilter<"authenticator"> | boolean
+  transports?: Prisma.StringNullableFilter<"authenticator"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"authenticator"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"authenticator"> | Date | string
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.userWhereInput>
 }
 
-export type AuthenticatorOrderByWithRelationInput = {
+export type authenticatorOrderByWithRelationInput = {
   credentialID?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   providerAccountId?: Prisma.SortOrder
@@ -270,28 +270,28 @@ export type AuthenticatorOrderByWithRelationInput = {
   transports?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
+  user?: Prisma.userOrderByWithRelationInput
 }
 
-export type AuthenticatorWhereUniqueInput = Prisma.AtLeast<{
+export type authenticatorWhereUniqueInput = Prisma.AtLeast<{
   credentialID?: string
-  userId_credentialID?: Prisma.AuthenticatorUserIdCredentialIDCompoundUniqueInput
-  AND?: Prisma.AuthenticatorWhereInput | Prisma.AuthenticatorWhereInput[]
-  OR?: Prisma.AuthenticatorWhereInput[]
-  NOT?: Prisma.AuthenticatorWhereInput | Prisma.AuthenticatorWhereInput[]
-  userId?: Prisma.StringFilter<"Authenticator"> | string
-  providerAccountId?: Prisma.StringFilter<"Authenticator"> | string
-  credentialPublicKey?: Prisma.StringFilter<"Authenticator"> | string
-  counter?: Prisma.IntFilter<"Authenticator"> | number
-  credentialDeviceType?: Prisma.StringNullableFilter<"Authenticator"> | string | null
-  credentialBackedUp?: Prisma.BoolFilter<"Authenticator"> | boolean
-  transports?: Prisma.StringNullableFilter<"Authenticator"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Authenticator"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Authenticator"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  userId_credentialID?: Prisma.authenticatorUserIdCredentialIDCompoundUniqueInput
+  AND?: Prisma.authenticatorWhereInput | Prisma.authenticatorWhereInput[]
+  OR?: Prisma.authenticatorWhereInput[]
+  NOT?: Prisma.authenticatorWhereInput | Prisma.authenticatorWhereInput[]
+  userId?: Prisma.StringFilter<"authenticator"> | string
+  providerAccountId?: Prisma.StringFilter<"authenticator"> | string
+  credentialPublicKey?: Prisma.StringFilter<"authenticator"> | string
+  counter?: Prisma.IntFilter<"authenticator"> | number
+  credentialDeviceType?: Prisma.StringNullableFilter<"authenticator"> | string | null
+  credentialBackedUp?: Prisma.BoolFilter<"authenticator"> | boolean
+  transports?: Prisma.StringNullableFilter<"authenticator"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"authenticator"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"authenticator"> | Date | string
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.userWhereInput>
 }, "userId_credentialID" | "credentialID">
 
-export type AuthenticatorOrderByWithAggregationInput = {
+export type authenticatorOrderByWithAggregationInput = {
   credentialID?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   providerAccountId?: Prisma.SortOrder
@@ -302,30 +302,30 @@ export type AuthenticatorOrderByWithAggregationInput = {
   transports?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  _count?: Prisma.AuthenticatorCountOrderByAggregateInput
-  _avg?: Prisma.AuthenticatorAvgOrderByAggregateInput
-  _max?: Prisma.AuthenticatorMaxOrderByAggregateInput
-  _min?: Prisma.AuthenticatorMinOrderByAggregateInput
-  _sum?: Prisma.AuthenticatorSumOrderByAggregateInput
+  _count?: Prisma.authenticatorCountOrderByAggregateInput
+  _avg?: Prisma.authenticatorAvgOrderByAggregateInput
+  _max?: Prisma.authenticatorMaxOrderByAggregateInput
+  _min?: Prisma.authenticatorMinOrderByAggregateInput
+  _sum?: Prisma.authenticatorSumOrderByAggregateInput
 }
 
-export type AuthenticatorScalarWhereWithAggregatesInput = {
-  AND?: Prisma.AuthenticatorScalarWhereWithAggregatesInput | Prisma.AuthenticatorScalarWhereWithAggregatesInput[]
-  OR?: Prisma.AuthenticatorScalarWhereWithAggregatesInput[]
-  NOT?: Prisma.AuthenticatorScalarWhereWithAggregatesInput | Prisma.AuthenticatorScalarWhereWithAggregatesInput[]
-  credentialID?: Prisma.StringWithAggregatesFilter<"Authenticator"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"Authenticator"> | string
-  providerAccountId?: Prisma.StringWithAggregatesFilter<"Authenticator"> | string
-  credentialPublicKey?: Prisma.StringWithAggregatesFilter<"Authenticator"> | string
-  counter?: Prisma.IntWithAggregatesFilter<"Authenticator"> | number
-  credentialDeviceType?: Prisma.StringNullableWithAggregatesFilter<"Authenticator"> | string | null
-  credentialBackedUp?: Prisma.BoolWithAggregatesFilter<"Authenticator"> | boolean
-  transports?: Prisma.StringNullableWithAggregatesFilter<"Authenticator"> | string | null
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Authenticator"> | Date | string
-  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Authenticator"> | Date | string
+export type authenticatorScalarWhereWithAggregatesInput = {
+  AND?: Prisma.authenticatorScalarWhereWithAggregatesInput | Prisma.authenticatorScalarWhereWithAggregatesInput[]
+  OR?: Prisma.authenticatorScalarWhereWithAggregatesInput[]
+  NOT?: Prisma.authenticatorScalarWhereWithAggregatesInput | Prisma.authenticatorScalarWhereWithAggregatesInput[]
+  credentialID?: Prisma.StringWithAggregatesFilter<"authenticator"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"authenticator"> | string
+  providerAccountId?: Prisma.StringWithAggregatesFilter<"authenticator"> | string
+  credentialPublicKey?: Prisma.StringWithAggregatesFilter<"authenticator"> | string
+  counter?: Prisma.IntWithAggregatesFilter<"authenticator"> | number
+  credentialDeviceType?: Prisma.StringNullableWithAggregatesFilter<"authenticator"> | string | null
+  credentialBackedUp?: Prisma.BoolWithAggregatesFilter<"authenticator"> | boolean
+  transports?: Prisma.StringNullableWithAggregatesFilter<"authenticator"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"authenticator"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"authenticator"> | Date | string
 }
 
-export type AuthenticatorCreateInput = {
+export type authenticatorCreateInput = {
   credentialID: string
   providerAccountId: string
   credentialPublicKey: string
@@ -335,10 +335,10 @@ export type AuthenticatorCreateInput = {
   transports?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutAuthenticatorInput
+  user: Prisma.userCreateNestedOneWithoutAuthenticatorInput
 }
 
-export type AuthenticatorUncheckedCreateInput = {
+export type authenticatorUncheckedCreateInput = {
   credentialID: string
   userId: string
   providerAccountId: string
@@ -351,7 +351,7 @@ export type AuthenticatorUncheckedCreateInput = {
   updatedAt?: Date | string
 }
 
-export type AuthenticatorUpdateInput = {
+export type authenticatorUpdateInput = {
   credentialID?: Prisma.StringFieldUpdateOperationsInput | string
   providerAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   credentialPublicKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -361,10 +361,10 @@ export type AuthenticatorUpdateInput = {
   transports?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutAuthenticatorNestedInput
+  user?: Prisma.userUpdateOneRequiredWithoutAuthenticatorNestedInput
 }
 
-export type AuthenticatorUncheckedUpdateInput = {
+export type authenticatorUncheckedUpdateInput = {
   credentialID?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   providerAccountId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -377,7 +377,7 @@ export type AuthenticatorUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type AuthenticatorCreateManyInput = {
+export type authenticatorCreateManyInput = {
   credentialID: string
   userId: string
   providerAccountId: string
@@ -390,7 +390,7 @@ export type AuthenticatorCreateManyInput = {
   updatedAt?: Date | string
 }
 
-export type AuthenticatorUpdateManyMutationInput = {
+export type authenticatorUpdateManyMutationInput = {
   credentialID?: Prisma.StringFieldUpdateOperationsInput | string
   providerAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   credentialPublicKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -402,7 +402,7 @@ export type AuthenticatorUpdateManyMutationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type AuthenticatorUncheckedUpdateManyInput = {
+export type authenticatorUncheckedUpdateManyInput = {
   credentialID?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   providerAccountId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -416,21 +416,21 @@ export type AuthenticatorUncheckedUpdateManyInput = {
 }
 
 export type AuthenticatorListRelationFilter = {
-  every?: Prisma.AuthenticatorWhereInput
-  some?: Prisma.AuthenticatorWhereInput
-  none?: Prisma.AuthenticatorWhereInput
+  every?: Prisma.authenticatorWhereInput
+  some?: Prisma.authenticatorWhereInput
+  none?: Prisma.authenticatorWhereInput
 }
 
-export type AuthenticatorOrderByRelationAggregateInput = {
+export type authenticatorOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type AuthenticatorUserIdCredentialIDCompoundUniqueInput = {
+export type authenticatorUserIdCredentialIDCompoundUniqueInput = {
   userId: string
   credentialID: string
 }
 
-export type AuthenticatorCountOrderByAggregateInput = {
+export type authenticatorCountOrderByAggregateInput = {
   credentialID?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   providerAccountId?: Prisma.SortOrder
@@ -443,11 +443,11 @@ export type AuthenticatorCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type AuthenticatorAvgOrderByAggregateInput = {
+export type authenticatorAvgOrderByAggregateInput = {
   counter?: Prisma.SortOrder
 }
 
-export type AuthenticatorMaxOrderByAggregateInput = {
+export type authenticatorMaxOrderByAggregateInput = {
   credentialID?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   providerAccountId?: Prisma.SortOrder
@@ -460,7 +460,7 @@ export type AuthenticatorMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type AuthenticatorMinOrderByAggregateInput = {
+export type authenticatorMinOrderByAggregateInput = {
   credentialID?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   providerAccountId?: Prisma.SortOrder
@@ -473,50 +473,50 @@ export type AuthenticatorMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type AuthenticatorSumOrderByAggregateInput = {
+export type authenticatorSumOrderByAggregateInput = {
   counter?: Prisma.SortOrder
 }
 
-export type AuthenticatorCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.AuthenticatorCreateWithoutUserInput, Prisma.AuthenticatorUncheckedCreateWithoutUserInput> | Prisma.AuthenticatorCreateWithoutUserInput[] | Prisma.AuthenticatorUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.AuthenticatorCreateOrConnectWithoutUserInput | Prisma.AuthenticatorCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.AuthenticatorCreateManyUserInputEnvelope
-  connect?: Prisma.AuthenticatorWhereUniqueInput | Prisma.AuthenticatorWhereUniqueInput[]
+export type authenticatorCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.authenticatorCreateWithoutUserInput, Prisma.authenticatorUncheckedCreateWithoutUserInput> | Prisma.authenticatorCreateWithoutUserInput[] | Prisma.authenticatorUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.authenticatorCreateOrConnectWithoutUserInput | Prisma.authenticatorCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.authenticatorCreateManyUserInputEnvelope
+  connect?: Prisma.authenticatorWhereUniqueInput | Prisma.authenticatorWhereUniqueInput[]
 }
 
-export type AuthenticatorUncheckedCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.AuthenticatorCreateWithoutUserInput, Prisma.AuthenticatorUncheckedCreateWithoutUserInput> | Prisma.AuthenticatorCreateWithoutUserInput[] | Prisma.AuthenticatorUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.AuthenticatorCreateOrConnectWithoutUserInput | Prisma.AuthenticatorCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.AuthenticatorCreateManyUserInputEnvelope
-  connect?: Prisma.AuthenticatorWhereUniqueInput | Prisma.AuthenticatorWhereUniqueInput[]
+export type authenticatorUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.authenticatorCreateWithoutUserInput, Prisma.authenticatorUncheckedCreateWithoutUserInput> | Prisma.authenticatorCreateWithoutUserInput[] | Prisma.authenticatorUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.authenticatorCreateOrConnectWithoutUserInput | Prisma.authenticatorCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.authenticatorCreateManyUserInputEnvelope
+  connect?: Prisma.authenticatorWhereUniqueInput | Prisma.authenticatorWhereUniqueInput[]
 }
 
-export type AuthenticatorUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.AuthenticatorCreateWithoutUserInput, Prisma.AuthenticatorUncheckedCreateWithoutUserInput> | Prisma.AuthenticatorCreateWithoutUserInput[] | Prisma.AuthenticatorUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.AuthenticatorCreateOrConnectWithoutUserInput | Prisma.AuthenticatorCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.AuthenticatorUpsertWithWhereUniqueWithoutUserInput | Prisma.AuthenticatorUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.AuthenticatorCreateManyUserInputEnvelope
-  set?: Prisma.AuthenticatorWhereUniqueInput | Prisma.AuthenticatorWhereUniqueInput[]
-  disconnect?: Prisma.AuthenticatorWhereUniqueInput | Prisma.AuthenticatorWhereUniqueInput[]
-  delete?: Prisma.AuthenticatorWhereUniqueInput | Prisma.AuthenticatorWhereUniqueInput[]
-  connect?: Prisma.AuthenticatorWhereUniqueInput | Prisma.AuthenticatorWhereUniqueInput[]
-  update?: Prisma.AuthenticatorUpdateWithWhereUniqueWithoutUserInput | Prisma.AuthenticatorUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.AuthenticatorUpdateManyWithWhereWithoutUserInput | Prisma.AuthenticatorUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.AuthenticatorScalarWhereInput | Prisma.AuthenticatorScalarWhereInput[]
+export type authenticatorUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.authenticatorCreateWithoutUserInput, Prisma.authenticatorUncheckedCreateWithoutUserInput> | Prisma.authenticatorCreateWithoutUserInput[] | Prisma.authenticatorUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.authenticatorCreateOrConnectWithoutUserInput | Prisma.authenticatorCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.authenticatorUpsertWithWhereUniqueWithoutUserInput | Prisma.authenticatorUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.authenticatorCreateManyUserInputEnvelope
+  set?: Prisma.authenticatorWhereUniqueInput | Prisma.authenticatorWhereUniqueInput[]
+  disconnect?: Prisma.authenticatorWhereUniqueInput | Prisma.authenticatorWhereUniqueInput[]
+  delete?: Prisma.authenticatorWhereUniqueInput | Prisma.authenticatorWhereUniqueInput[]
+  connect?: Prisma.authenticatorWhereUniqueInput | Prisma.authenticatorWhereUniqueInput[]
+  update?: Prisma.authenticatorUpdateWithWhereUniqueWithoutUserInput | Prisma.authenticatorUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.authenticatorUpdateManyWithWhereWithoutUserInput | Prisma.authenticatorUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.authenticatorScalarWhereInput | Prisma.authenticatorScalarWhereInput[]
 }
 
-export type AuthenticatorUncheckedUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.AuthenticatorCreateWithoutUserInput, Prisma.AuthenticatorUncheckedCreateWithoutUserInput> | Prisma.AuthenticatorCreateWithoutUserInput[] | Prisma.AuthenticatorUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.AuthenticatorCreateOrConnectWithoutUserInput | Prisma.AuthenticatorCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.AuthenticatorUpsertWithWhereUniqueWithoutUserInput | Prisma.AuthenticatorUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.AuthenticatorCreateManyUserInputEnvelope
-  set?: Prisma.AuthenticatorWhereUniqueInput | Prisma.AuthenticatorWhereUniqueInput[]
-  disconnect?: Prisma.AuthenticatorWhereUniqueInput | Prisma.AuthenticatorWhereUniqueInput[]
-  delete?: Prisma.AuthenticatorWhereUniqueInput | Prisma.AuthenticatorWhereUniqueInput[]
-  connect?: Prisma.AuthenticatorWhereUniqueInput | Prisma.AuthenticatorWhereUniqueInput[]
-  update?: Prisma.AuthenticatorUpdateWithWhereUniqueWithoutUserInput | Prisma.AuthenticatorUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.AuthenticatorUpdateManyWithWhereWithoutUserInput | Prisma.AuthenticatorUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.AuthenticatorScalarWhereInput | Prisma.AuthenticatorScalarWhereInput[]
+export type authenticatorUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.authenticatorCreateWithoutUserInput, Prisma.authenticatorUncheckedCreateWithoutUserInput> | Prisma.authenticatorCreateWithoutUserInput[] | Prisma.authenticatorUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.authenticatorCreateOrConnectWithoutUserInput | Prisma.authenticatorCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.authenticatorUpsertWithWhereUniqueWithoutUserInput | Prisma.authenticatorUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.authenticatorCreateManyUserInputEnvelope
+  set?: Prisma.authenticatorWhereUniqueInput | Prisma.authenticatorWhereUniqueInput[]
+  disconnect?: Prisma.authenticatorWhereUniqueInput | Prisma.authenticatorWhereUniqueInput[]
+  delete?: Prisma.authenticatorWhereUniqueInput | Prisma.authenticatorWhereUniqueInput[]
+  connect?: Prisma.authenticatorWhereUniqueInput | Prisma.authenticatorWhereUniqueInput[]
+  update?: Prisma.authenticatorUpdateWithWhereUniqueWithoutUserInput | Prisma.authenticatorUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.authenticatorUpdateManyWithWhereWithoutUserInput | Prisma.authenticatorUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.authenticatorScalarWhereInput | Prisma.authenticatorScalarWhereInput[]
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -527,7 +527,7 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type AuthenticatorCreateWithoutUserInput = {
+export type authenticatorCreateWithoutUserInput = {
   credentialID: string
   providerAccountId: string
   credentialPublicKey: string
@@ -539,7 +539,7 @@ export type AuthenticatorCreateWithoutUserInput = {
   updatedAt?: Date | string
 }
 
-export type AuthenticatorUncheckedCreateWithoutUserInput = {
+export type authenticatorUncheckedCreateWithoutUserInput = {
   credentialID: string
   providerAccountId: string
   credentialPublicKey: string
@@ -551,49 +551,49 @@ export type AuthenticatorUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
 }
 
-export type AuthenticatorCreateOrConnectWithoutUserInput = {
-  where: Prisma.AuthenticatorWhereUniqueInput
-  create: Prisma.XOR<Prisma.AuthenticatorCreateWithoutUserInput, Prisma.AuthenticatorUncheckedCreateWithoutUserInput>
+export type authenticatorCreateOrConnectWithoutUserInput = {
+  where: Prisma.authenticatorWhereUniqueInput
+  create: Prisma.XOR<Prisma.authenticatorCreateWithoutUserInput, Prisma.authenticatorUncheckedCreateWithoutUserInput>
 }
 
-export type AuthenticatorCreateManyUserInputEnvelope = {
-  data: Prisma.AuthenticatorCreateManyUserInput | Prisma.AuthenticatorCreateManyUserInput[]
+export type authenticatorCreateManyUserInputEnvelope = {
+  data: Prisma.authenticatorCreateManyUserInput | Prisma.authenticatorCreateManyUserInput[]
   skipDuplicates?: boolean
 }
 
-export type AuthenticatorUpsertWithWhereUniqueWithoutUserInput = {
-  where: Prisma.AuthenticatorWhereUniqueInput
-  update: Prisma.XOR<Prisma.AuthenticatorUpdateWithoutUserInput, Prisma.AuthenticatorUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.AuthenticatorCreateWithoutUserInput, Prisma.AuthenticatorUncheckedCreateWithoutUserInput>
+export type authenticatorUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.authenticatorWhereUniqueInput
+  update: Prisma.XOR<Prisma.authenticatorUpdateWithoutUserInput, Prisma.authenticatorUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.authenticatorCreateWithoutUserInput, Prisma.authenticatorUncheckedCreateWithoutUserInput>
 }
 
-export type AuthenticatorUpdateWithWhereUniqueWithoutUserInput = {
-  where: Prisma.AuthenticatorWhereUniqueInput
-  data: Prisma.XOR<Prisma.AuthenticatorUpdateWithoutUserInput, Prisma.AuthenticatorUncheckedUpdateWithoutUserInput>
+export type authenticatorUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.authenticatorWhereUniqueInput
+  data: Prisma.XOR<Prisma.authenticatorUpdateWithoutUserInput, Prisma.authenticatorUncheckedUpdateWithoutUserInput>
 }
 
-export type AuthenticatorUpdateManyWithWhereWithoutUserInput = {
-  where: Prisma.AuthenticatorScalarWhereInput
-  data: Prisma.XOR<Prisma.AuthenticatorUpdateManyMutationInput, Prisma.AuthenticatorUncheckedUpdateManyWithoutUserInput>
+export type authenticatorUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.authenticatorScalarWhereInput
+  data: Prisma.XOR<Prisma.authenticatorUpdateManyMutationInput, Prisma.authenticatorUncheckedUpdateManyWithoutUserInput>
 }
 
-export type AuthenticatorScalarWhereInput = {
-  AND?: Prisma.AuthenticatorScalarWhereInput | Prisma.AuthenticatorScalarWhereInput[]
-  OR?: Prisma.AuthenticatorScalarWhereInput[]
-  NOT?: Prisma.AuthenticatorScalarWhereInput | Prisma.AuthenticatorScalarWhereInput[]
-  credentialID?: Prisma.StringFilter<"Authenticator"> | string
-  userId?: Prisma.StringFilter<"Authenticator"> | string
-  providerAccountId?: Prisma.StringFilter<"Authenticator"> | string
-  credentialPublicKey?: Prisma.StringFilter<"Authenticator"> | string
-  counter?: Prisma.IntFilter<"Authenticator"> | number
-  credentialDeviceType?: Prisma.StringNullableFilter<"Authenticator"> | string | null
-  credentialBackedUp?: Prisma.BoolFilter<"Authenticator"> | boolean
-  transports?: Prisma.StringNullableFilter<"Authenticator"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"Authenticator"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Authenticator"> | Date | string
+export type authenticatorScalarWhereInput = {
+  AND?: Prisma.authenticatorScalarWhereInput | Prisma.authenticatorScalarWhereInput[]
+  OR?: Prisma.authenticatorScalarWhereInput[]
+  NOT?: Prisma.authenticatorScalarWhereInput | Prisma.authenticatorScalarWhereInput[]
+  credentialID?: Prisma.StringFilter<"authenticator"> | string
+  userId?: Prisma.StringFilter<"authenticator"> | string
+  providerAccountId?: Prisma.StringFilter<"authenticator"> | string
+  credentialPublicKey?: Prisma.StringFilter<"authenticator"> | string
+  counter?: Prisma.IntFilter<"authenticator"> | number
+  credentialDeviceType?: Prisma.StringNullableFilter<"authenticator"> | string | null
+  credentialBackedUp?: Prisma.BoolFilter<"authenticator"> | boolean
+  transports?: Prisma.StringNullableFilter<"authenticator"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"authenticator"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"authenticator"> | Date | string
 }
 
-export type AuthenticatorCreateManyUserInput = {
+export type authenticatorCreateManyUserInput = {
   credentialID: string
   providerAccountId: string
   credentialPublicKey: string
@@ -605,7 +605,7 @@ export type AuthenticatorCreateManyUserInput = {
   updatedAt?: Date | string
 }
 
-export type AuthenticatorUpdateWithoutUserInput = {
+export type authenticatorUpdateWithoutUserInput = {
   credentialID?: Prisma.StringFieldUpdateOperationsInput | string
   providerAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   credentialPublicKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -617,7 +617,7 @@ export type AuthenticatorUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type AuthenticatorUncheckedUpdateWithoutUserInput = {
+export type authenticatorUncheckedUpdateWithoutUserInput = {
   credentialID?: Prisma.StringFieldUpdateOperationsInput | string
   providerAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   credentialPublicKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -629,7 +629,7 @@ export type AuthenticatorUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type AuthenticatorUncheckedUpdateManyWithoutUserInput = {
+export type authenticatorUncheckedUpdateManyWithoutUserInput = {
   credentialID?: Prisma.StringFieldUpdateOperationsInput | string
   providerAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   credentialPublicKey?: Prisma.StringFieldUpdateOperationsInput | string
@@ -643,7 +643,7 @@ export type AuthenticatorUncheckedUpdateManyWithoutUserInput = {
 
 
 
-export type AuthenticatorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+export type authenticatorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   credentialID?: boolean
   userId?: boolean
   providerAccountId?: boolean
@@ -654,10 +654,10 @@ export type AuthenticatorSelect<ExtArgs extends runtime.Types.Extensions.Interna
   transports?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.userDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["authenticator"]>
 
-export type AuthenticatorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+export type authenticatorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   credentialID?: boolean
   userId?: boolean
   providerAccountId?: boolean
@@ -668,10 +668,10 @@ export type AuthenticatorSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   transports?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.userDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["authenticator"]>
 
-export type AuthenticatorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+export type authenticatorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   credentialID?: boolean
   userId?: boolean
   providerAccountId?: boolean
@@ -682,10 +682,10 @@ export type AuthenticatorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   transports?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.userDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["authenticator"]>
 
-export type AuthenticatorSelectScalar = {
+export type authenticatorSelectScalar = {
   credentialID?: boolean
   userId?: boolean
   providerAccountId?: boolean
@@ -698,21 +698,21 @@ export type AuthenticatorSelectScalar = {
   updatedAt?: boolean
 }
 
-export type AuthenticatorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"credentialID" | "userId" | "providerAccountId" | "credentialPublicKey" | "counter" | "credentialDeviceType" | "credentialBackedUp" | "transports" | "createdAt" | "updatedAt", ExtArgs["result"]["authenticator"]>
-export type AuthenticatorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+export type authenticatorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"credentialID" | "userId" | "providerAccountId" | "credentialPublicKey" | "counter" | "credentialDeviceType" | "credentialBackedUp" | "transports" | "createdAt" | "updatedAt", ExtArgs["result"]["authenticator"]>
+export type authenticatorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.userDefaultArgs<ExtArgs>
 }
-export type AuthenticatorIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+export type authenticatorIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.userDefaultArgs<ExtArgs>
 }
-export type AuthenticatorIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+export type authenticatorIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.userDefaultArgs<ExtArgs>
 }
 
-export type $AuthenticatorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  name: "Authenticator"
+export type $authenticatorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  name: "authenticator"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
+    user: Prisma.$userPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     credentialID: string
@@ -729,18 +729,18 @@ export type $AuthenticatorPayload<ExtArgs extends runtime.Types.Extensions.Inter
   composites: {}
 }
 
-export type AuthenticatorGetPayload<S extends boolean | null | undefined | AuthenticatorDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload, S>
+export type authenticatorGetPayload<S extends boolean | null | undefined | authenticatorDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$authenticatorPayload, S>
 
-export type AuthenticatorCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> =
-  Omit<AuthenticatorFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+export type authenticatorCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> =
+  Omit<authenticatorFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
     select?: AuthenticatorCountAggregateInputType | true
   }
 
-export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-  [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Authenticator'], meta: { name: 'Authenticator' } }
+export interface authenticatorDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['authenticator'], meta: { name: 'authenticator' } }
   /**
    * Find zero or one Authenticator that matches the filter.
-   * @param {AuthenticatorFindUniqueArgs} args - Arguments to find a Authenticator
+   * @param {authenticatorFindUniqueArgs} args - Arguments to find a Authenticator
    * @example
    * // Get one Authenticator
    * const authenticator = await prisma.authenticator.findUnique({
@@ -749,12 +749,12 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    *   }
    * })
    */
-  findUnique<T extends AuthenticatorFindUniqueArgs>(args: Prisma.SelectSubset<T, AuthenticatorFindUniqueArgs<ExtArgs>>): Prisma.Prisma__AuthenticatorClient<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  findUnique<T extends authenticatorFindUniqueArgs>(args: Prisma.SelectSubset<T, authenticatorFindUniqueArgs<ExtArgs>>): Prisma.Prisma__authenticatorClient<runtime.Types.Result.GetResult<Prisma.$authenticatorPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find one Authenticator that matches the filter or throw an error with `error.code='P2025'`
    * if no matches were found.
-   * @param {AuthenticatorFindUniqueOrThrowArgs} args - Arguments to find a Authenticator
+   * @param {authenticatorFindUniqueOrThrowArgs} args - Arguments to find a Authenticator
    * @example
    * // Get one Authenticator
    * const authenticator = await prisma.authenticator.findUniqueOrThrow({
@@ -763,13 +763,13 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    *   }
    * })
    */
-  findUniqueOrThrow<T extends AuthenticatorFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, AuthenticatorFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__AuthenticatorClient<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  findUniqueOrThrow<T extends authenticatorFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, authenticatorFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__authenticatorClient<runtime.Types.Result.GetResult<Prisma.$authenticatorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find the first Authenticator that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {AuthenticatorFindFirstArgs} args - Arguments to find a Authenticator
+   * @param {authenticatorFindFirstArgs} args - Arguments to find a Authenticator
    * @example
    * // Get one Authenticator
    * const authenticator = await prisma.authenticator.findFirst({
@@ -778,14 +778,14 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    *   }
    * })
    */
-  findFirst<T extends AuthenticatorFindFirstArgs>(args?: Prisma.SelectSubset<T, AuthenticatorFindFirstArgs<ExtArgs>>): Prisma.Prisma__AuthenticatorClient<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  findFirst<T extends authenticatorFindFirstArgs>(args?: Prisma.SelectSubset<T, authenticatorFindFirstArgs<ExtArgs>>): Prisma.Prisma__authenticatorClient<runtime.Types.Result.GetResult<Prisma.$authenticatorPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find the first Authenticator that matches the filter or
    * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {AuthenticatorFindFirstOrThrowArgs} args - Arguments to find a Authenticator
+   * @param {authenticatorFindFirstOrThrowArgs} args - Arguments to find a Authenticator
    * @example
    * // Get one Authenticator
    * const authenticator = await prisma.authenticator.findFirstOrThrow({
@@ -794,13 +794,13 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    *   }
    * })
    */
-  findFirstOrThrow<T extends AuthenticatorFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, AuthenticatorFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__AuthenticatorClient<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  findFirstOrThrow<T extends authenticatorFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, authenticatorFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__authenticatorClient<runtime.Types.Result.GetResult<Prisma.$authenticatorPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find zero or more Authenticators that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {AuthenticatorFindManyArgs} args - Arguments to filter and select certain fields only.
+   * @param {authenticatorFindManyArgs} args - Arguments to filter and select certain fields only.
    * @example
    * // Get all Authenticators
    * const authenticators = await prisma.authenticator.findMany()
@@ -812,11 +812,11 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    * const authenticatorWithCredentialIDOnly = await prisma.authenticator.findMany({ select: { credentialID: true } })
    * 
    */
-  findMany<T extends AuthenticatorFindManyArgs>(args?: Prisma.SelectSubset<T, AuthenticatorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+  findMany<T extends authenticatorFindManyArgs>(args?: Prisma.SelectSubset<T, authenticatorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$authenticatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
   /**
    * Create a Authenticator.
-   * @param {AuthenticatorCreateArgs} args - Arguments to create a Authenticator.
+   * @param {authenticatorCreateArgs} args - Arguments to create a Authenticator.
    * @example
    * // Create one Authenticator
    * const Authenticator = await prisma.authenticator.create({
@@ -826,11 +826,11 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    * })
    * 
    */
-  create<T extends AuthenticatorCreateArgs>(args: Prisma.SelectSubset<T, AuthenticatorCreateArgs<ExtArgs>>): Prisma.Prisma__AuthenticatorClient<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  create<T extends authenticatorCreateArgs>(args: Prisma.SelectSubset<T, authenticatorCreateArgs<ExtArgs>>): Prisma.Prisma__authenticatorClient<runtime.Types.Result.GetResult<Prisma.$authenticatorPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Create many Authenticators.
-   * @param {AuthenticatorCreateManyArgs} args - Arguments to create many Authenticators.
+   * @param {authenticatorCreateManyArgs} args - Arguments to create many Authenticators.
    * @example
    * // Create many Authenticators
    * const authenticator = await prisma.authenticator.createMany({
@@ -840,11 +840,11 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    * })
    *     
    */
-  createMany<T extends AuthenticatorCreateManyArgs>(args?: Prisma.SelectSubset<T, AuthenticatorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+  createMany<T extends authenticatorCreateManyArgs>(args?: Prisma.SelectSubset<T, authenticatorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
    * Create many Authenticators and returns the data saved in the database.
-   * @param {AuthenticatorCreateManyAndReturnArgs} args - Arguments to create many Authenticators.
+   * @param {authenticatorCreateManyAndReturnArgs} args - Arguments to create many Authenticators.
    * @example
    * // Create many Authenticators
    * const authenticator = await prisma.authenticator.createManyAndReturn({
@@ -864,11 +864,11 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    * Read more here: https://pris.ly/d/null-undefined
    * 
    */
-  createManyAndReturn<T extends AuthenticatorCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, AuthenticatorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+  createManyAndReturn<T extends authenticatorCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, authenticatorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$authenticatorPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Delete a Authenticator.
-   * @param {AuthenticatorDeleteArgs} args - Arguments to delete one Authenticator.
+   * @param {authenticatorDeleteArgs} args - Arguments to delete one Authenticator.
    * @example
    * // Delete one Authenticator
    * const Authenticator = await prisma.authenticator.delete({
@@ -878,11 +878,11 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    * })
    * 
    */
-  delete<T extends AuthenticatorDeleteArgs>(args: Prisma.SelectSubset<T, AuthenticatorDeleteArgs<ExtArgs>>): Prisma.Prisma__AuthenticatorClient<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  delete<T extends authenticatorDeleteArgs>(args: Prisma.SelectSubset<T, authenticatorDeleteArgs<ExtArgs>>): Prisma.Prisma__authenticatorClient<runtime.Types.Result.GetResult<Prisma.$authenticatorPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Update one Authenticator.
-   * @param {AuthenticatorUpdateArgs} args - Arguments to update one Authenticator.
+   * @param {authenticatorUpdateArgs} args - Arguments to update one Authenticator.
    * @example
    * // Update one Authenticator
    * const authenticator = await prisma.authenticator.update({
@@ -895,11 +895,11 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    * })
    * 
    */
-  update<T extends AuthenticatorUpdateArgs>(args: Prisma.SelectSubset<T, AuthenticatorUpdateArgs<ExtArgs>>): Prisma.Prisma__AuthenticatorClient<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  update<T extends authenticatorUpdateArgs>(args: Prisma.SelectSubset<T, authenticatorUpdateArgs<ExtArgs>>): Prisma.Prisma__authenticatorClient<runtime.Types.Result.GetResult<Prisma.$authenticatorPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Delete zero or more Authenticators.
-   * @param {AuthenticatorDeleteManyArgs} args - Arguments to filter Authenticators to delete.
+   * @param {authenticatorDeleteManyArgs} args - Arguments to filter Authenticators to delete.
    * @example
    * // Delete a few Authenticators
    * const { count } = await prisma.authenticator.deleteMany({
@@ -909,13 +909,13 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    * })
    * 
    */
-  deleteMany<T extends AuthenticatorDeleteManyArgs>(args?: Prisma.SelectSubset<T, AuthenticatorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+  deleteMany<T extends authenticatorDeleteManyArgs>(args?: Prisma.SelectSubset<T, authenticatorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
    * Update zero or more Authenticators.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {AuthenticatorUpdateManyArgs} args - Arguments to update one or more rows.
+   * @param {authenticatorUpdateManyArgs} args - Arguments to update one or more rows.
    * @example
    * // Update many Authenticators
    * const authenticator = await prisma.authenticator.updateMany({
@@ -928,11 +928,11 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    * })
    * 
    */
-  updateMany<T extends AuthenticatorUpdateManyArgs>(args: Prisma.SelectSubset<T, AuthenticatorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+  updateMany<T extends authenticatorUpdateManyArgs>(args: Prisma.SelectSubset<T, authenticatorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
    * Update zero or more Authenticators and returns the data updated in the database.
-   * @param {AuthenticatorUpdateManyAndReturnArgs} args - Arguments to update many Authenticators.
+   * @param {authenticatorUpdateManyAndReturnArgs} args - Arguments to update many Authenticators.
    * @example
    * // Update many Authenticators
    * const authenticator = await prisma.authenticator.updateManyAndReturn({
@@ -958,11 +958,11 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    * Read more here: https://pris.ly/d/null-undefined
    * 
    */
-  updateManyAndReturn<T extends AuthenticatorUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, AuthenticatorUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+  updateManyAndReturn<T extends authenticatorUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, authenticatorUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$authenticatorPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Authenticator.
-   * @param {AuthenticatorUpsertArgs} args - Arguments to update or create a Authenticator.
+   * @param {authenticatorUpsertArgs} args - Arguments to update or create a Authenticator.
    * @example
    * // Update or create a Authenticator
    * const authenticator = await prisma.authenticator.upsert({
@@ -977,14 +977,14 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    *   }
    * })
    */
-  upsert<T extends AuthenticatorUpsertArgs>(args: Prisma.SelectSubset<T, AuthenticatorUpsertArgs<ExtArgs>>): Prisma.Prisma__AuthenticatorClient<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  upsert<T extends authenticatorUpsertArgs>(args: Prisma.SelectSubset<T, authenticatorUpsertArgs<ExtArgs>>): Prisma.Prisma__authenticatorClient<runtime.Types.Result.GetResult<Prisma.$authenticatorPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
   /**
    * Count the number of Authenticators.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {AuthenticatorCountArgs} args - Arguments to filter Authenticators to count.
+   * @param {authenticatorCountArgs} args - Arguments to filter Authenticators to count.
    * @example
    * // Count the number of Authenticators
    * const count = await prisma.authenticator.count({
@@ -993,8 +993,8 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    *   }
    * })
   **/
-  count<T extends AuthenticatorCountArgs>(
-    args?: Prisma.Subset<T, AuthenticatorCountArgs>,
+  count<T extends authenticatorCountArgs>(
+    args?: Prisma.Subset<T, authenticatorCountArgs>,
   ): Prisma.PrismaPromise<
     T extends runtime.Types.Utils.Record<'select', any>
       ? T['select'] extends true
@@ -1033,7 +1033,7 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    * Group by Authenticator.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {AuthenticatorGroupByArgs} args - Group by arguments.
+   * @param {authenticatorGroupByArgs} args - Group by arguments.
    * @example
    * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
@@ -1048,14 +1048,14 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
    * 
   **/
   groupBy<
-    T extends AuthenticatorGroupByArgs,
+    T extends authenticatorGroupByArgs,
     HasSelectOrTake extends Prisma.Or<
       Prisma.Extends<'skip', Prisma.Keys<T>>,
       Prisma.Extends<'take', Prisma.Keys<T>>
     >,
     OrderByArg extends Prisma.True extends HasSelectOrTake
-      ? { orderBy: AuthenticatorGroupByArgs['orderBy'] }
-      : { orderBy?: AuthenticatorGroupByArgs['orderBy'] },
+      ? { orderBy: authenticatorGroupByArgs['orderBy'] }
+      : { orderBy?: authenticatorGroupByArgs['orderBy'] },
     OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>,
     ByFields extends Prisma.MaybeTupleToUnion<T['by']>,
     ByValid extends Prisma.Has<ByFields, OrderFields>,
@@ -1104,22 +1104,22 @@ export interface AuthenticatorDelegate<ExtArgs extends runtime.Types.Extensions.
           ? never
           : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
       }[OrderFields]
-  >(args: Prisma.SubsetIntersection<T, AuthenticatorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAuthenticatorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  >(args: Prisma.SubsetIntersection<T, authenticatorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAuthenticatorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
 /**
- * Fields of the Authenticator model
+ * Fields of the authenticator model
  */
-readonly fields: AuthenticatorFieldRefs;
+readonly fields: authenticatorFieldRefs;
 }
 
 /**
- * The delegate class that acts as a "Promise-like" for Authenticator.
+ * The delegate class that acts as a "Promise-like" for authenticator.
  * Why is this prefixed with `Prisma__`?
  * Because we want to prevent naming conflicts as mentioned in
  * https://github.com/prisma/prisma-client-js/issues/707
  */
-export interface Prisma__AuthenticatorClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+export interface Prisma__authenticatorClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.userDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.userDefaultArgs<ExtArgs>>): Prisma.Prisma__userClient<runtime.Types.Result.GetResult<Prisma.$userPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1146,433 +1146,433 @@ export interface Prisma__AuthenticatorClient<T, Null = never, ExtArgs extends ru
 
 
 /**
- * Fields of the Authenticator model
+ * Fields of the authenticator model
  */
-export interface AuthenticatorFieldRefs {
-  readonly credentialID: Prisma.FieldRef<"Authenticator", 'String'>
-  readonly userId: Prisma.FieldRef<"Authenticator", 'String'>
-  readonly providerAccountId: Prisma.FieldRef<"Authenticator", 'String'>
-  readonly credentialPublicKey: Prisma.FieldRef<"Authenticator", 'String'>
-  readonly counter: Prisma.FieldRef<"Authenticator", 'Int'>
-  readonly credentialDeviceType: Prisma.FieldRef<"Authenticator", 'String'>
-  readonly credentialBackedUp: Prisma.FieldRef<"Authenticator", 'Boolean'>
-  readonly transports: Prisma.FieldRef<"Authenticator", 'String'>
-  readonly createdAt: Prisma.FieldRef<"Authenticator", 'DateTime'>
-  readonly updatedAt: Prisma.FieldRef<"Authenticator", 'DateTime'>
+export interface authenticatorFieldRefs {
+  readonly credentialID: Prisma.FieldRef<"authenticator", 'String'>
+  readonly userId: Prisma.FieldRef<"authenticator", 'String'>
+  readonly providerAccountId: Prisma.FieldRef<"authenticator", 'String'>
+  readonly credentialPublicKey: Prisma.FieldRef<"authenticator", 'String'>
+  readonly counter: Prisma.FieldRef<"authenticator", 'Int'>
+  readonly credentialDeviceType: Prisma.FieldRef<"authenticator", 'String'>
+  readonly credentialBackedUp: Prisma.FieldRef<"authenticator", 'Boolean'>
+  readonly transports: Prisma.FieldRef<"authenticator", 'String'>
+  readonly createdAt: Prisma.FieldRef<"authenticator", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"authenticator", 'DateTime'>
 }
     
 
 // Custom InputTypes
 /**
- * Authenticator findUnique
+ * authenticator findUnique
  */
-export type AuthenticatorFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Authenticator
+   * Select specific fields to fetch from the authenticator
    */
-  select?: Prisma.AuthenticatorSelect<ExtArgs> | null
+  select?: Prisma.authenticatorSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Authenticator
+   * Omit specific fields from the authenticator
    */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
+  omit?: Prisma.authenticatorOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticatorInclude<ExtArgs> | null
+  include?: Prisma.authenticatorInclude<ExtArgs> | null
   /**
-   * Filter, which Authenticator to fetch.
+   * Filter, which authenticator to fetch.
    */
-  where: Prisma.AuthenticatorWhereUniqueInput
+  where: Prisma.authenticatorWhereUniqueInput
 }
 
 /**
- * Authenticator findUniqueOrThrow
+ * authenticator findUniqueOrThrow
  */
-export type AuthenticatorFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Authenticator
+   * Select specific fields to fetch from the authenticator
    */
-  select?: Prisma.AuthenticatorSelect<ExtArgs> | null
+  select?: Prisma.authenticatorSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Authenticator
+   * Omit specific fields from the authenticator
    */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
+  omit?: Prisma.authenticatorOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticatorInclude<ExtArgs> | null
+  include?: Prisma.authenticatorInclude<ExtArgs> | null
   /**
-   * Filter, which Authenticator to fetch.
+   * Filter, which authenticator to fetch.
    */
-  where: Prisma.AuthenticatorWhereUniqueInput
+  where: Prisma.authenticatorWhereUniqueInput
 }
 
 /**
- * Authenticator findFirst
+ * authenticator findFirst
  */
-export type AuthenticatorFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Authenticator
+   * Select specific fields to fetch from the authenticator
    */
-  select?: Prisma.AuthenticatorSelect<ExtArgs> | null
+  select?: Prisma.authenticatorSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Authenticator
+   * Omit specific fields from the authenticator
    */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
+  omit?: Prisma.authenticatorOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticatorInclude<ExtArgs> | null
+  include?: Prisma.authenticatorInclude<ExtArgs> | null
   /**
-   * Filter, which Authenticator to fetch.
+   * Filter, which authenticator to fetch.
    */
-  where?: Prisma.AuthenticatorWhereInput
+  where?: Prisma.authenticatorWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of Authenticators to fetch.
+   * Determine the order of authenticators to fetch.
    */
-  orderBy?: Prisma.AuthenticatorOrderByWithRelationInput | Prisma.AuthenticatorOrderByWithRelationInput[]
+  orderBy?: Prisma.authenticatorOrderByWithRelationInput | Prisma.authenticatorOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
-   * Sets the position for searching for Authenticators.
+   * Sets the position for searching for authenticators.
    */
-  cursor?: Prisma.AuthenticatorWhereUniqueInput
+  cursor?: Prisma.authenticatorWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` Authenticators from the position of the cursor.
+   * Take `±n` authenticators from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` Authenticators.
+   * Skip the first `n` authenticators.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    * 
-   * Filter by unique combinations of Authenticators.
+   * Filter by unique combinations of authenticators.
    */
   distinct?: Prisma.AuthenticatorScalarFieldEnum | Prisma.AuthenticatorScalarFieldEnum[]
 }
 
 /**
- * Authenticator findFirstOrThrow
+ * authenticator findFirstOrThrow
  */
-export type AuthenticatorFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Authenticator
+   * Select specific fields to fetch from the authenticator
    */
-  select?: Prisma.AuthenticatorSelect<ExtArgs> | null
+  select?: Prisma.authenticatorSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Authenticator
+   * Omit specific fields from the authenticator
    */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
+  omit?: Prisma.authenticatorOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticatorInclude<ExtArgs> | null
+  include?: Prisma.authenticatorInclude<ExtArgs> | null
   /**
-   * Filter, which Authenticator to fetch.
+   * Filter, which authenticator to fetch.
    */
-  where?: Prisma.AuthenticatorWhereInput
+  where?: Prisma.authenticatorWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of Authenticators to fetch.
+   * Determine the order of authenticators to fetch.
    */
-  orderBy?: Prisma.AuthenticatorOrderByWithRelationInput | Prisma.AuthenticatorOrderByWithRelationInput[]
+  orderBy?: Prisma.authenticatorOrderByWithRelationInput | Prisma.authenticatorOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
-   * Sets the position for searching for Authenticators.
+   * Sets the position for searching for authenticators.
    */
-  cursor?: Prisma.AuthenticatorWhereUniqueInput
+  cursor?: Prisma.authenticatorWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` Authenticators from the position of the cursor.
+   * Take `±n` authenticators from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` Authenticators.
+   * Skip the first `n` authenticators.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    * 
-   * Filter by unique combinations of Authenticators.
+   * Filter by unique combinations of authenticators.
    */
   distinct?: Prisma.AuthenticatorScalarFieldEnum | Prisma.AuthenticatorScalarFieldEnum[]
 }
 
 /**
- * Authenticator findMany
+ * authenticator findMany
  */
-export type AuthenticatorFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Authenticator
+   * Select specific fields to fetch from the authenticator
    */
-  select?: Prisma.AuthenticatorSelect<ExtArgs> | null
+  select?: Prisma.authenticatorSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Authenticator
+   * Omit specific fields from the authenticator
    */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
+  omit?: Prisma.authenticatorOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticatorInclude<ExtArgs> | null
+  include?: Prisma.authenticatorInclude<ExtArgs> | null
   /**
-   * Filter, which Authenticators to fetch.
+   * Filter, which authenticators to fetch.
    */
-  where?: Prisma.AuthenticatorWhereInput
+  where?: Prisma.authenticatorWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of Authenticators to fetch.
+   * Determine the order of authenticators to fetch.
    */
-  orderBy?: Prisma.AuthenticatorOrderByWithRelationInput | Prisma.AuthenticatorOrderByWithRelationInput[]
+  orderBy?: Prisma.authenticatorOrderByWithRelationInput | Prisma.authenticatorOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
-   * Sets the position for listing Authenticators.
+   * Sets the position for listing authenticators.
    */
-  cursor?: Prisma.AuthenticatorWhereUniqueInput
+  cursor?: Prisma.authenticatorWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` Authenticators from the position of the cursor.
+   * Take `±n` authenticators from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` Authenticators.
+   * Skip the first `n` authenticators.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    * 
-   * Filter by unique combinations of Authenticators.
+   * Filter by unique combinations of authenticators.
    */
   distinct?: Prisma.AuthenticatorScalarFieldEnum | Prisma.AuthenticatorScalarFieldEnum[]
 }
 
 /**
- * Authenticator create
+ * authenticator create
  */
-export type AuthenticatorCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Authenticator
+   * Select specific fields to fetch from the authenticator
    */
-  select?: Prisma.AuthenticatorSelect<ExtArgs> | null
+  select?: Prisma.authenticatorSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Authenticator
+   * Omit specific fields from the authenticator
    */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
+  omit?: Prisma.authenticatorOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticatorInclude<ExtArgs> | null
+  include?: Prisma.authenticatorInclude<ExtArgs> | null
   /**
-   * The data needed to create a Authenticator.
+   * The data needed to create a authenticator.
    */
-  data: Prisma.XOR<Prisma.AuthenticatorCreateInput, Prisma.AuthenticatorUncheckedCreateInput>
+  data: Prisma.XOR<Prisma.authenticatorCreateInput, Prisma.authenticatorUncheckedCreateInput>
 }
 
 /**
- * Authenticator createMany
+ * authenticator createMany
  */
-export type AuthenticatorCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * The data used to create many Authenticators.
+   * The data used to create many authenticators.
    */
-  data: Prisma.AuthenticatorCreateManyInput | Prisma.AuthenticatorCreateManyInput[]
+  data: Prisma.authenticatorCreateManyInput | Prisma.authenticatorCreateManyInput[]
   skipDuplicates?: boolean
 }
 
 /**
- * Authenticator createManyAndReturn
+ * authenticator createManyAndReturn
  */
-export type AuthenticatorCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Authenticator
+   * Select specific fields to fetch from the authenticator
    */
-  select?: Prisma.AuthenticatorSelectCreateManyAndReturn<ExtArgs> | null
+  select?: Prisma.authenticatorSelectCreateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the Authenticator
+   * Omit specific fields from the authenticator
    */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
+  omit?: Prisma.authenticatorOmit<ExtArgs> | null
   /**
-   * The data used to create many Authenticators.
+   * The data used to create many authenticators.
    */
-  data: Prisma.AuthenticatorCreateManyInput | Prisma.AuthenticatorCreateManyInput[]
+  data: Prisma.authenticatorCreateManyInput | Prisma.authenticatorCreateManyInput[]
   skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticatorIncludeCreateManyAndReturn<ExtArgs> | null
+  include?: Prisma.authenticatorIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
- * Authenticator update
+ * authenticator update
  */
-export type AuthenticatorUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Authenticator
+   * Select specific fields to fetch from the authenticator
    */
-  select?: Prisma.AuthenticatorSelect<ExtArgs> | null
+  select?: Prisma.authenticatorSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Authenticator
+   * Omit specific fields from the authenticator
    */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
+  omit?: Prisma.authenticatorOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticatorInclude<ExtArgs> | null
+  include?: Prisma.authenticatorInclude<ExtArgs> | null
   /**
-   * The data needed to update a Authenticator.
+   * The data needed to update a authenticator.
    */
-  data: Prisma.XOR<Prisma.AuthenticatorUpdateInput, Prisma.AuthenticatorUncheckedUpdateInput>
+  data: Prisma.XOR<Prisma.authenticatorUpdateInput, Prisma.authenticatorUncheckedUpdateInput>
   /**
-   * Choose, which Authenticator to update.
+   * Choose, which authenticator to update.
    */
-  where: Prisma.AuthenticatorWhereUniqueInput
+  where: Prisma.authenticatorWhereUniqueInput
 }
 
 /**
- * Authenticator updateMany
+ * authenticator updateMany
  */
-export type AuthenticatorUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * The data used to update Authenticators.
+   * The data used to update authenticators.
    */
-  data: Prisma.XOR<Prisma.AuthenticatorUpdateManyMutationInput, Prisma.AuthenticatorUncheckedUpdateManyInput>
+  data: Prisma.XOR<Prisma.authenticatorUpdateManyMutationInput, Prisma.authenticatorUncheckedUpdateManyInput>
   /**
-   * Filter which Authenticators to update
+   * Filter which authenticators to update
    */
-  where?: Prisma.AuthenticatorWhereInput
+  where?: Prisma.authenticatorWhereInput
   /**
-   * Limit how many Authenticators to update.
+   * Limit how many authenticators to update.
    */
   limit?: number
 }
 
 /**
- * Authenticator updateManyAndReturn
+ * authenticator updateManyAndReturn
  */
-export type AuthenticatorUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Authenticator
+   * Select specific fields to fetch from the authenticator
    */
-  select?: Prisma.AuthenticatorSelectUpdateManyAndReturn<ExtArgs> | null
+  select?: Prisma.authenticatorSelectUpdateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the Authenticator
+   * Omit specific fields from the authenticator
    */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
+  omit?: Prisma.authenticatorOmit<ExtArgs> | null
   /**
-   * The data used to update Authenticators.
+   * The data used to update authenticators.
    */
-  data: Prisma.XOR<Prisma.AuthenticatorUpdateManyMutationInput, Prisma.AuthenticatorUncheckedUpdateManyInput>
+  data: Prisma.XOR<Prisma.authenticatorUpdateManyMutationInput, Prisma.authenticatorUncheckedUpdateManyInput>
   /**
-   * Filter which Authenticators to update
+   * Filter which authenticators to update
    */
-  where?: Prisma.AuthenticatorWhereInput
+  where?: Prisma.authenticatorWhereInput
   /**
-   * Limit how many Authenticators to update.
+   * Limit how many authenticators to update.
    */
   limit?: number
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticatorIncludeUpdateManyAndReturn<ExtArgs> | null
+  include?: Prisma.authenticatorIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
- * Authenticator upsert
+ * authenticator upsert
  */
-export type AuthenticatorUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Authenticator
+   * Select specific fields to fetch from the authenticator
    */
-  select?: Prisma.AuthenticatorSelect<ExtArgs> | null
+  select?: Prisma.authenticatorSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Authenticator
+   * Omit specific fields from the authenticator
    */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
+  omit?: Prisma.authenticatorOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticatorInclude<ExtArgs> | null
+  include?: Prisma.authenticatorInclude<ExtArgs> | null
   /**
-   * The filter to search for the Authenticator to update in case it exists.
+   * The filter to search for the authenticator to update in case it exists.
    */
-  where: Prisma.AuthenticatorWhereUniqueInput
+  where: Prisma.authenticatorWhereUniqueInput
   /**
-   * In case the Authenticator found by the `where` argument doesn't exist, create a new Authenticator with this data.
+   * In case the authenticator found by the `where` argument doesn't exist, create a new authenticator with this data.
    */
-  create: Prisma.XOR<Prisma.AuthenticatorCreateInput, Prisma.AuthenticatorUncheckedCreateInput>
+  create: Prisma.XOR<Prisma.authenticatorCreateInput, Prisma.authenticatorUncheckedCreateInput>
   /**
-   * In case the Authenticator was found with the provided `where` argument, update it with this data.
+   * In case the authenticator was found with the provided `where` argument, update it with this data.
    */
-  update: Prisma.XOR<Prisma.AuthenticatorUpdateInput, Prisma.AuthenticatorUncheckedUpdateInput>
+  update: Prisma.XOR<Prisma.authenticatorUpdateInput, Prisma.authenticatorUncheckedUpdateInput>
 }
 
 /**
- * Authenticator delete
+ * authenticator delete
  */
-export type AuthenticatorDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Authenticator
+   * Select specific fields to fetch from the authenticator
    */
-  select?: Prisma.AuthenticatorSelect<ExtArgs> | null
+  select?: Prisma.authenticatorSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Authenticator
+   * Omit specific fields from the authenticator
    */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
+  omit?: Prisma.authenticatorOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticatorInclude<ExtArgs> | null
+  include?: Prisma.authenticatorInclude<ExtArgs> | null
   /**
-   * Filter which Authenticator to delete.
+   * Filter which authenticator to delete.
    */
-  where: Prisma.AuthenticatorWhereUniqueInput
+  where: Prisma.authenticatorWhereUniqueInput
 }
 
 /**
- * Authenticator deleteMany
+ * authenticator deleteMany
  */
-export type AuthenticatorDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Filter which Authenticators to delete
+   * Filter which authenticators to delete
    */
-  where?: Prisma.AuthenticatorWhereInput
+  where?: Prisma.authenticatorWhereInput
   /**
-   * Limit how many Authenticators to delete.
+   * Limit how many authenticators to delete.
    */
   limit?: number
 }
 
 /**
- * Authenticator without action
+ * authenticator without action
  */
-export type AuthenticatorDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type authenticatorDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Authenticator
+   * Select specific fields to fetch from the authenticator
    */
-  select?: Prisma.AuthenticatorSelect<ExtArgs> | null
+  select?: Prisma.authenticatorSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Authenticator
+   * Omit specific fields from the authenticator
    */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
+  omit?: Prisma.authenticatorOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.AuthenticatorInclude<ExtArgs> | null
+  include?: Prisma.authenticatorInclude<ExtArgs> | null
 }

@@ -4,7 +4,7 @@
 // biome-ignore-all lint: generated file
 // @ts-nocheck 
 /*
- * This file exports the `ItemCollection` model and its related types.
+ * This file exports the `itemCollection` model and its related types.
  *
  * 🟢 You can import this file directly.
  */
@@ -13,10 +13,10 @@ import type * as $Enums from "../enums"
 import type * as Prisma from "../internal/prismaNamespace"
 
 /**
- * Model ItemCollection
+ * Model itemCollection
  * 
  */
-export type ItemCollectionModel = runtime.Types.Result.DefaultSelection<Prisma.$ItemCollectionPayload>
+export type itemCollectionModel = runtime.Types.Result.DefaultSelection<Prisma.$itemCollectionPayload>
 
 export type AggregateItemCollection = {
   _count: ItemCollectionCountAggregateOutputType | null
@@ -65,37 +65,37 @@ export type ItemCollectionCountAggregateInputType = {
 
 export type ItemCollectionAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Filter which ItemCollection to aggregate.
+   * Filter which itemCollection to aggregate.
    */
-  where?: Prisma.ItemCollectionWhereInput
+  where?: Prisma.itemCollectionWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of ItemCollections to fetch.
+   * Determine the order of itemCollections to fetch.
    */
-  orderBy?: Prisma.ItemCollectionOrderByWithRelationInput | Prisma.ItemCollectionOrderByWithRelationInput[]
+  orderBy?: Prisma.itemCollectionOrderByWithRelationInput | Prisma.itemCollectionOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
    * Sets the start position
    */
-  cursor?: Prisma.ItemCollectionWhereUniqueInput
+  cursor?: Prisma.itemCollectionWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` ItemCollections from the position of the cursor.
+   * Take `±n` itemCollections from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` ItemCollections.
+   * Skip the first `n` itemCollections.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Count returned ItemCollections
+   * Count returned itemCollections
   **/
   _count?: true | ItemCollectionCountAggregateInputType
   /**
@@ -123,11 +123,11 @@ export type GetItemCollectionAggregateType<T extends ItemCollectionAggregateArgs
 
 
 
-export type ItemCollectionGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ItemCollectionWhereInput
-  orderBy?: Prisma.ItemCollectionOrderByWithAggregationInput | Prisma.ItemCollectionOrderByWithAggregationInput[]
+export type itemCollectionGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.itemCollectionWhereInput
+  orderBy?: Prisma.itemCollectionOrderByWithAggregationInput | Prisma.itemCollectionOrderByWithAggregationInput[]
   by: Prisma.ItemCollectionScalarFieldEnum[] | Prisma.ItemCollectionScalarFieldEnum
-  having?: Prisma.ItemCollectionScalarWhereWithAggregatesInput
+  having?: Prisma.itemCollectionScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: ItemCollectionCountAggregateInputType | true
@@ -144,7 +144,7 @@ export type ItemCollectionGroupByOutputType = {
   _max: ItemCollectionMaxAggregateOutputType | null
 }
 
-export type GetItemCollectionGroupByPayload<T extends ItemCollectionGroupByArgs> = Prisma.PrismaPromise<
+export type GetItemCollectionGroupByPayload<T extends itemCollectionGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ItemCollectionGroupByOutputType, T['by']> &
       {
@@ -159,384 +159,384 @@ export type GetItemCollectionGroupByPayload<T extends ItemCollectionGroupByArgs>
 
 
 
-export type ItemCollectionWhereInput = {
-  AND?: Prisma.ItemCollectionWhereInput | Prisma.ItemCollectionWhereInput[]
-  OR?: Prisma.ItemCollectionWhereInput[]
-  NOT?: Prisma.ItemCollectionWhereInput | Prisma.ItemCollectionWhereInput[]
-  itemId?: Prisma.StringFilter<"ItemCollection"> | string
-  collectionId?: Prisma.StringFilter<"ItemCollection"> | string
-  addedAt?: Prisma.DateTimeFilter<"ItemCollection"> | Date | string
-  item?: Prisma.XOR<Prisma.ItemScalarRelationFilter, Prisma.ItemWhereInput>
-  collection?: Prisma.XOR<Prisma.CollectionScalarRelationFilter, Prisma.CollectionWhereInput>
+export type itemCollectionWhereInput = {
+  AND?: Prisma.itemCollectionWhereInput | Prisma.itemCollectionWhereInput[]
+  OR?: Prisma.itemCollectionWhereInput[]
+  NOT?: Prisma.itemCollectionWhereInput | Prisma.itemCollectionWhereInput[]
+  itemId?: Prisma.StringFilter<"itemCollection"> | string
+  collectionId?: Prisma.StringFilter<"itemCollection"> | string
+  addedAt?: Prisma.DateTimeFilter<"itemCollection"> | Date | string
+  item?: Prisma.XOR<Prisma.ItemScalarRelationFilter, Prisma.itemWhereInput>
+  collection?: Prisma.XOR<Prisma.CollectionScalarRelationFilter, Prisma.collectionWhereInput>
 }
 
-export type ItemCollectionOrderByWithRelationInput = {
+export type itemCollectionOrderByWithRelationInput = {
   itemId?: Prisma.SortOrder
   collectionId?: Prisma.SortOrder
   addedAt?: Prisma.SortOrder
-  item?: Prisma.ItemOrderByWithRelationInput
-  collection?: Prisma.CollectionOrderByWithRelationInput
+  item?: Prisma.itemOrderByWithRelationInput
+  collection?: Prisma.collectionOrderByWithRelationInput
 }
 
-export type ItemCollectionWhereUniqueInput = Prisma.AtLeast<{
-  itemId_collectionId?: Prisma.ItemCollectionItemIdCollectionIdCompoundUniqueInput
-  AND?: Prisma.ItemCollectionWhereInput | Prisma.ItemCollectionWhereInput[]
-  OR?: Prisma.ItemCollectionWhereInput[]
-  NOT?: Prisma.ItemCollectionWhereInput | Prisma.ItemCollectionWhereInput[]
-  itemId?: Prisma.StringFilter<"ItemCollection"> | string
-  collectionId?: Prisma.StringFilter<"ItemCollection"> | string
-  addedAt?: Prisma.DateTimeFilter<"ItemCollection"> | Date | string
-  item?: Prisma.XOR<Prisma.ItemScalarRelationFilter, Prisma.ItemWhereInput>
-  collection?: Prisma.XOR<Prisma.CollectionScalarRelationFilter, Prisma.CollectionWhereInput>
+export type itemCollectionWhereUniqueInput = Prisma.AtLeast<{
+  itemId_collectionId?: Prisma.itemCollectionItemIdCollectionIdCompoundUniqueInput
+  AND?: Prisma.itemCollectionWhereInput | Prisma.itemCollectionWhereInput[]
+  OR?: Prisma.itemCollectionWhereInput[]
+  NOT?: Prisma.itemCollectionWhereInput | Prisma.itemCollectionWhereInput[]
+  itemId?: Prisma.StringFilter<"itemCollection"> | string
+  collectionId?: Prisma.StringFilter<"itemCollection"> | string
+  addedAt?: Prisma.DateTimeFilter<"itemCollection"> | Date | string
+  item?: Prisma.XOR<Prisma.ItemScalarRelationFilter, Prisma.itemWhereInput>
+  collection?: Prisma.XOR<Prisma.CollectionScalarRelationFilter, Prisma.collectionWhereInput>
 }, "itemId_collectionId">
 
-export type ItemCollectionOrderByWithAggregationInput = {
+export type itemCollectionOrderByWithAggregationInput = {
   itemId?: Prisma.SortOrder
   collectionId?: Prisma.SortOrder
   addedAt?: Prisma.SortOrder
-  _count?: Prisma.ItemCollectionCountOrderByAggregateInput
-  _max?: Prisma.ItemCollectionMaxOrderByAggregateInput
-  _min?: Prisma.ItemCollectionMinOrderByAggregateInput
+  _count?: Prisma.itemCollectionCountOrderByAggregateInput
+  _max?: Prisma.itemCollectionMaxOrderByAggregateInput
+  _min?: Prisma.itemCollectionMinOrderByAggregateInput
 }
 
-export type ItemCollectionScalarWhereWithAggregatesInput = {
-  AND?: Prisma.ItemCollectionScalarWhereWithAggregatesInput | Prisma.ItemCollectionScalarWhereWithAggregatesInput[]
-  OR?: Prisma.ItemCollectionScalarWhereWithAggregatesInput[]
-  NOT?: Prisma.ItemCollectionScalarWhereWithAggregatesInput | Prisma.ItemCollectionScalarWhereWithAggregatesInput[]
-  itemId?: Prisma.StringWithAggregatesFilter<"ItemCollection"> | string
-  collectionId?: Prisma.StringWithAggregatesFilter<"ItemCollection"> | string
-  addedAt?: Prisma.DateTimeWithAggregatesFilter<"ItemCollection"> | Date | string
+export type itemCollectionScalarWhereWithAggregatesInput = {
+  AND?: Prisma.itemCollectionScalarWhereWithAggregatesInput | Prisma.itemCollectionScalarWhereWithAggregatesInput[]
+  OR?: Prisma.itemCollectionScalarWhereWithAggregatesInput[]
+  NOT?: Prisma.itemCollectionScalarWhereWithAggregatesInput | Prisma.itemCollectionScalarWhereWithAggregatesInput[]
+  itemId?: Prisma.StringWithAggregatesFilter<"itemCollection"> | string
+  collectionId?: Prisma.StringWithAggregatesFilter<"itemCollection"> | string
+  addedAt?: Prisma.DateTimeWithAggregatesFilter<"itemCollection"> | Date | string
 }
 
-export type ItemCollectionCreateInput = {
+export type itemCollectionCreateInput = {
   addedAt?: Date | string
-  item: Prisma.ItemCreateNestedOneWithoutCollectionsInput
-  collection: Prisma.CollectionCreateNestedOneWithoutItemsInput
+  item: Prisma.itemCreateNestedOneWithoutCollectionsInput
+  collection: Prisma.collectionCreateNestedOneWithoutItemsInput
 }
 
-export type ItemCollectionUncheckedCreateInput = {
+export type itemCollectionUncheckedCreateInput = {
   itemId: string
   collectionId: string
   addedAt?: Date | string
 }
 
-export type ItemCollectionUpdateInput = {
+export type itemCollectionUpdateInput = {
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  item?: Prisma.ItemUpdateOneRequiredWithoutCollectionsNestedInput
-  collection?: Prisma.CollectionUpdateOneRequiredWithoutItemsNestedInput
+  item?: Prisma.itemUpdateOneRequiredWithoutCollectionsNestedInput
+  collection?: Prisma.collectionUpdateOneRequiredWithoutItemsNestedInput
 }
 
-export type ItemCollectionUncheckedUpdateInput = {
+export type itemCollectionUncheckedUpdateInput = {
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   collectionId?: Prisma.StringFieldUpdateOperationsInput | string
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ItemCollectionCreateManyInput = {
+export type itemCollectionCreateManyInput = {
   itemId: string
   collectionId: string
   addedAt?: Date | string
 }
 
-export type ItemCollectionUpdateManyMutationInput = {
+export type itemCollectionUpdateManyMutationInput = {
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ItemCollectionUncheckedUpdateManyInput = {
+export type itemCollectionUncheckedUpdateManyInput = {
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   collectionId?: Prisma.StringFieldUpdateOperationsInput | string
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ItemCollectionListRelationFilter = {
-  every?: Prisma.ItemCollectionWhereInput
-  some?: Prisma.ItemCollectionWhereInput
-  none?: Prisma.ItemCollectionWhereInput
+  every?: Prisma.itemCollectionWhereInput
+  some?: Prisma.itemCollectionWhereInput
+  none?: Prisma.itemCollectionWhereInput
 }
 
-export type ItemCollectionOrderByRelationAggregateInput = {
+export type itemCollectionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type ItemCollectionItemIdCollectionIdCompoundUniqueInput = {
+export type itemCollectionItemIdCollectionIdCompoundUniqueInput = {
   itemId: string
   collectionId: string
 }
 
-export type ItemCollectionCountOrderByAggregateInput = {
+export type itemCollectionCountOrderByAggregateInput = {
   itemId?: Prisma.SortOrder
   collectionId?: Prisma.SortOrder
   addedAt?: Prisma.SortOrder
 }
 
-export type ItemCollectionMaxOrderByAggregateInput = {
+export type itemCollectionMaxOrderByAggregateInput = {
   itemId?: Prisma.SortOrder
   collectionId?: Prisma.SortOrder
   addedAt?: Prisma.SortOrder
 }
 
-export type ItemCollectionMinOrderByAggregateInput = {
+export type itemCollectionMinOrderByAggregateInput = {
   itemId?: Prisma.SortOrder
   collectionId?: Prisma.SortOrder
   addedAt?: Prisma.SortOrder
 }
 
-export type ItemCollectionCreateNestedManyWithoutItemInput = {
-  create?: Prisma.XOR<Prisma.ItemCollectionCreateWithoutItemInput, Prisma.ItemCollectionUncheckedCreateWithoutItemInput> | Prisma.ItemCollectionCreateWithoutItemInput[] | Prisma.ItemCollectionUncheckedCreateWithoutItemInput[]
-  connectOrCreate?: Prisma.ItemCollectionCreateOrConnectWithoutItemInput | Prisma.ItemCollectionCreateOrConnectWithoutItemInput[]
-  createMany?: Prisma.ItemCollectionCreateManyItemInputEnvelope
-  connect?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
+export type itemCollectionCreateNestedManyWithoutItemInput = {
+  create?: Prisma.XOR<Prisma.itemCollectionCreateWithoutItemInput, Prisma.itemCollectionUncheckedCreateWithoutItemInput> | Prisma.itemCollectionCreateWithoutItemInput[] | Prisma.itemCollectionUncheckedCreateWithoutItemInput[]
+  connectOrCreate?: Prisma.itemCollectionCreateOrConnectWithoutItemInput | Prisma.itemCollectionCreateOrConnectWithoutItemInput[]
+  createMany?: Prisma.itemCollectionCreateManyItemInputEnvelope
+  connect?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
 }
 
-export type ItemCollectionUncheckedCreateNestedManyWithoutItemInput = {
-  create?: Prisma.XOR<Prisma.ItemCollectionCreateWithoutItemInput, Prisma.ItemCollectionUncheckedCreateWithoutItemInput> | Prisma.ItemCollectionCreateWithoutItemInput[] | Prisma.ItemCollectionUncheckedCreateWithoutItemInput[]
-  connectOrCreate?: Prisma.ItemCollectionCreateOrConnectWithoutItemInput | Prisma.ItemCollectionCreateOrConnectWithoutItemInput[]
-  createMany?: Prisma.ItemCollectionCreateManyItemInputEnvelope
-  connect?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
+export type itemCollectionUncheckedCreateNestedManyWithoutItemInput = {
+  create?: Prisma.XOR<Prisma.itemCollectionCreateWithoutItemInput, Prisma.itemCollectionUncheckedCreateWithoutItemInput> | Prisma.itemCollectionCreateWithoutItemInput[] | Prisma.itemCollectionUncheckedCreateWithoutItemInput[]
+  connectOrCreate?: Prisma.itemCollectionCreateOrConnectWithoutItemInput | Prisma.itemCollectionCreateOrConnectWithoutItemInput[]
+  createMany?: Prisma.itemCollectionCreateManyItemInputEnvelope
+  connect?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
 }
 
-export type ItemCollectionUpdateManyWithoutItemNestedInput = {
-  create?: Prisma.XOR<Prisma.ItemCollectionCreateWithoutItemInput, Prisma.ItemCollectionUncheckedCreateWithoutItemInput> | Prisma.ItemCollectionCreateWithoutItemInput[] | Prisma.ItemCollectionUncheckedCreateWithoutItemInput[]
-  connectOrCreate?: Prisma.ItemCollectionCreateOrConnectWithoutItemInput | Prisma.ItemCollectionCreateOrConnectWithoutItemInput[]
-  upsert?: Prisma.ItemCollectionUpsertWithWhereUniqueWithoutItemInput | Prisma.ItemCollectionUpsertWithWhereUniqueWithoutItemInput[]
-  createMany?: Prisma.ItemCollectionCreateManyItemInputEnvelope
-  set?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  disconnect?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  delete?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  connect?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  update?: Prisma.ItemCollectionUpdateWithWhereUniqueWithoutItemInput | Prisma.ItemCollectionUpdateWithWhereUniqueWithoutItemInput[]
-  updateMany?: Prisma.ItemCollectionUpdateManyWithWhereWithoutItemInput | Prisma.ItemCollectionUpdateManyWithWhereWithoutItemInput[]
-  deleteMany?: Prisma.ItemCollectionScalarWhereInput | Prisma.ItemCollectionScalarWhereInput[]
+export type itemCollectionUpdateManyWithoutItemNestedInput = {
+  create?: Prisma.XOR<Prisma.itemCollectionCreateWithoutItemInput, Prisma.itemCollectionUncheckedCreateWithoutItemInput> | Prisma.itemCollectionCreateWithoutItemInput[] | Prisma.itemCollectionUncheckedCreateWithoutItemInput[]
+  connectOrCreate?: Prisma.itemCollectionCreateOrConnectWithoutItemInput | Prisma.itemCollectionCreateOrConnectWithoutItemInput[]
+  upsert?: Prisma.itemCollectionUpsertWithWhereUniqueWithoutItemInput | Prisma.itemCollectionUpsertWithWhereUniqueWithoutItemInput[]
+  createMany?: Prisma.itemCollectionCreateManyItemInputEnvelope
+  set?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  disconnect?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  delete?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  connect?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  update?: Prisma.itemCollectionUpdateWithWhereUniqueWithoutItemInput | Prisma.itemCollectionUpdateWithWhereUniqueWithoutItemInput[]
+  updateMany?: Prisma.itemCollectionUpdateManyWithWhereWithoutItemInput | Prisma.itemCollectionUpdateManyWithWhereWithoutItemInput[]
+  deleteMany?: Prisma.itemCollectionScalarWhereInput | Prisma.itemCollectionScalarWhereInput[]
 }
 
-export type ItemCollectionUncheckedUpdateManyWithoutItemNestedInput = {
-  create?: Prisma.XOR<Prisma.ItemCollectionCreateWithoutItemInput, Prisma.ItemCollectionUncheckedCreateWithoutItemInput> | Prisma.ItemCollectionCreateWithoutItemInput[] | Prisma.ItemCollectionUncheckedCreateWithoutItemInput[]
-  connectOrCreate?: Prisma.ItemCollectionCreateOrConnectWithoutItemInput | Prisma.ItemCollectionCreateOrConnectWithoutItemInput[]
-  upsert?: Prisma.ItemCollectionUpsertWithWhereUniqueWithoutItemInput | Prisma.ItemCollectionUpsertWithWhereUniqueWithoutItemInput[]
-  createMany?: Prisma.ItemCollectionCreateManyItemInputEnvelope
-  set?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  disconnect?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  delete?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  connect?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  update?: Prisma.ItemCollectionUpdateWithWhereUniqueWithoutItemInput | Prisma.ItemCollectionUpdateWithWhereUniqueWithoutItemInput[]
-  updateMany?: Prisma.ItemCollectionUpdateManyWithWhereWithoutItemInput | Prisma.ItemCollectionUpdateManyWithWhereWithoutItemInput[]
-  deleteMany?: Prisma.ItemCollectionScalarWhereInput | Prisma.ItemCollectionScalarWhereInput[]
+export type itemCollectionUncheckedUpdateManyWithoutItemNestedInput = {
+  create?: Prisma.XOR<Prisma.itemCollectionCreateWithoutItemInput, Prisma.itemCollectionUncheckedCreateWithoutItemInput> | Prisma.itemCollectionCreateWithoutItemInput[] | Prisma.itemCollectionUncheckedCreateWithoutItemInput[]
+  connectOrCreate?: Prisma.itemCollectionCreateOrConnectWithoutItemInput | Prisma.itemCollectionCreateOrConnectWithoutItemInput[]
+  upsert?: Prisma.itemCollectionUpsertWithWhereUniqueWithoutItemInput | Prisma.itemCollectionUpsertWithWhereUniqueWithoutItemInput[]
+  createMany?: Prisma.itemCollectionCreateManyItemInputEnvelope
+  set?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  disconnect?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  delete?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  connect?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  update?: Prisma.itemCollectionUpdateWithWhereUniqueWithoutItemInput | Prisma.itemCollectionUpdateWithWhereUniqueWithoutItemInput[]
+  updateMany?: Prisma.itemCollectionUpdateManyWithWhereWithoutItemInput | Prisma.itemCollectionUpdateManyWithWhereWithoutItemInput[]
+  deleteMany?: Prisma.itemCollectionScalarWhereInput | Prisma.itemCollectionScalarWhereInput[]
 }
 
-export type ItemCollectionCreateNestedManyWithoutCollectionInput = {
-  create?: Prisma.XOR<Prisma.ItemCollectionCreateWithoutCollectionInput, Prisma.ItemCollectionUncheckedCreateWithoutCollectionInput> | Prisma.ItemCollectionCreateWithoutCollectionInput[] | Prisma.ItemCollectionUncheckedCreateWithoutCollectionInput[]
-  connectOrCreate?: Prisma.ItemCollectionCreateOrConnectWithoutCollectionInput | Prisma.ItemCollectionCreateOrConnectWithoutCollectionInput[]
-  createMany?: Prisma.ItemCollectionCreateManyCollectionInputEnvelope
-  connect?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
+export type itemCollectionCreateNestedManyWithoutCollectionInput = {
+  create?: Prisma.XOR<Prisma.itemCollectionCreateWithoutCollectionInput, Prisma.itemCollectionUncheckedCreateWithoutCollectionInput> | Prisma.itemCollectionCreateWithoutCollectionInput[] | Prisma.itemCollectionUncheckedCreateWithoutCollectionInput[]
+  connectOrCreate?: Prisma.itemCollectionCreateOrConnectWithoutCollectionInput | Prisma.itemCollectionCreateOrConnectWithoutCollectionInput[]
+  createMany?: Prisma.itemCollectionCreateManyCollectionInputEnvelope
+  connect?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
 }
 
-export type ItemCollectionUncheckedCreateNestedManyWithoutCollectionInput = {
-  create?: Prisma.XOR<Prisma.ItemCollectionCreateWithoutCollectionInput, Prisma.ItemCollectionUncheckedCreateWithoutCollectionInput> | Prisma.ItemCollectionCreateWithoutCollectionInput[] | Prisma.ItemCollectionUncheckedCreateWithoutCollectionInput[]
-  connectOrCreate?: Prisma.ItemCollectionCreateOrConnectWithoutCollectionInput | Prisma.ItemCollectionCreateOrConnectWithoutCollectionInput[]
-  createMany?: Prisma.ItemCollectionCreateManyCollectionInputEnvelope
-  connect?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
+export type itemCollectionUncheckedCreateNestedManyWithoutCollectionInput = {
+  create?: Prisma.XOR<Prisma.itemCollectionCreateWithoutCollectionInput, Prisma.itemCollectionUncheckedCreateWithoutCollectionInput> | Prisma.itemCollectionCreateWithoutCollectionInput[] | Prisma.itemCollectionUncheckedCreateWithoutCollectionInput[]
+  connectOrCreate?: Prisma.itemCollectionCreateOrConnectWithoutCollectionInput | Prisma.itemCollectionCreateOrConnectWithoutCollectionInput[]
+  createMany?: Prisma.itemCollectionCreateManyCollectionInputEnvelope
+  connect?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
 }
 
-export type ItemCollectionUpdateManyWithoutCollectionNestedInput = {
-  create?: Prisma.XOR<Prisma.ItemCollectionCreateWithoutCollectionInput, Prisma.ItemCollectionUncheckedCreateWithoutCollectionInput> | Prisma.ItemCollectionCreateWithoutCollectionInput[] | Prisma.ItemCollectionUncheckedCreateWithoutCollectionInput[]
-  connectOrCreate?: Prisma.ItemCollectionCreateOrConnectWithoutCollectionInput | Prisma.ItemCollectionCreateOrConnectWithoutCollectionInput[]
-  upsert?: Prisma.ItemCollectionUpsertWithWhereUniqueWithoutCollectionInput | Prisma.ItemCollectionUpsertWithWhereUniqueWithoutCollectionInput[]
-  createMany?: Prisma.ItemCollectionCreateManyCollectionInputEnvelope
-  set?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  disconnect?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  delete?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  connect?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  update?: Prisma.ItemCollectionUpdateWithWhereUniqueWithoutCollectionInput | Prisma.ItemCollectionUpdateWithWhereUniqueWithoutCollectionInput[]
-  updateMany?: Prisma.ItemCollectionUpdateManyWithWhereWithoutCollectionInput | Prisma.ItemCollectionUpdateManyWithWhereWithoutCollectionInput[]
-  deleteMany?: Prisma.ItemCollectionScalarWhereInput | Prisma.ItemCollectionScalarWhereInput[]
+export type itemCollectionUpdateManyWithoutCollectionNestedInput = {
+  create?: Prisma.XOR<Prisma.itemCollectionCreateWithoutCollectionInput, Prisma.itemCollectionUncheckedCreateWithoutCollectionInput> | Prisma.itemCollectionCreateWithoutCollectionInput[] | Prisma.itemCollectionUncheckedCreateWithoutCollectionInput[]
+  connectOrCreate?: Prisma.itemCollectionCreateOrConnectWithoutCollectionInput | Prisma.itemCollectionCreateOrConnectWithoutCollectionInput[]
+  upsert?: Prisma.itemCollectionUpsertWithWhereUniqueWithoutCollectionInput | Prisma.itemCollectionUpsertWithWhereUniqueWithoutCollectionInput[]
+  createMany?: Prisma.itemCollectionCreateManyCollectionInputEnvelope
+  set?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  disconnect?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  delete?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  connect?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  update?: Prisma.itemCollectionUpdateWithWhereUniqueWithoutCollectionInput | Prisma.itemCollectionUpdateWithWhereUniqueWithoutCollectionInput[]
+  updateMany?: Prisma.itemCollectionUpdateManyWithWhereWithoutCollectionInput | Prisma.itemCollectionUpdateManyWithWhereWithoutCollectionInput[]
+  deleteMany?: Prisma.itemCollectionScalarWhereInput | Prisma.itemCollectionScalarWhereInput[]
 }
 
-export type ItemCollectionUncheckedUpdateManyWithoutCollectionNestedInput = {
-  create?: Prisma.XOR<Prisma.ItemCollectionCreateWithoutCollectionInput, Prisma.ItemCollectionUncheckedCreateWithoutCollectionInput> | Prisma.ItemCollectionCreateWithoutCollectionInput[] | Prisma.ItemCollectionUncheckedCreateWithoutCollectionInput[]
-  connectOrCreate?: Prisma.ItemCollectionCreateOrConnectWithoutCollectionInput | Prisma.ItemCollectionCreateOrConnectWithoutCollectionInput[]
-  upsert?: Prisma.ItemCollectionUpsertWithWhereUniqueWithoutCollectionInput | Prisma.ItemCollectionUpsertWithWhereUniqueWithoutCollectionInput[]
-  createMany?: Prisma.ItemCollectionCreateManyCollectionInputEnvelope
-  set?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  disconnect?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  delete?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  connect?: Prisma.ItemCollectionWhereUniqueInput | Prisma.ItemCollectionWhereUniqueInput[]
-  update?: Prisma.ItemCollectionUpdateWithWhereUniqueWithoutCollectionInput | Prisma.ItemCollectionUpdateWithWhereUniqueWithoutCollectionInput[]
-  updateMany?: Prisma.ItemCollectionUpdateManyWithWhereWithoutCollectionInput | Prisma.ItemCollectionUpdateManyWithWhereWithoutCollectionInput[]
-  deleteMany?: Prisma.ItemCollectionScalarWhereInput | Prisma.ItemCollectionScalarWhereInput[]
+export type itemCollectionUncheckedUpdateManyWithoutCollectionNestedInput = {
+  create?: Prisma.XOR<Prisma.itemCollectionCreateWithoutCollectionInput, Prisma.itemCollectionUncheckedCreateWithoutCollectionInput> | Prisma.itemCollectionCreateWithoutCollectionInput[] | Prisma.itemCollectionUncheckedCreateWithoutCollectionInput[]
+  connectOrCreate?: Prisma.itemCollectionCreateOrConnectWithoutCollectionInput | Prisma.itemCollectionCreateOrConnectWithoutCollectionInput[]
+  upsert?: Prisma.itemCollectionUpsertWithWhereUniqueWithoutCollectionInput | Prisma.itemCollectionUpsertWithWhereUniqueWithoutCollectionInput[]
+  createMany?: Prisma.itemCollectionCreateManyCollectionInputEnvelope
+  set?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  disconnect?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  delete?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  connect?: Prisma.itemCollectionWhereUniqueInput | Prisma.itemCollectionWhereUniqueInput[]
+  update?: Prisma.itemCollectionUpdateWithWhereUniqueWithoutCollectionInput | Prisma.itemCollectionUpdateWithWhereUniqueWithoutCollectionInput[]
+  updateMany?: Prisma.itemCollectionUpdateManyWithWhereWithoutCollectionInput | Prisma.itemCollectionUpdateManyWithWhereWithoutCollectionInput[]
+  deleteMany?: Prisma.itemCollectionScalarWhereInput | Prisma.itemCollectionScalarWhereInput[]
 }
 
-export type ItemCollectionCreateWithoutItemInput = {
+export type itemCollectionCreateWithoutItemInput = {
   addedAt?: Date | string
-  collection: Prisma.CollectionCreateNestedOneWithoutItemsInput
+  collection: Prisma.collectionCreateNestedOneWithoutItemsInput
 }
 
-export type ItemCollectionUncheckedCreateWithoutItemInput = {
+export type itemCollectionUncheckedCreateWithoutItemInput = {
   collectionId: string
   addedAt?: Date | string
 }
 
-export type ItemCollectionCreateOrConnectWithoutItemInput = {
-  where: Prisma.ItemCollectionWhereUniqueInput
-  create: Prisma.XOR<Prisma.ItemCollectionCreateWithoutItemInput, Prisma.ItemCollectionUncheckedCreateWithoutItemInput>
+export type itemCollectionCreateOrConnectWithoutItemInput = {
+  where: Prisma.itemCollectionWhereUniqueInput
+  create: Prisma.XOR<Prisma.itemCollectionCreateWithoutItemInput, Prisma.itemCollectionUncheckedCreateWithoutItemInput>
 }
 
-export type ItemCollectionCreateManyItemInputEnvelope = {
-  data: Prisma.ItemCollectionCreateManyItemInput | Prisma.ItemCollectionCreateManyItemInput[]
+export type itemCollectionCreateManyItemInputEnvelope = {
+  data: Prisma.itemCollectionCreateManyItemInput | Prisma.itemCollectionCreateManyItemInput[]
   skipDuplicates?: boolean
 }
 
-export type ItemCollectionUpsertWithWhereUniqueWithoutItemInput = {
-  where: Prisma.ItemCollectionWhereUniqueInput
-  update: Prisma.XOR<Prisma.ItemCollectionUpdateWithoutItemInput, Prisma.ItemCollectionUncheckedUpdateWithoutItemInput>
-  create: Prisma.XOR<Prisma.ItemCollectionCreateWithoutItemInput, Prisma.ItemCollectionUncheckedCreateWithoutItemInput>
+export type itemCollectionUpsertWithWhereUniqueWithoutItemInput = {
+  where: Prisma.itemCollectionWhereUniqueInput
+  update: Prisma.XOR<Prisma.itemCollectionUpdateWithoutItemInput, Prisma.itemCollectionUncheckedUpdateWithoutItemInput>
+  create: Prisma.XOR<Prisma.itemCollectionCreateWithoutItemInput, Prisma.itemCollectionUncheckedCreateWithoutItemInput>
 }
 
-export type ItemCollectionUpdateWithWhereUniqueWithoutItemInput = {
-  where: Prisma.ItemCollectionWhereUniqueInput
-  data: Prisma.XOR<Prisma.ItemCollectionUpdateWithoutItemInput, Prisma.ItemCollectionUncheckedUpdateWithoutItemInput>
+export type itemCollectionUpdateWithWhereUniqueWithoutItemInput = {
+  where: Prisma.itemCollectionWhereUniqueInput
+  data: Prisma.XOR<Prisma.itemCollectionUpdateWithoutItemInput, Prisma.itemCollectionUncheckedUpdateWithoutItemInput>
 }
 
-export type ItemCollectionUpdateManyWithWhereWithoutItemInput = {
-  where: Prisma.ItemCollectionScalarWhereInput
-  data: Prisma.XOR<Prisma.ItemCollectionUpdateManyMutationInput, Prisma.ItemCollectionUncheckedUpdateManyWithoutItemInput>
+export type itemCollectionUpdateManyWithWhereWithoutItemInput = {
+  where: Prisma.itemCollectionScalarWhereInput
+  data: Prisma.XOR<Prisma.itemCollectionUpdateManyMutationInput, Prisma.itemCollectionUncheckedUpdateManyWithoutItemInput>
 }
 
-export type ItemCollectionScalarWhereInput = {
-  AND?: Prisma.ItemCollectionScalarWhereInput | Prisma.ItemCollectionScalarWhereInput[]
-  OR?: Prisma.ItemCollectionScalarWhereInput[]
-  NOT?: Prisma.ItemCollectionScalarWhereInput | Prisma.ItemCollectionScalarWhereInput[]
-  itemId?: Prisma.StringFilter<"ItemCollection"> | string
-  collectionId?: Prisma.StringFilter<"ItemCollection"> | string
-  addedAt?: Prisma.DateTimeFilter<"ItemCollection"> | Date | string
+export type itemCollectionScalarWhereInput = {
+  AND?: Prisma.itemCollectionScalarWhereInput | Prisma.itemCollectionScalarWhereInput[]
+  OR?: Prisma.itemCollectionScalarWhereInput[]
+  NOT?: Prisma.itemCollectionScalarWhereInput | Prisma.itemCollectionScalarWhereInput[]
+  itemId?: Prisma.StringFilter<"itemCollection"> | string
+  collectionId?: Prisma.StringFilter<"itemCollection"> | string
+  addedAt?: Prisma.DateTimeFilter<"itemCollection"> | Date | string
 }
 
-export type ItemCollectionCreateWithoutCollectionInput = {
+export type itemCollectionCreateWithoutCollectionInput = {
   addedAt?: Date | string
-  item: Prisma.ItemCreateNestedOneWithoutCollectionsInput
+  item: Prisma.itemCreateNestedOneWithoutCollectionsInput
 }
 
-export type ItemCollectionUncheckedCreateWithoutCollectionInput = {
+export type itemCollectionUncheckedCreateWithoutCollectionInput = {
   itemId: string
   addedAt?: Date | string
 }
 
-export type ItemCollectionCreateOrConnectWithoutCollectionInput = {
-  where: Prisma.ItemCollectionWhereUniqueInput
-  create: Prisma.XOR<Prisma.ItemCollectionCreateWithoutCollectionInput, Prisma.ItemCollectionUncheckedCreateWithoutCollectionInput>
+export type itemCollectionCreateOrConnectWithoutCollectionInput = {
+  where: Prisma.itemCollectionWhereUniqueInput
+  create: Prisma.XOR<Prisma.itemCollectionCreateWithoutCollectionInput, Prisma.itemCollectionUncheckedCreateWithoutCollectionInput>
 }
 
-export type ItemCollectionCreateManyCollectionInputEnvelope = {
-  data: Prisma.ItemCollectionCreateManyCollectionInput | Prisma.ItemCollectionCreateManyCollectionInput[]
+export type itemCollectionCreateManyCollectionInputEnvelope = {
+  data: Prisma.itemCollectionCreateManyCollectionInput | Prisma.itemCollectionCreateManyCollectionInput[]
   skipDuplicates?: boolean
 }
 
-export type ItemCollectionUpsertWithWhereUniqueWithoutCollectionInput = {
-  where: Prisma.ItemCollectionWhereUniqueInput
-  update: Prisma.XOR<Prisma.ItemCollectionUpdateWithoutCollectionInput, Prisma.ItemCollectionUncheckedUpdateWithoutCollectionInput>
-  create: Prisma.XOR<Prisma.ItemCollectionCreateWithoutCollectionInput, Prisma.ItemCollectionUncheckedCreateWithoutCollectionInput>
+export type itemCollectionUpsertWithWhereUniqueWithoutCollectionInput = {
+  where: Prisma.itemCollectionWhereUniqueInput
+  update: Prisma.XOR<Prisma.itemCollectionUpdateWithoutCollectionInput, Prisma.itemCollectionUncheckedUpdateWithoutCollectionInput>
+  create: Prisma.XOR<Prisma.itemCollectionCreateWithoutCollectionInput, Prisma.itemCollectionUncheckedCreateWithoutCollectionInput>
 }
 
-export type ItemCollectionUpdateWithWhereUniqueWithoutCollectionInput = {
-  where: Prisma.ItemCollectionWhereUniqueInput
-  data: Prisma.XOR<Prisma.ItemCollectionUpdateWithoutCollectionInput, Prisma.ItemCollectionUncheckedUpdateWithoutCollectionInput>
+export type itemCollectionUpdateWithWhereUniqueWithoutCollectionInput = {
+  where: Prisma.itemCollectionWhereUniqueInput
+  data: Prisma.XOR<Prisma.itemCollectionUpdateWithoutCollectionInput, Prisma.itemCollectionUncheckedUpdateWithoutCollectionInput>
 }
 
-export type ItemCollectionUpdateManyWithWhereWithoutCollectionInput = {
-  where: Prisma.ItemCollectionScalarWhereInput
-  data: Prisma.XOR<Prisma.ItemCollectionUpdateManyMutationInput, Prisma.ItemCollectionUncheckedUpdateManyWithoutCollectionInput>
+export type itemCollectionUpdateManyWithWhereWithoutCollectionInput = {
+  where: Prisma.itemCollectionScalarWhereInput
+  data: Prisma.XOR<Prisma.itemCollectionUpdateManyMutationInput, Prisma.itemCollectionUncheckedUpdateManyWithoutCollectionInput>
 }
 
-export type ItemCollectionCreateManyItemInput = {
+export type itemCollectionCreateManyItemInput = {
   collectionId: string
   addedAt?: Date | string
 }
 
-export type ItemCollectionUpdateWithoutItemInput = {
+export type itemCollectionUpdateWithoutItemInput = {
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  collection?: Prisma.CollectionUpdateOneRequiredWithoutItemsNestedInput
+  collection?: Prisma.collectionUpdateOneRequiredWithoutItemsNestedInput
 }
 
-export type ItemCollectionUncheckedUpdateWithoutItemInput = {
+export type itemCollectionUncheckedUpdateWithoutItemInput = {
   collectionId?: Prisma.StringFieldUpdateOperationsInput | string
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ItemCollectionUncheckedUpdateManyWithoutItemInput = {
+export type itemCollectionUncheckedUpdateManyWithoutItemInput = {
   collectionId?: Prisma.StringFieldUpdateOperationsInput | string
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ItemCollectionCreateManyCollectionInput = {
+export type itemCollectionCreateManyCollectionInput = {
   itemId: string
   addedAt?: Date | string
 }
 
-export type ItemCollectionUpdateWithoutCollectionInput = {
+export type itemCollectionUpdateWithoutCollectionInput = {
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  item?: Prisma.ItemUpdateOneRequiredWithoutCollectionsNestedInput
+  item?: Prisma.itemUpdateOneRequiredWithoutCollectionsNestedInput
 }
 
-export type ItemCollectionUncheckedUpdateWithoutCollectionInput = {
+export type itemCollectionUncheckedUpdateWithoutCollectionInput = {
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ItemCollectionUncheckedUpdateManyWithoutCollectionInput = {
+export type itemCollectionUncheckedUpdateManyWithoutCollectionInput = {
   itemId?: Prisma.StringFieldUpdateOperationsInput | string
   addedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
 
-export type ItemCollectionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+export type itemCollectionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   itemId?: boolean
   collectionId?: boolean
   addedAt?: boolean
-  item?: boolean | Prisma.ItemDefaultArgs<ExtArgs>
-  collection?: boolean | Prisma.CollectionDefaultArgs<ExtArgs>
+  item?: boolean | Prisma.itemDefaultArgs<ExtArgs>
+  collection?: boolean | Prisma.collectionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["itemCollection"]>
 
-export type ItemCollectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+export type itemCollectionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   itemId?: boolean
   collectionId?: boolean
   addedAt?: boolean
-  item?: boolean | Prisma.ItemDefaultArgs<ExtArgs>
-  collection?: boolean | Prisma.CollectionDefaultArgs<ExtArgs>
+  item?: boolean | Prisma.itemDefaultArgs<ExtArgs>
+  collection?: boolean | Prisma.collectionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["itemCollection"]>
 
-export type ItemCollectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+export type itemCollectionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   itemId?: boolean
   collectionId?: boolean
   addedAt?: boolean
-  item?: boolean | Prisma.ItemDefaultArgs<ExtArgs>
-  collection?: boolean | Prisma.CollectionDefaultArgs<ExtArgs>
+  item?: boolean | Prisma.itemDefaultArgs<ExtArgs>
+  collection?: boolean | Prisma.collectionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["itemCollection"]>
 
-export type ItemCollectionSelectScalar = {
+export type itemCollectionSelectScalar = {
   itemId?: boolean
   collectionId?: boolean
   addedAt?: boolean
 }
 
-export type ItemCollectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"itemId" | "collectionId" | "addedAt", ExtArgs["result"]["itemCollection"]>
-export type ItemCollectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  item?: boolean | Prisma.ItemDefaultArgs<ExtArgs>
-  collection?: boolean | Prisma.CollectionDefaultArgs<ExtArgs>
+export type itemCollectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"itemId" | "collectionId" | "addedAt", ExtArgs["result"]["itemCollection"]>
+export type itemCollectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  item?: boolean | Prisma.itemDefaultArgs<ExtArgs>
+  collection?: boolean | Prisma.collectionDefaultArgs<ExtArgs>
 }
-export type ItemCollectionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  item?: boolean | Prisma.ItemDefaultArgs<ExtArgs>
-  collection?: boolean | Prisma.CollectionDefaultArgs<ExtArgs>
+export type itemCollectionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  item?: boolean | Prisma.itemDefaultArgs<ExtArgs>
+  collection?: boolean | Prisma.collectionDefaultArgs<ExtArgs>
 }
-export type ItemCollectionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  item?: boolean | Prisma.ItemDefaultArgs<ExtArgs>
-  collection?: boolean | Prisma.CollectionDefaultArgs<ExtArgs>
+export type itemCollectionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  item?: boolean | Prisma.itemDefaultArgs<ExtArgs>
+  collection?: boolean | Prisma.collectionDefaultArgs<ExtArgs>
 }
 
-export type $ItemCollectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  name: "ItemCollection"
+export type $itemCollectionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  name: "itemCollection"
   objects: {
-    item: Prisma.$ItemPayload<ExtArgs>
-    collection: Prisma.$CollectionPayload<ExtArgs>
+    item: Prisma.$itemPayload<ExtArgs>
+    collection: Prisma.$collectionPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     itemId: string
@@ -546,18 +546,18 @@ export type $ItemCollectionPayload<ExtArgs extends runtime.Types.Extensions.Inte
   composites: {}
 }
 
-export type ItemCollectionGetPayload<S extends boolean | null | undefined | ItemCollectionDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$ItemCollectionPayload, S>
+export type itemCollectionGetPayload<S extends boolean | null | undefined | itemCollectionDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$itemCollectionPayload, S>
 
-export type ItemCollectionCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> =
-  Omit<ItemCollectionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+export type itemCollectionCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> =
+  Omit<itemCollectionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
     select?: ItemCollectionCountAggregateInputType | true
   }
 
-export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-  [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ItemCollection'], meta: { name: 'ItemCollection' } }
+export interface itemCollectionDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['itemCollection'], meta: { name: 'itemCollection' } }
   /**
    * Find zero or one ItemCollection that matches the filter.
-   * @param {ItemCollectionFindUniqueArgs} args - Arguments to find a ItemCollection
+   * @param {itemCollectionFindUniqueArgs} args - Arguments to find a ItemCollection
    * @example
    * // Get one ItemCollection
    * const itemCollection = await prisma.itemCollection.findUnique({
@@ -566,12 +566,12 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    *   }
    * })
    */
-  findUnique<T extends ItemCollectionFindUniqueArgs>(args: Prisma.SelectSubset<T, ItemCollectionFindUniqueArgs<ExtArgs>>): Prisma.Prisma__ItemCollectionClient<runtime.Types.Result.GetResult<Prisma.$ItemCollectionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  findUnique<T extends itemCollectionFindUniqueArgs>(args: Prisma.SelectSubset<T, itemCollectionFindUniqueArgs<ExtArgs>>): Prisma.Prisma__itemCollectionClient<runtime.Types.Result.GetResult<Prisma.$itemCollectionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find one ItemCollection that matches the filter or throw an error with `error.code='P2025'`
    * if no matches were found.
-   * @param {ItemCollectionFindUniqueOrThrowArgs} args - Arguments to find a ItemCollection
+   * @param {itemCollectionFindUniqueOrThrowArgs} args - Arguments to find a ItemCollection
    * @example
    * // Get one ItemCollection
    * const itemCollection = await prisma.itemCollection.findUniqueOrThrow({
@@ -580,13 +580,13 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    *   }
    * })
    */
-  findUniqueOrThrow<T extends ItemCollectionFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, ItemCollectionFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__ItemCollectionClient<runtime.Types.Result.GetResult<Prisma.$ItemCollectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  findUniqueOrThrow<T extends itemCollectionFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, itemCollectionFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__itemCollectionClient<runtime.Types.Result.GetResult<Prisma.$itemCollectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find the first ItemCollection that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {ItemCollectionFindFirstArgs} args - Arguments to find a ItemCollection
+   * @param {itemCollectionFindFirstArgs} args - Arguments to find a ItemCollection
    * @example
    * // Get one ItemCollection
    * const itemCollection = await prisma.itemCollection.findFirst({
@@ -595,14 +595,14 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    *   }
    * })
    */
-  findFirst<T extends ItemCollectionFindFirstArgs>(args?: Prisma.SelectSubset<T, ItemCollectionFindFirstArgs<ExtArgs>>): Prisma.Prisma__ItemCollectionClient<runtime.Types.Result.GetResult<Prisma.$ItemCollectionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  findFirst<T extends itemCollectionFindFirstArgs>(args?: Prisma.SelectSubset<T, itemCollectionFindFirstArgs<ExtArgs>>): Prisma.Prisma__itemCollectionClient<runtime.Types.Result.GetResult<Prisma.$itemCollectionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find the first ItemCollection that matches the filter or
    * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {ItemCollectionFindFirstOrThrowArgs} args - Arguments to find a ItemCollection
+   * @param {itemCollectionFindFirstOrThrowArgs} args - Arguments to find a ItemCollection
    * @example
    * // Get one ItemCollection
    * const itemCollection = await prisma.itemCollection.findFirstOrThrow({
@@ -611,13 +611,13 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    *   }
    * })
    */
-  findFirstOrThrow<T extends ItemCollectionFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, ItemCollectionFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__ItemCollectionClient<runtime.Types.Result.GetResult<Prisma.$ItemCollectionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  findFirstOrThrow<T extends itemCollectionFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, itemCollectionFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__itemCollectionClient<runtime.Types.Result.GetResult<Prisma.$itemCollectionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find zero or more ItemCollections that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {ItemCollectionFindManyArgs} args - Arguments to filter and select certain fields only.
+   * @param {itemCollectionFindManyArgs} args - Arguments to filter and select certain fields only.
    * @example
    * // Get all ItemCollections
    * const itemCollections = await prisma.itemCollection.findMany()
@@ -629,11 +629,11 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    * const itemCollectionWithItemIdOnly = await prisma.itemCollection.findMany({ select: { itemId: true } })
    * 
    */
-  findMany<T extends ItemCollectionFindManyArgs>(args?: Prisma.SelectSubset<T, ItemCollectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemCollectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+  findMany<T extends itemCollectionFindManyArgs>(args?: Prisma.SelectSubset<T, itemCollectionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$itemCollectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
   /**
    * Create a ItemCollection.
-   * @param {ItemCollectionCreateArgs} args - Arguments to create a ItemCollection.
+   * @param {itemCollectionCreateArgs} args - Arguments to create a ItemCollection.
    * @example
    * // Create one ItemCollection
    * const ItemCollection = await prisma.itemCollection.create({
@@ -643,11 +643,11 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    * })
    * 
    */
-  create<T extends ItemCollectionCreateArgs>(args: Prisma.SelectSubset<T, ItemCollectionCreateArgs<ExtArgs>>): Prisma.Prisma__ItemCollectionClient<runtime.Types.Result.GetResult<Prisma.$ItemCollectionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  create<T extends itemCollectionCreateArgs>(args: Prisma.SelectSubset<T, itemCollectionCreateArgs<ExtArgs>>): Prisma.Prisma__itemCollectionClient<runtime.Types.Result.GetResult<Prisma.$itemCollectionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Create many ItemCollections.
-   * @param {ItemCollectionCreateManyArgs} args - Arguments to create many ItemCollections.
+   * @param {itemCollectionCreateManyArgs} args - Arguments to create many ItemCollections.
    * @example
    * // Create many ItemCollections
    * const itemCollection = await prisma.itemCollection.createMany({
@@ -657,11 +657,11 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    * })
    *     
    */
-  createMany<T extends ItemCollectionCreateManyArgs>(args?: Prisma.SelectSubset<T, ItemCollectionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+  createMany<T extends itemCollectionCreateManyArgs>(args?: Prisma.SelectSubset<T, itemCollectionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
    * Create many ItemCollections and returns the data saved in the database.
-   * @param {ItemCollectionCreateManyAndReturnArgs} args - Arguments to create many ItemCollections.
+   * @param {itemCollectionCreateManyAndReturnArgs} args - Arguments to create many ItemCollections.
    * @example
    * // Create many ItemCollections
    * const itemCollection = await prisma.itemCollection.createManyAndReturn({
@@ -681,11 +681,11 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    * Read more here: https://pris.ly/d/null-undefined
    * 
    */
-  createManyAndReturn<T extends ItemCollectionCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ItemCollectionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemCollectionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+  createManyAndReturn<T extends itemCollectionCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, itemCollectionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$itemCollectionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Delete a ItemCollection.
-   * @param {ItemCollectionDeleteArgs} args - Arguments to delete one ItemCollection.
+   * @param {itemCollectionDeleteArgs} args - Arguments to delete one ItemCollection.
    * @example
    * // Delete one ItemCollection
    * const ItemCollection = await prisma.itemCollection.delete({
@@ -695,11 +695,11 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    * })
    * 
    */
-  delete<T extends ItemCollectionDeleteArgs>(args: Prisma.SelectSubset<T, ItemCollectionDeleteArgs<ExtArgs>>): Prisma.Prisma__ItemCollectionClient<runtime.Types.Result.GetResult<Prisma.$ItemCollectionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  delete<T extends itemCollectionDeleteArgs>(args: Prisma.SelectSubset<T, itemCollectionDeleteArgs<ExtArgs>>): Prisma.Prisma__itemCollectionClient<runtime.Types.Result.GetResult<Prisma.$itemCollectionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Update one ItemCollection.
-   * @param {ItemCollectionUpdateArgs} args - Arguments to update one ItemCollection.
+   * @param {itemCollectionUpdateArgs} args - Arguments to update one ItemCollection.
    * @example
    * // Update one ItemCollection
    * const itemCollection = await prisma.itemCollection.update({
@@ -712,11 +712,11 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    * })
    * 
    */
-  update<T extends ItemCollectionUpdateArgs>(args: Prisma.SelectSubset<T, ItemCollectionUpdateArgs<ExtArgs>>): Prisma.Prisma__ItemCollectionClient<runtime.Types.Result.GetResult<Prisma.$ItemCollectionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  update<T extends itemCollectionUpdateArgs>(args: Prisma.SelectSubset<T, itemCollectionUpdateArgs<ExtArgs>>): Prisma.Prisma__itemCollectionClient<runtime.Types.Result.GetResult<Prisma.$itemCollectionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Delete zero or more ItemCollections.
-   * @param {ItemCollectionDeleteManyArgs} args - Arguments to filter ItemCollections to delete.
+   * @param {itemCollectionDeleteManyArgs} args - Arguments to filter ItemCollections to delete.
    * @example
    * // Delete a few ItemCollections
    * const { count } = await prisma.itemCollection.deleteMany({
@@ -726,13 +726,13 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    * })
    * 
    */
-  deleteMany<T extends ItemCollectionDeleteManyArgs>(args?: Prisma.SelectSubset<T, ItemCollectionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+  deleteMany<T extends itemCollectionDeleteManyArgs>(args?: Prisma.SelectSubset<T, itemCollectionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
    * Update zero or more ItemCollections.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {ItemCollectionUpdateManyArgs} args - Arguments to update one or more rows.
+   * @param {itemCollectionUpdateManyArgs} args - Arguments to update one or more rows.
    * @example
    * // Update many ItemCollections
    * const itemCollection = await prisma.itemCollection.updateMany({
@@ -745,11 +745,11 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    * })
    * 
    */
-  updateMany<T extends ItemCollectionUpdateManyArgs>(args: Prisma.SelectSubset<T, ItemCollectionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+  updateMany<T extends itemCollectionUpdateManyArgs>(args: Prisma.SelectSubset<T, itemCollectionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
    * Update zero or more ItemCollections and returns the data updated in the database.
-   * @param {ItemCollectionUpdateManyAndReturnArgs} args - Arguments to update many ItemCollections.
+   * @param {itemCollectionUpdateManyAndReturnArgs} args - Arguments to update many ItemCollections.
    * @example
    * // Update many ItemCollections
    * const itemCollection = await prisma.itemCollection.updateManyAndReturn({
@@ -775,11 +775,11 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    * Read more here: https://pris.ly/d/null-undefined
    * 
    */
-  updateManyAndReturn<T extends ItemCollectionUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ItemCollectionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemCollectionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+  updateManyAndReturn<T extends itemCollectionUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, itemCollectionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$itemCollectionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one ItemCollection.
-   * @param {ItemCollectionUpsertArgs} args - Arguments to update or create a ItemCollection.
+   * @param {itemCollectionUpsertArgs} args - Arguments to update or create a ItemCollection.
    * @example
    * // Update or create a ItemCollection
    * const itemCollection = await prisma.itemCollection.upsert({
@@ -794,14 +794,14 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    *   }
    * })
    */
-  upsert<T extends ItemCollectionUpsertArgs>(args: Prisma.SelectSubset<T, ItemCollectionUpsertArgs<ExtArgs>>): Prisma.Prisma__ItemCollectionClient<runtime.Types.Result.GetResult<Prisma.$ItemCollectionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  upsert<T extends itemCollectionUpsertArgs>(args: Prisma.SelectSubset<T, itemCollectionUpsertArgs<ExtArgs>>): Prisma.Prisma__itemCollectionClient<runtime.Types.Result.GetResult<Prisma.$itemCollectionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
   /**
    * Count the number of ItemCollections.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {ItemCollectionCountArgs} args - Arguments to filter ItemCollections to count.
+   * @param {itemCollectionCountArgs} args - Arguments to filter ItemCollections to count.
    * @example
    * // Count the number of ItemCollections
    * const count = await prisma.itemCollection.count({
@@ -810,8 +810,8 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    *   }
    * })
   **/
-  count<T extends ItemCollectionCountArgs>(
-    args?: Prisma.Subset<T, ItemCollectionCountArgs>,
+  count<T extends itemCollectionCountArgs>(
+    args?: Prisma.Subset<T, itemCollectionCountArgs>,
   ): Prisma.PrismaPromise<
     T extends runtime.Types.Utils.Record<'select', any>
       ? T['select'] extends true
@@ -850,7 +850,7 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    * Group by ItemCollection.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {ItemCollectionGroupByArgs} args - Group by arguments.
+   * @param {itemCollectionGroupByArgs} args - Group by arguments.
    * @example
    * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
@@ -865,14 +865,14 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
    * 
   **/
   groupBy<
-    T extends ItemCollectionGroupByArgs,
+    T extends itemCollectionGroupByArgs,
     HasSelectOrTake extends Prisma.Or<
       Prisma.Extends<'skip', Prisma.Keys<T>>,
       Prisma.Extends<'take', Prisma.Keys<T>>
     >,
     OrderByArg extends Prisma.True extends HasSelectOrTake
-      ? { orderBy: ItemCollectionGroupByArgs['orderBy'] }
-      : { orderBy?: ItemCollectionGroupByArgs['orderBy'] },
+      ? { orderBy: itemCollectionGroupByArgs['orderBy'] }
+      : { orderBy?: itemCollectionGroupByArgs['orderBy'] },
     OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>,
     ByFields extends Prisma.MaybeTupleToUnion<T['by']>,
     ByValid extends Prisma.Has<ByFields, OrderFields>,
@@ -921,23 +921,23 @@ export interface ItemCollectionDelegate<ExtArgs extends runtime.Types.Extensions
           ? never
           : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
       }[OrderFields]
-  >(args: Prisma.SubsetIntersection<T, ItemCollectionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetItemCollectionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  >(args: Prisma.SubsetIntersection<T, itemCollectionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetItemCollectionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
 /**
- * Fields of the ItemCollection model
+ * Fields of the itemCollection model
  */
-readonly fields: ItemCollectionFieldRefs;
+readonly fields: itemCollectionFieldRefs;
 }
 
 /**
- * The delegate class that acts as a "Promise-like" for ItemCollection.
+ * The delegate class that acts as a "Promise-like" for itemCollection.
  * Why is this prefixed with `Prisma__`?
  * Because we want to prevent naming conflicts as mentioned in
  * https://github.com/prisma/prisma-client-js/issues/707
  */
-export interface Prisma__ItemCollectionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+export interface Prisma__itemCollectionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  item<T extends Prisma.ItemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ItemDefaultArgs<ExtArgs>>): Prisma.Prisma__ItemClient<runtime.Types.Result.GetResult<Prisma.$ItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  collection<T extends Prisma.CollectionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CollectionDefaultArgs<ExtArgs>>): Prisma.Prisma__CollectionClient<runtime.Types.Result.GetResult<Prisma.$CollectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  item<T extends Prisma.itemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.itemDefaultArgs<ExtArgs>>): Prisma.Prisma__itemClient<runtime.Types.Result.GetResult<Prisma.$itemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  collection<T extends Prisma.collectionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.collectionDefaultArgs<ExtArgs>>): Prisma.Prisma__collectionClient<runtime.Types.Result.GetResult<Prisma.$collectionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -964,426 +964,426 @@ export interface Prisma__ItemCollectionClient<T, Null = never, ExtArgs extends r
 
 
 /**
- * Fields of the ItemCollection model
+ * Fields of the itemCollection model
  */
-export interface ItemCollectionFieldRefs {
-  readonly itemId: Prisma.FieldRef<"ItemCollection", 'String'>
-  readonly collectionId: Prisma.FieldRef<"ItemCollection", 'String'>
-  readonly addedAt: Prisma.FieldRef<"ItemCollection", 'DateTime'>
+export interface itemCollectionFieldRefs {
+  readonly itemId: Prisma.FieldRef<"itemCollection", 'String'>
+  readonly collectionId: Prisma.FieldRef<"itemCollection", 'String'>
+  readonly addedAt: Prisma.FieldRef<"itemCollection", 'DateTime'>
 }
     
 
 // Custom InputTypes
 /**
- * ItemCollection findUnique
+ * itemCollection findUnique
  */
-export type ItemCollectionFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemCollection
+   * Select specific fields to fetch from the itemCollection
    */
-  select?: Prisma.ItemCollectionSelect<ExtArgs> | null
+  select?: Prisma.itemCollectionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemCollection
+   * Omit specific fields from the itemCollection
    */
-  omit?: Prisma.ItemCollectionOmit<ExtArgs> | null
+  omit?: Prisma.itemCollectionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemCollectionInclude<ExtArgs> | null
+  include?: Prisma.itemCollectionInclude<ExtArgs> | null
   /**
-   * Filter, which ItemCollection to fetch.
+   * Filter, which itemCollection to fetch.
    */
-  where: Prisma.ItemCollectionWhereUniqueInput
+  where: Prisma.itemCollectionWhereUniqueInput
 }
 
 /**
- * ItemCollection findUniqueOrThrow
+ * itemCollection findUniqueOrThrow
  */
-export type ItemCollectionFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemCollection
+   * Select specific fields to fetch from the itemCollection
    */
-  select?: Prisma.ItemCollectionSelect<ExtArgs> | null
+  select?: Prisma.itemCollectionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemCollection
+   * Omit specific fields from the itemCollection
    */
-  omit?: Prisma.ItemCollectionOmit<ExtArgs> | null
+  omit?: Prisma.itemCollectionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemCollectionInclude<ExtArgs> | null
+  include?: Prisma.itemCollectionInclude<ExtArgs> | null
   /**
-   * Filter, which ItemCollection to fetch.
+   * Filter, which itemCollection to fetch.
    */
-  where: Prisma.ItemCollectionWhereUniqueInput
+  where: Prisma.itemCollectionWhereUniqueInput
 }
 
 /**
- * ItemCollection findFirst
+ * itemCollection findFirst
  */
-export type ItemCollectionFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemCollection
+   * Select specific fields to fetch from the itemCollection
    */
-  select?: Prisma.ItemCollectionSelect<ExtArgs> | null
+  select?: Prisma.itemCollectionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemCollection
+   * Omit specific fields from the itemCollection
    */
-  omit?: Prisma.ItemCollectionOmit<ExtArgs> | null
+  omit?: Prisma.itemCollectionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemCollectionInclude<ExtArgs> | null
+  include?: Prisma.itemCollectionInclude<ExtArgs> | null
   /**
-   * Filter, which ItemCollection to fetch.
+   * Filter, which itemCollection to fetch.
    */
-  where?: Prisma.ItemCollectionWhereInput
+  where?: Prisma.itemCollectionWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of ItemCollections to fetch.
+   * Determine the order of itemCollections to fetch.
    */
-  orderBy?: Prisma.ItemCollectionOrderByWithRelationInput | Prisma.ItemCollectionOrderByWithRelationInput[]
+  orderBy?: Prisma.itemCollectionOrderByWithRelationInput | Prisma.itemCollectionOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
-   * Sets the position for searching for ItemCollections.
+   * Sets the position for searching for itemCollections.
    */
-  cursor?: Prisma.ItemCollectionWhereUniqueInput
+  cursor?: Prisma.itemCollectionWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` ItemCollections from the position of the cursor.
+   * Take `±n` itemCollections from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` ItemCollections.
+   * Skip the first `n` itemCollections.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    * 
-   * Filter by unique combinations of ItemCollections.
+   * Filter by unique combinations of itemCollections.
    */
   distinct?: Prisma.ItemCollectionScalarFieldEnum | Prisma.ItemCollectionScalarFieldEnum[]
 }
 
 /**
- * ItemCollection findFirstOrThrow
+ * itemCollection findFirstOrThrow
  */
-export type ItemCollectionFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemCollection
+   * Select specific fields to fetch from the itemCollection
    */
-  select?: Prisma.ItemCollectionSelect<ExtArgs> | null
+  select?: Prisma.itemCollectionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemCollection
+   * Omit specific fields from the itemCollection
    */
-  omit?: Prisma.ItemCollectionOmit<ExtArgs> | null
+  omit?: Prisma.itemCollectionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemCollectionInclude<ExtArgs> | null
+  include?: Prisma.itemCollectionInclude<ExtArgs> | null
   /**
-   * Filter, which ItemCollection to fetch.
+   * Filter, which itemCollection to fetch.
    */
-  where?: Prisma.ItemCollectionWhereInput
+  where?: Prisma.itemCollectionWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of ItemCollections to fetch.
+   * Determine the order of itemCollections to fetch.
    */
-  orderBy?: Prisma.ItemCollectionOrderByWithRelationInput | Prisma.ItemCollectionOrderByWithRelationInput[]
+  orderBy?: Prisma.itemCollectionOrderByWithRelationInput | Prisma.itemCollectionOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
-   * Sets the position for searching for ItemCollections.
+   * Sets the position for searching for itemCollections.
    */
-  cursor?: Prisma.ItemCollectionWhereUniqueInput
+  cursor?: Prisma.itemCollectionWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` ItemCollections from the position of the cursor.
+   * Take `±n` itemCollections from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` ItemCollections.
+   * Skip the first `n` itemCollections.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    * 
-   * Filter by unique combinations of ItemCollections.
+   * Filter by unique combinations of itemCollections.
    */
   distinct?: Prisma.ItemCollectionScalarFieldEnum | Prisma.ItemCollectionScalarFieldEnum[]
 }
 
 /**
- * ItemCollection findMany
+ * itemCollection findMany
  */
-export type ItemCollectionFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemCollection
+   * Select specific fields to fetch from the itemCollection
    */
-  select?: Prisma.ItemCollectionSelect<ExtArgs> | null
+  select?: Prisma.itemCollectionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemCollection
+   * Omit specific fields from the itemCollection
    */
-  omit?: Prisma.ItemCollectionOmit<ExtArgs> | null
+  omit?: Prisma.itemCollectionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemCollectionInclude<ExtArgs> | null
+  include?: Prisma.itemCollectionInclude<ExtArgs> | null
   /**
-   * Filter, which ItemCollections to fetch.
+   * Filter, which itemCollections to fetch.
    */
-  where?: Prisma.ItemCollectionWhereInput
+  where?: Prisma.itemCollectionWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of ItemCollections to fetch.
+   * Determine the order of itemCollections to fetch.
    */
-  orderBy?: Prisma.ItemCollectionOrderByWithRelationInput | Prisma.ItemCollectionOrderByWithRelationInput[]
+  orderBy?: Prisma.itemCollectionOrderByWithRelationInput | Prisma.itemCollectionOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
-   * Sets the position for listing ItemCollections.
+   * Sets the position for listing itemCollections.
    */
-  cursor?: Prisma.ItemCollectionWhereUniqueInput
+  cursor?: Prisma.itemCollectionWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` ItemCollections from the position of the cursor.
+   * Take `±n` itemCollections from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` ItemCollections.
+   * Skip the first `n` itemCollections.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    * 
-   * Filter by unique combinations of ItemCollections.
+   * Filter by unique combinations of itemCollections.
    */
   distinct?: Prisma.ItemCollectionScalarFieldEnum | Prisma.ItemCollectionScalarFieldEnum[]
 }
 
 /**
- * ItemCollection create
+ * itemCollection create
  */
-export type ItemCollectionCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemCollection
+   * Select specific fields to fetch from the itemCollection
    */
-  select?: Prisma.ItemCollectionSelect<ExtArgs> | null
+  select?: Prisma.itemCollectionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemCollection
+   * Omit specific fields from the itemCollection
    */
-  omit?: Prisma.ItemCollectionOmit<ExtArgs> | null
+  omit?: Prisma.itemCollectionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemCollectionInclude<ExtArgs> | null
+  include?: Prisma.itemCollectionInclude<ExtArgs> | null
   /**
-   * The data needed to create a ItemCollection.
+   * The data needed to create a itemCollection.
    */
-  data: Prisma.XOR<Prisma.ItemCollectionCreateInput, Prisma.ItemCollectionUncheckedCreateInput>
+  data: Prisma.XOR<Prisma.itemCollectionCreateInput, Prisma.itemCollectionUncheckedCreateInput>
 }
 
 /**
- * ItemCollection createMany
+ * itemCollection createMany
  */
-export type ItemCollectionCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * The data used to create many ItemCollections.
+   * The data used to create many itemCollections.
    */
-  data: Prisma.ItemCollectionCreateManyInput | Prisma.ItemCollectionCreateManyInput[]
+  data: Prisma.itemCollectionCreateManyInput | Prisma.itemCollectionCreateManyInput[]
   skipDuplicates?: boolean
 }
 
 /**
- * ItemCollection createManyAndReturn
+ * itemCollection createManyAndReturn
  */
-export type ItemCollectionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemCollection
+   * Select specific fields to fetch from the itemCollection
    */
-  select?: Prisma.ItemCollectionSelectCreateManyAndReturn<ExtArgs> | null
+  select?: Prisma.itemCollectionSelectCreateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemCollection
+   * Omit specific fields from the itemCollection
    */
-  omit?: Prisma.ItemCollectionOmit<ExtArgs> | null
+  omit?: Prisma.itemCollectionOmit<ExtArgs> | null
   /**
-   * The data used to create many ItemCollections.
+   * The data used to create many itemCollections.
    */
-  data: Prisma.ItemCollectionCreateManyInput | Prisma.ItemCollectionCreateManyInput[]
+  data: Prisma.itemCollectionCreateManyInput | Prisma.itemCollectionCreateManyInput[]
   skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemCollectionIncludeCreateManyAndReturn<ExtArgs> | null
+  include?: Prisma.itemCollectionIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
- * ItemCollection update
+ * itemCollection update
  */
-export type ItemCollectionUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemCollection
+   * Select specific fields to fetch from the itemCollection
    */
-  select?: Prisma.ItemCollectionSelect<ExtArgs> | null
+  select?: Prisma.itemCollectionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemCollection
+   * Omit specific fields from the itemCollection
    */
-  omit?: Prisma.ItemCollectionOmit<ExtArgs> | null
+  omit?: Prisma.itemCollectionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemCollectionInclude<ExtArgs> | null
+  include?: Prisma.itemCollectionInclude<ExtArgs> | null
   /**
-   * The data needed to update a ItemCollection.
+   * The data needed to update a itemCollection.
    */
-  data: Prisma.XOR<Prisma.ItemCollectionUpdateInput, Prisma.ItemCollectionUncheckedUpdateInput>
+  data: Prisma.XOR<Prisma.itemCollectionUpdateInput, Prisma.itemCollectionUncheckedUpdateInput>
   /**
-   * Choose, which ItemCollection to update.
+   * Choose, which itemCollection to update.
    */
-  where: Prisma.ItemCollectionWhereUniqueInput
+  where: Prisma.itemCollectionWhereUniqueInput
 }
 
 /**
- * ItemCollection updateMany
+ * itemCollection updateMany
  */
-export type ItemCollectionUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * The data used to update ItemCollections.
+   * The data used to update itemCollections.
    */
-  data: Prisma.XOR<Prisma.ItemCollectionUpdateManyMutationInput, Prisma.ItemCollectionUncheckedUpdateManyInput>
+  data: Prisma.XOR<Prisma.itemCollectionUpdateManyMutationInput, Prisma.itemCollectionUncheckedUpdateManyInput>
   /**
-   * Filter which ItemCollections to update
+   * Filter which itemCollections to update
    */
-  where?: Prisma.ItemCollectionWhereInput
+  where?: Prisma.itemCollectionWhereInput
   /**
-   * Limit how many ItemCollections to update.
+   * Limit how many itemCollections to update.
    */
   limit?: number
 }
 
 /**
- * ItemCollection updateManyAndReturn
+ * itemCollection updateManyAndReturn
  */
-export type ItemCollectionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemCollection
+   * Select specific fields to fetch from the itemCollection
    */
-  select?: Prisma.ItemCollectionSelectUpdateManyAndReturn<ExtArgs> | null
+  select?: Prisma.itemCollectionSelectUpdateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemCollection
+   * Omit specific fields from the itemCollection
    */
-  omit?: Prisma.ItemCollectionOmit<ExtArgs> | null
+  omit?: Prisma.itemCollectionOmit<ExtArgs> | null
   /**
-   * The data used to update ItemCollections.
+   * The data used to update itemCollections.
    */
-  data: Prisma.XOR<Prisma.ItemCollectionUpdateManyMutationInput, Prisma.ItemCollectionUncheckedUpdateManyInput>
+  data: Prisma.XOR<Prisma.itemCollectionUpdateManyMutationInput, Prisma.itemCollectionUncheckedUpdateManyInput>
   /**
-   * Filter which ItemCollections to update
+   * Filter which itemCollections to update
    */
-  where?: Prisma.ItemCollectionWhereInput
+  where?: Prisma.itemCollectionWhereInput
   /**
-   * Limit how many ItemCollections to update.
+   * Limit how many itemCollections to update.
    */
   limit?: number
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemCollectionIncludeUpdateManyAndReturn<ExtArgs> | null
+  include?: Prisma.itemCollectionIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
- * ItemCollection upsert
+ * itemCollection upsert
  */
-export type ItemCollectionUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemCollection
+   * Select specific fields to fetch from the itemCollection
    */
-  select?: Prisma.ItemCollectionSelect<ExtArgs> | null
+  select?: Prisma.itemCollectionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemCollection
+   * Omit specific fields from the itemCollection
    */
-  omit?: Prisma.ItemCollectionOmit<ExtArgs> | null
+  omit?: Prisma.itemCollectionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemCollectionInclude<ExtArgs> | null
+  include?: Prisma.itemCollectionInclude<ExtArgs> | null
   /**
-   * The filter to search for the ItemCollection to update in case it exists.
+   * The filter to search for the itemCollection to update in case it exists.
    */
-  where: Prisma.ItemCollectionWhereUniqueInput
+  where: Prisma.itemCollectionWhereUniqueInput
   /**
-   * In case the ItemCollection found by the `where` argument doesn't exist, create a new ItemCollection with this data.
+   * In case the itemCollection found by the `where` argument doesn't exist, create a new itemCollection with this data.
    */
-  create: Prisma.XOR<Prisma.ItemCollectionCreateInput, Prisma.ItemCollectionUncheckedCreateInput>
+  create: Prisma.XOR<Prisma.itemCollectionCreateInput, Prisma.itemCollectionUncheckedCreateInput>
   /**
-   * In case the ItemCollection was found with the provided `where` argument, update it with this data.
+   * In case the itemCollection was found with the provided `where` argument, update it with this data.
    */
-  update: Prisma.XOR<Prisma.ItemCollectionUpdateInput, Prisma.ItemCollectionUncheckedUpdateInput>
+  update: Prisma.XOR<Prisma.itemCollectionUpdateInput, Prisma.itemCollectionUncheckedUpdateInput>
 }
 
 /**
- * ItemCollection delete
+ * itemCollection delete
  */
-export type ItemCollectionDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemCollection
+   * Select specific fields to fetch from the itemCollection
    */
-  select?: Prisma.ItemCollectionSelect<ExtArgs> | null
+  select?: Prisma.itemCollectionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemCollection
+   * Omit specific fields from the itemCollection
    */
-  omit?: Prisma.ItemCollectionOmit<ExtArgs> | null
+  omit?: Prisma.itemCollectionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemCollectionInclude<ExtArgs> | null
+  include?: Prisma.itemCollectionInclude<ExtArgs> | null
   /**
-   * Filter which ItemCollection to delete.
+   * Filter which itemCollection to delete.
    */
-  where: Prisma.ItemCollectionWhereUniqueInput
+  where: Prisma.itemCollectionWhereUniqueInput
 }
 
 /**
- * ItemCollection deleteMany
+ * itemCollection deleteMany
  */
-export type ItemCollectionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Filter which ItemCollections to delete
+   * Filter which itemCollections to delete
    */
-  where?: Prisma.ItemCollectionWhereInput
+  where?: Prisma.itemCollectionWhereInput
   /**
-   * Limit how many ItemCollections to delete.
+   * Limit how many itemCollections to delete.
    */
   limit?: number
 }
 
 /**
- * ItemCollection without action
+ * itemCollection without action
  */
-export type ItemCollectionDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemCollectionDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemCollection
+   * Select specific fields to fetch from the itemCollection
    */
-  select?: Prisma.ItemCollectionSelect<ExtArgs> | null
+  select?: Prisma.itemCollectionSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemCollection
+   * Omit specific fields from the itemCollection
    */
-  omit?: Prisma.ItemCollectionOmit<ExtArgs> | null
+  omit?: Prisma.itemCollectionOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemCollectionInclude<ExtArgs> | null
+  include?: Prisma.itemCollectionInclude<ExtArgs> | null
 }

@@ -51,16 +51,16 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  User: 'User',
-  Account: 'Account',
-  Session: 'Session',
-  VerificationToken: 'VerificationToken',
-  Authenticator: 'Authenticator',
-  ItemType: 'ItemType',
-  Item: 'Item',
-  Collection: 'Collection',
-  ItemCollection: 'ItemCollection',
-  Tag: 'Tag'
+  user: 'user',
+  account: 'account',
+  session: 'session',
+  verification: 'verification',
+  authenticator: 'authenticator',
+  itemType: 'itemType',
+  item: 'item',
+  collection: 'collection',
+  itemCollection: 'itemCollection',
+  tag: 'tag'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -128,7 +128,7 @@ export const SessionScalarFieldEnum = {
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
 
 
-export const VerificationTokenScalarFieldEnum = {
+export const VerificationScalarFieldEnum = {
   id: 'id',
   identifier: 'identifier',
   value: 'value',
@@ -137,7 +137,7 @@ export const VerificationTokenScalarFieldEnum = {
   updatedAt: 'updatedAt'
 } as const
 
-export type VerificationTokenScalarFieldEnum = (typeof VerificationTokenScalarFieldEnum)[keyof typeof VerificationTokenScalarFieldEnum]
+export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
 export const AuthenticatorScalarFieldEnum = {

@@ -9,7 +9,7 @@ datasource db {
 
 // ─── BetterAuth Models ────────────────────────────────────────────────
 
-model User {
+model user {
   id            String   @id @default(cuid())
   email         String   @unique
   emailVerified Boolean  @default(false)
@@ -22,22 +22,20 @@ model User {
   stripeCustomerId     String? @unique
   stripeSubscriptionId String? @unique
 
-  accounts      Account[]
-  sessions      Session[]
-  items         Item[]
-  collections   Collection[]
-  itemTypes     ItemType[]
-  authenticator Authenticator[]
-
-  @@map("users")
+  accounts      account[]
+  sessions      session[]
+  items         item[]
+  collections   collection[]
+  itemTypes     itemType[]
+  authenticator authenticator[]
 }
 
-model Account {
+model account {
   id         String @id @default(cuid())
   accountId  String
   providerId String
   userId     String
-  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       user   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   accessToken           String?
   refreshToken          String?
@@ -51,25 +49,22 @@ model Account {
   updatedAt DateTime @updatedAt
 
   @@unique([accountId, providerId])
-  @@map("accounts")
 }
 
-model Session {
+model session {
   id        String   @id @default(cuid())
   token     String   @unique
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      user     @relation(fields: [userId], references: [id], onDelete: Cascade)
   ipAddress String?
   userAgent String?
   expiresAt DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@map("sessions")
 }
 
-model VerificationToken {
+model verification {
   id         String   @id @default(cuid())
   identifier String
   value      String
@@ -78,13 +73,12 @@ model VerificationToken {
   updatedAt  DateTime @updatedAt
 
   @@unique([identifier, value])
-  @@map("verification_tokens")
 }
 
-model Authenticator {
+model authenticator {
   credentialID         String  @unique
   userId               String
-  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                 user    @relation(fields: [userId], references: [id], onDelete: Cascade)
   providerAccountId    String
   credentialPublicKey  String
   counter              Int
@@ -101,7 +95,7 @@ model Authenticator {
 
 // ─── Application Models ──────────────────────────────────────────────
 
-model ItemType {
+model itemType {
   id       String  @id @default(cuid())
   name     String
   icon     String
@@ -109,14 +103,14 @@ model ItemType {
   isSystem Boolean @default(false)
 
   userId String?
-  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   user?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  items Item[]
+  items item[]
 
   @@map("item_types")
 }
 
-model Item {
+model item {
   id          String  @id @default(cuid())
   title       String
   description String?
@@ -130,13 +124,13 @@ model Item {
   isPinned    Boolean @default(false)
 
   userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   itemTypeId String
-  itemType   ItemType @relation(fields: [itemTypeId], references: [id], onDelete: Restrict)
+  itemType   itemType @relation(fields: [itemTypeId], references: [id], onDelete: Restrict)
 
-  tags        Tag[]
-  collections ItemCollection[]
+  tags        tag[]
+  collections itemCollection[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -151,16 +145,16 @@ model Item {
   @@map("items")
 }
 
-model Collection {
+model collection {
   id          String  @id @default(cuid())
   name        String
   description String?
   isFavorite  Boolean @default(false)
 
   userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  items ItemCollection[]
+  items itemCollection[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -169,12 +163,12 @@ model Collection {
   @@map("collections")
 }
 
-model ItemCollection {
+model itemCollection {
   itemId       String
   collectionId String
 
-  item       Item       @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  item       item       @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  collection collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
 
   addedAt DateTime @default(now())
 
@@ -184,11 +178,11 @@ model ItemCollection {
   @@map("item_collections")
 }
 
-model Tag {
+model tag {
   id   String @id @default(cuid())
   name String @unique
 
-  items Item[]
+  items item[]
 
   @@map("tags")
 }

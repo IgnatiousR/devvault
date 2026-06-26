@@ -4,7 +4,7 @@
 // biome-ignore-all lint: generated file
 // @ts-nocheck 
 /*
- * This file exports the `ItemType` model and its related types.
+ * This file exports the `itemType` model and its related types.
  *
  * 🟢 You can import this file directly.
  */
@@ -13,10 +13,10 @@ import type * as $Enums from "../enums"
 import type * as Prisma from "../internal/prismaNamespace"
 
 /**
- * Model ItemType
+ * Model itemType
  * 
  */
-export type ItemTypeModel = runtime.Types.Result.DefaultSelection<Prisma.$ItemTypePayload>
+export type itemTypeModel = runtime.Types.Result.DefaultSelection<Prisma.$itemTypePayload>
 
 export type AggregateItemType = {
   _count: ItemTypeCountAggregateOutputType | null
@@ -83,37 +83,37 @@ export type ItemTypeCountAggregateInputType = {
 
 export type ItemTypeAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Filter which ItemType to aggregate.
+   * Filter which itemType to aggregate.
    */
-  where?: Prisma.ItemTypeWhereInput
+  where?: Prisma.itemTypeWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of ItemTypes to fetch.
+   * Determine the order of itemTypes to fetch.
    */
-  orderBy?: Prisma.ItemTypeOrderByWithRelationInput | Prisma.ItemTypeOrderByWithRelationInput[]
+  orderBy?: Prisma.itemTypeOrderByWithRelationInput | Prisma.itemTypeOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
    * Sets the start position
    */
-  cursor?: Prisma.ItemTypeWhereUniqueInput
+  cursor?: Prisma.itemTypeWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` ItemTypes from the position of the cursor.
+   * Take `±n` itemTypes from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` ItemTypes.
+   * Skip the first `n` itemTypes.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Count returned ItemTypes
+   * Count returned itemTypes
   **/
   _count?: true | ItemTypeCountAggregateInputType
   /**
@@ -141,11 +141,11 @@ export type GetItemTypeAggregateType<T extends ItemTypeAggregateArgs> = {
 
 
 
-export type ItemTypeGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ItemTypeWhereInput
-  orderBy?: Prisma.ItemTypeOrderByWithAggregationInput | Prisma.ItemTypeOrderByWithAggregationInput[]
+export type itemTypeGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.itemTypeWhereInput
+  orderBy?: Prisma.itemTypeOrderByWithAggregationInput | Prisma.itemTypeOrderByWithAggregationInput[]
   by: Prisma.ItemTypeScalarFieldEnum[] | Prisma.ItemTypeScalarFieldEnum
-  having?: Prisma.ItemTypeScalarWhereWithAggregatesInput
+  having?: Prisma.itemTypeScalarWhereWithAggregatesInput
   take?: number
   skip?: number
   _count?: ItemTypeCountAggregateInputType | true
@@ -165,7 +165,7 @@ export type ItemTypeGroupByOutputType = {
   _max: ItemTypeMaxAggregateOutputType | null
 }
 
-export type GetItemTypeGroupByPayload<T extends ItemTypeGroupByArgs> = Prisma.PrismaPromise<
+export type GetItemTypeGroupByPayload<T extends itemTypeGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<ItemTypeGroupByOutputType, T['by']> &
       {
@@ -180,110 +180,110 @@ export type GetItemTypeGroupByPayload<T extends ItemTypeGroupByArgs> = Prisma.Pr
 
 
 
-export type ItemTypeWhereInput = {
-  AND?: Prisma.ItemTypeWhereInput | Prisma.ItemTypeWhereInput[]
-  OR?: Prisma.ItemTypeWhereInput[]
-  NOT?: Prisma.ItemTypeWhereInput | Prisma.ItemTypeWhereInput[]
-  id?: Prisma.StringFilter<"ItemType"> | string
-  name?: Prisma.StringFilter<"ItemType"> | string
-  icon?: Prisma.StringFilter<"ItemType"> | string
-  color?: Prisma.StringFilter<"ItemType"> | string
-  isSystem?: Prisma.BoolFilter<"ItemType"> | boolean
-  userId?: Prisma.StringNullableFilter<"ItemType"> | string | null
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+export type itemTypeWhereInput = {
+  AND?: Prisma.itemTypeWhereInput | Prisma.itemTypeWhereInput[]
+  OR?: Prisma.itemTypeWhereInput[]
+  NOT?: Prisma.itemTypeWhereInput | Prisma.itemTypeWhereInput[]
+  id?: Prisma.StringFilter<"itemType"> | string
+  name?: Prisma.StringFilter<"itemType"> | string
+  icon?: Prisma.StringFilter<"itemType"> | string
+  color?: Prisma.StringFilter<"itemType"> | string
+  isSystem?: Prisma.BoolFilter<"itemType"> | boolean
+  userId?: Prisma.StringNullableFilter<"itemType"> | string | null
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.userWhereInput> | null
   items?: Prisma.ItemListRelationFilter
 }
 
-export type ItemTypeOrderByWithRelationInput = {
+export type itemTypeOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   icon?: Prisma.SortOrder
   color?: Prisma.SortOrder
   isSystem?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
-  items?: Prisma.ItemOrderByRelationAggregateInput
+  user?: Prisma.userOrderByWithRelationInput
+  items?: Prisma.itemOrderByRelationAggregateInput
 }
 
-export type ItemTypeWhereUniqueInput = Prisma.AtLeast<{
+export type itemTypeWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  AND?: Prisma.ItemTypeWhereInput | Prisma.ItemTypeWhereInput[]
-  OR?: Prisma.ItemTypeWhereInput[]
-  NOT?: Prisma.ItemTypeWhereInput | Prisma.ItemTypeWhereInput[]
-  name?: Prisma.StringFilter<"ItemType"> | string
-  icon?: Prisma.StringFilter<"ItemType"> | string
-  color?: Prisma.StringFilter<"ItemType"> | string
-  isSystem?: Prisma.BoolFilter<"ItemType"> | boolean
-  userId?: Prisma.StringNullableFilter<"ItemType"> | string | null
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  AND?: Prisma.itemTypeWhereInput | Prisma.itemTypeWhereInput[]
+  OR?: Prisma.itemTypeWhereInput[]
+  NOT?: Prisma.itemTypeWhereInput | Prisma.itemTypeWhereInput[]
+  name?: Prisma.StringFilter<"itemType"> | string
+  icon?: Prisma.StringFilter<"itemType"> | string
+  color?: Prisma.StringFilter<"itemType"> | string
+  isSystem?: Prisma.BoolFilter<"itemType"> | boolean
+  userId?: Prisma.StringNullableFilter<"itemType"> | string | null
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.userWhereInput> | null
   items?: Prisma.ItemListRelationFilter
 }, "id">
 
-export type ItemTypeOrderByWithAggregationInput = {
+export type itemTypeOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   icon?: Prisma.SortOrder
   color?: Prisma.SortOrder
   isSystem?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
-  _count?: Prisma.ItemTypeCountOrderByAggregateInput
-  _max?: Prisma.ItemTypeMaxOrderByAggregateInput
-  _min?: Prisma.ItemTypeMinOrderByAggregateInput
+  _count?: Prisma.itemTypeCountOrderByAggregateInput
+  _max?: Prisma.itemTypeMaxOrderByAggregateInput
+  _min?: Prisma.itemTypeMinOrderByAggregateInput
 }
 
-export type ItemTypeScalarWhereWithAggregatesInput = {
-  AND?: Prisma.ItemTypeScalarWhereWithAggregatesInput | Prisma.ItemTypeScalarWhereWithAggregatesInput[]
-  OR?: Prisma.ItemTypeScalarWhereWithAggregatesInput[]
-  NOT?: Prisma.ItemTypeScalarWhereWithAggregatesInput | Prisma.ItemTypeScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"ItemType"> | string
-  name?: Prisma.StringWithAggregatesFilter<"ItemType"> | string
-  icon?: Prisma.StringWithAggregatesFilter<"ItemType"> | string
-  color?: Prisma.StringWithAggregatesFilter<"ItemType"> | string
-  isSystem?: Prisma.BoolWithAggregatesFilter<"ItemType"> | boolean
-  userId?: Prisma.StringNullableWithAggregatesFilter<"ItemType"> | string | null
+export type itemTypeScalarWhereWithAggregatesInput = {
+  AND?: Prisma.itemTypeScalarWhereWithAggregatesInput | Prisma.itemTypeScalarWhereWithAggregatesInput[]
+  OR?: Prisma.itemTypeScalarWhereWithAggregatesInput[]
+  NOT?: Prisma.itemTypeScalarWhereWithAggregatesInput | Prisma.itemTypeScalarWhereWithAggregatesInput[]
+  id?: Prisma.StringWithAggregatesFilter<"itemType"> | string
+  name?: Prisma.StringWithAggregatesFilter<"itemType"> | string
+  icon?: Prisma.StringWithAggregatesFilter<"itemType"> | string
+  color?: Prisma.StringWithAggregatesFilter<"itemType"> | string
+  isSystem?: Prisma.BoolWithAggregatesFilter<"itemType"> | boolean
+  userId?: Prisma.StringNullableWithAggregatesFilter<"itemType"> | string | null
 }
 
-export type ItemTypeCreateInput = {
+export type itemTypeCreateInput = {
   id?: string
   name: string
   icon: string
   color: string
   isSystem?: boolean
-  user?: Prisma.UserCreateNestedOneWithoutItemTypesInput
-  items?: Prisma.ItemCreateNestedManyWithoutItemTypeInput
+  user?: Prisma.userCreateNestedOneWithoutItemTypesInput
+  items?: Prisma.itemCreateNestedManyWithoutItemTypeInput
 }
 
-export type ItemTypeUncheckedCreateInput = {
+export type itemTypeUncheckedCreateInput = {
   id?: string
   name: string
   icon: string
   color: string
   isSystem?: boolean
   userId?: string | null
-  items?: Prisma.ItemUncheckedCreateNestedManyWithoutItemTypeInput
+  items?: Prisma.itemUncheckedCreateNestedManyWithoutItemTypeInput
 }
 
-export type ItemTypeUpdateInput = {
+export type itemTypeUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  user?: Prisma.UserUpdateOneWithoutItemTypesNestedInput
-  items?: Prisma.ItemUpdateManyWithoutItemTypeNestedInput
+  user?: Prisma.userUpdateOneWithoutItemTypesNestedInput
+  items?: Prisma.itemUpdateManyWithoutItemTypeNestedInput
 }
 
-export type ItemTypeUncheckedUpdateInput = {
+export type itemTypeUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  items?: Prisma.ItemUncheckedUpdateManyWithoutItemTypeNestedInput
+  items?: Prisma.itemUncheckedUpdateManyWithoutItemTypeNestedInput
 }
 
-export type ItemTypeCreateManyInput = {
+export type itemTypeCreateManyInput = {
   id?: string
   name: string
   icon: string
@@ -292,7 +292,7 @@ export type ItemTypeCreateManyInput = {
   userId?: string | null
 }
 
-export type ItemTypeUpdateManyMutationInput = {
+export type itemTypeUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -300,7 +300,7 @@ export type ItemTypeUpdateManyMutationInput = {
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
-export type ItemTypeUncheckedUpdateManyInput = {
+export type itemTypeUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -310,16 +310,16 @@ export type ItemTypeUncheckedUpdateManyInput = {
 }
 
 export type ItemTypeListRelationFilter = {
-  every?: Prisma.ItemTypeWhereInput
-  some?: Prisma.ItemTypeWhereInput
-  none?: Prisma.ItemTypeWhereInput
+  every?: Prisma.itemTypeWhereInput
+  some?: Prisma.itemTypeWhereInput
+  none?: Prisma.itemTypeWhereInput
 }
 
-export type ItemTypeOrderByRelationAggregateInput = {
+export type itemTypeOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type ItemTypeCountOrderByAggregateInput = {
+export type itemTypeCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   icon?: Prisma.SortOrder
@@ -328,7 +328,7 @@ export type ItemTypeCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
 }
 
-export type ItemTypeMaxOrderByAggregateInput = {
+export type itemTypeMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   icon?: Prisma.SortOrder
@@ -337,7 +337,7 @@ export type ItemTypeMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
 }
 
-export type ItemTypeMinOrderByAggregateInput = {
+export type itemTypeMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   icon?: Prisma.SortOrder
@@ -347,132 +347,132 @@ export type ItemTypeMinOrderByAggregateInput = {
 }
 
 export type ItemTypeScalarRelationFilter = {
-  is?: Prisma.ItemTypeWhereInput
-  isNot?: Prisma.ItemTypeWhereInput
+  is?: Prisma.itemTypeWhereInput
+  isNot?: Prisma.itemTypeWhereInput
 }
 
-export type ItemTypeCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.ItemTypeCreateWithoutUserInput, Prisma.ItemTypeUncheckedCreateWithoutUserInput> | Prisma.ItemTypeCreateWithoutUserInput[] | Prisma.ItemTypeUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.ItemTypeCreateOrConnectWithoutUserInput | Prisma.ItemTypeCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.ItemTypeCreateManyUserInputEnvelope
-  connect?: Prisma.ItemTypeWhereUniqueInput | Prisma.ItemTypeWhereUniqueInput[]
+export type itemTypeCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.itemTypeCreateWithoutUserInput, Prisma.itemTypeUncheckedCreateWithoutUserInput> | Prisma.itemTypeCreateWithoutUserInput[] | Prisma.itemTypeUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.itemTypeCreateOrConnectWithoutUserInput | Prisma.itemTypeCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.itemTypeCreateManyUserInputEnvelope
+  connect?: Prisma.itemTypeWhereUniqueInput | Prisma.itemTypeWhereUniqueInput[]
 }
 
-export type ItemTypeUncheckedCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.ItemTypeCreateWithoutUserInput, Prisma.ItemTypeUncheckedCreateWithoutUserInput> | Prisma.ItemTypeCreateWithoutUserInput[] | Prisma.ItemTypeUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.ItemTypeCreateOrConnectWithoutUserInput | Prisma.ItemTypeCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.ItemTypeCreateManyUserInputEnvelope
-  connect?: Prisma.ItemTypeWhereUniqueInput | Prisma.ItemTypeWhereUniqueInput[]
+export type itemTypeUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.itemTypeCreateWithoutUserInput, Prisma.itemTypeUncheckedCreateWithoutUserInput> | Prisma.itemTypeCreateWithoutUserInput[] | Prisma.itemTypeUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.itemTypeCreateOrConnectWithoutUserInput | Prisma.itemTypeCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.itemTypeCreateManyUserInputEnvelope
+  connect?: Prisma.itemTypeWhereUniqueInput | Prisma.itemTypeWhereUniqueInput[]
 }
 
-export type ItemTypeUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.ItemTypeCreateWithoutUserInput, Prisma.ItemTypeUncheckedCreateWithoutUserInput> | Prisma.ItemTypeCreateWithoutUserInput[] | Prisma.ItemTypeUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.ItemTypeCreateOrConnectWithoutUserInput | Prisma.ItemTypeCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.ItemTypeUpsertWithWhereUniqueWithoutUserInput | Prisma.ItemTypeUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.ItemTypeCreateManyUserInputEnvelope
-  set?: Prisma.ItemTypeWhereUniqueInput | Prisma.ItemTypeWhereUniqueInput[]
-  disconnect?: Prisma.ItemTypeWhereUniqueInput | Prisma.ItemTypeWhereUniqueInput[]
-  delete?: Prisma.ItemTypeWhereUniqueInput | Prisma.ItemTypeWhereUniqueInput[]
-  connect?: Prisma.ItemTypeWhereUniqueInput | Prisma.ItemTypeWhereUniqueInput[]
-  update?: Prisma.ItemTypeUpdateWithWhereUniqueWithoutUserInput | Prisma.ItemTypeUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.ItemTypeUpdateManyWithWhereWithoutUserInput | Prisma.ItemTypeUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.ItemTypeScalarWhereInput | Prisma.ItemTypeScalarWhereInput[]
+export type itemTypeUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.itemTypeCreateWithoutUserInput, Prisma.itemTypeUncheckedCreateWithoutUserInput> | Prisma.itemTypeCreateWithoutUserInput[] | Prisma.itemTypeUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.itemTypeCreateOrConnectWithoutUserInput | Prisma.itemTypeCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.itemTypeUpsertWithWhereUniqueWithoutUserInput | Prisma.itemTypeUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.itemTypeCreateManyUserInputEnvelope
+  set?: Prisma.itemTypeWhereUniqueInput | Prisma.itemTypeWhereUniqueInput[]
+  disconnect?: Prisma.itemTypeWhereUniqueInput | Prisma.itemTypeWhereUniqueInput[]
+  delete?: Prisma.itemTypeWhereUniqueInput | Prisma.itemTypeWhereUniqueInput[]
+  connect?: Prisma.itemTypeWhereUniqueInput | Prisma.itemTypeWhereUniqueInput[]
+  update?: Prisma.itemTypeUpdateWithWhereUniqueWithoutUserInput | Prisma.itemTypeUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.itemTypeUpdateManyWithWhereWithoutUserInput | Prisma.itemTypeUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.itemTypeScalarWhereInput | Prisma.itemTypeScalarWhereInput[]
 }
 
-export type ItemTypeUncheckedUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.ItemTypeCreateWithoutUserInput, Prisma.ItemTypeUncheckedCreateWithoutUserInput> | Prisma.ItemTypeCreateWithoutUserInput[] | Prisma.ItemTypeUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.ItemTypeCreateOrConnectWithoutUserInput | Prisma.ItemTypeCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.ItemTypeUpsertWithWhereUniqueWithoutUserInput | Prisma.ItemTypeUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.ItemTypeCreateManyUserInputEnvelope
-  set?: Prisma.ItemTypeWhereUniqueInput | Prisma.ItemTypeWhereUniqueInput[]
-  disconnect?: Prisma.ItemTypeWhereUniqueInput | Prisma.ItemTypeWhereUniqueInput[]
-  delete?: Prisma.ItemTypeWhereUniqueInput | Prisma.ItemTypeWhereUniqueInput[]
-  connect?: Prisma.ItemTypeWhereUniqueInput | Prisma.ItemTypeWhereUniqueInput[]
-  update?: Prisma.ItemTypeUpdateWithWhereUniqueWithoutUserInput | Prisma.ItemTypeUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.ItemTypeUpdateManyWithWhereWithoutUserInput | Prisma.ItemTypeUpdateManyWithWhereWithoutUserInput[]
-  deleteMany?: Prisma.ItemTypeScalarWhereInput | Prisma.ItemTypeScalarWhereInput[]
+export type itemTypeUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.itemTypeCreateWithoutUserInput, Prisma.itemTypeUncheckedCreateWithoutUserInput> | Prisma.itemTypeCreateWithoutUserInput[] | Prisma.itemTypeUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.itemTypeCreateOrConnectWithoutUserInput | Prisma.itemTypeCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.itemTypeUpsertWithWhereUniqueWithoutUserInput | Prisma.itemTypeUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.itemTypeCreateManyUserInputEnvelope
+  set?: Prisma.itemTypeWhereUniqueInput | Prisma.itemTypeWhereUniqueInput[]
+  disconnect?: Prisma.itemTypeWhereUniqueInput | Prisma.itemTypeWhereUniqueInput[]
+  delete?: Prisma.itemTypeWhereUniqueInput | Prisma.itemTypeWhereUniqueInput[]
+  connect?: Prisma.itemTypeWhereUniqueInput | Prisma.itemTypeWhereUniqueInput[]
+  update?: Prisma.itemTypeUpdateWithWhereUniqueWithoutUserInput | Prisma.itemTypeUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.itemTypeUpdateManyWithWhereWithoutUserInput | Prisma.itemTypeUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.itemTypeScalarWhereInput | Prisma.itemTypeScalarWhereInput[]
 }
 
-export type ItemTypeCreateNestedOneWithoutItemsInput = {
-  create?: Prisma.XOR<Prisma.ItemTypeCreateWithoutItemsInput, Prisma.ItemTypeUncheckedCreateWithoutItemsInput>
-  connectOrCreate?: Prisma.ItemTypeCreateOrConnectWithoutItemsInput
-  connect?: Prisma.ItemTypeWhereUniqueInput
+export type itemTypeCreateNestedOneWithoutItemsInput = {
+  create?: Prisma.XOR<Prisma.itemTypeCreateWithoutItemsInput, Prisma.itemTypeUncheckedCreateWithoutItemsInput>
+  connectOrCreate?: Prisma.itemTypeCreateOrConnectWithoutItemsInput
+  connect?: Prisma.itemTypeWhereUniqueInput
 }
 
-export type ItemTypeUpdateOneRequiredWithoutItemsNestedInput = {
-  create?: Prisma.XOR<Prisma.ItemTypeCreateWithoutItemsInput, Prisma.ItemTypeUncheckedCreateWithoutItemsInput>
-  connectOrCreate?: Prisma.ItemTypeCreateOrConnectWithoutItemsInput
-  upsert?: Prisma.ItemTypeUpsertWithoutItemsInput
-  connect?: Prisma.ItemTypeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ItemTypeUpdateToOneWithWhereWithoutItemsInput, Prisma.ItemTypeUpdateWithoutItemsInput>, Prisma.ItemTypeUncheckedUpdateWithoutItemsInput>
+export type itemTypeUpdateOneRequiredWithoutItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.itemTypeCreateWithoutItemsInput, Prisma.itemTypeUncheckedCreateWithoutItemsInput>
+  connectOrCreate?: Prisma.itemTypeCreateOrConnectWithoutItemsInput
+  upsert?: Prisma.itemTypeUpsertWithoutItemsInput
+  connect?: Prisma.itemTypeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.itemTypeUpdateToOneWithWhereWithoutItemsInput, Prisma.itemTypeUpdateWithoutItemsInput>, Prisma.itemTypeUncheckedUpdateWithoutItemsInput>
 }
 
-export type ItemTypeCreateWithoutUserInput = {
+export type itemTypeCreateWithoutUserInput = {
   id?: string
   name: string
   icon: string
   color: string
   isSystem?: boolean
-  items?: Prisma.ItemCreateNestedManyWithoutItemTypeInput
+  items?: Prisma.itemCreateNestedManyWithoutItemTypeInput
 }
 
-export type ItemTypeUncheckedCreateWithoutUserInput = {
+export type itemTypeUncheckedCreateWithoutUserInput = {
   id?: string
   name: string
   icon: string
   color: string
   isSystem?: boolean
-  items?: Prisma.ItemUncheckedCreateNestedManyWithoutItemTypeInput
+  items?: Prisma.itemUncheckedCreateNestedManyWithoutItemTypeInput
 }
 
-export type ItemTypeCreateOrConnectWithoutUserInput = {
-  where: Prisma.ItemTypeWhereUniqueInput
-  create: Prisma.XOR<Prisma.ItemTypeCreateWithoutUserInput, Prisma.ItemTypeUncheckedCreateWithoutUserInput>
+export type itemTypeCreateOrConnectWithoutUserInput = {
+  where: Prisma.itemTypeWhereUniqueInput
+  create: Prisma.XOR<Prisma.itemTypeCreateWithoutUserInput, Prisma.itemTypeUncheckedCreateWithoutUserInput>
 }
 
-export type ItemTypeCreateManyUserInputEnvelope = {
-  data: Prisma.ItemTypeCreateManyUserInput | Prisma.ItemTypeCreateManyUserInput[]
+export type itemTypeCreateManyUserInputEnvelope = {
+  data: Prisma.itemTypeCreateManyUserInput | Prisma.itemTypeCreateManyUserInput[]
   skipDuplicates?: boolean
 }
 
-export type ItemTypeUpsertWithWhereUniqueWithoutUserInput = {
-  where: Prisma.ItemTypeWhereUniqueInput
-  update: Prisma.XOR<Prisma.ItemTypeUpdateWithoutUserInput, Prisma.ItemTypeUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.ItemTypeCreateWithoutUserInput, Prisma.ItemTypeUncheckedCreateWithoutUserInput>
+export type itemTypeUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.itemTypeWhereUniqueInput
+  update: Prisma.XOR<Prisma.itemTypeUpdateWithoutUserInput, Prisma.itemTypeUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.itemTypeCreateWithoutUserInput, Prisma.itemTypeUncheckedCreateWithoutUserInput>
 }
 
-export type ItemTypeUpdateWithWhereUniqueWithoutUserInput = {
-  where: Prisma.ItemTypeWhereUniqueInput
-  data: Prisma.XOR<Prisma.ItemTypeUpdateWithoutUserInput, Prisma.ItemTypeUncheckedUpdateWithoutUserInput>
+export type itemTypeUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.itemTypeWhereUniqueInput
+  data: Prisma.XOR<Prisma.itemTypeUpdateWithoutUserInput, Prisma.itemTypeUncheckedUpdateWithoutUserInput>
 }
 
-export type ItemTypeUpdateManyWithWhereWithoutUserInput = {
-  where: Prisma.ItemTypeScalarWhereInput
-  data: Prisma.XOR<Prisma.ItemTypeUpdateManyMutationInput, Prisma.ItemTypeUncheckedUpdateManyWithoutUserInput>
+export type itemTypeUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.itemTypeScalarWhereInput
+  data: Prisma.XOR<Prisma.itemTypeUpdateManyMutationInput, Prisma.itemTypeUncheckedUpdateManyWithoutUserInput>
 }
 
-export type ItemTypeScalarWhereInput = {
-  AND?: Prisma.ItemTypeScalarWhereInput | Prisma.ItemTypeScalarWhereInput[]
-  OR?: Prisma.ItemTypeScalarWhereInput[]
-  NOT?: Prisma.ItemTypeScalarWhereInput | Prisma.ItemTypeScalarWhereInput[]
-  id?: Prisma.StringFilter<"ItemType"> | string
-  name?: Prisma.StringFilter<"ItemType"> | string
-  icon?: Prisma.StringFilter<"ItemType"> | string
-  color?: Prisma.StringFilter<"ItemType"> | string
-  isSystem?: Prisma.BoolFilter<"ItemType"> | boolean
-  userId?: Prisma.StringNullableFilter<"ItemType"> | string | null
+export type itemTypeScalarWhereInput = {
+  AND?: Prisma.itemTypeScalarWhereInput | Prisma.itemTypeScalarWhereInput[]
+  OR?: Prisma.itemTypeScalarWhereInput[]
+  NOT?: Prisma.itemTypeScalarWhereInput | Prisma.itemTypeScalarWhereInput[]
+  id?: Prisma.StringFilter<"itemType"> | string
+  name?: Prisma.StringFilter<"itemType"> | string
+  icon?: Prisma.StringFilter<"itemType"> | string
+  color?: Prisma.StringFilter<"itemType"> | string
+  isSystem?: Prisma.BoolFilter<"itemType"> | boolean
+  userId?: Prisma.StringNullableFilter<"itemType"> | string | null
 }
 
-export type ItemTypeCreateWithoutItemsInput = {
+export type itemTypeCreateWithoutItemsInput = {
   id?: string
   name: string
   icon: string
   color: string
   isSystem?: boolean
-  user?: Prisma.UserCreateNestedOneWithoutItemTypesInput
+  user?: Prisma.userCreateNestedOneWithoutItemTypesInput
 }
 
-export type ItemTypeUncheckedCreateWithoutItemsInput = {
+export type itemTypeUncheckedCreateWithoutItemsInput = {
   id?: string
   name: string
   icon: string
@@ -481,32 +481,32 @@ export type ItemTypeUncheckedCreateWithoutItemsInput = {
   userId?: string | null
 }
 
-export type ItemTypeCreateOrConnectWithoutItemsInput = {
-  where: Prisma.ItemTypeWhereUniqueInput
-  create: Prisma.XOR<Prisma.ItemTypeCreateWithoutItemsInput, Prisma.ItemTypeUncheckedCreateWithoutItemsInput>
+export type itemTypeCreateOrConnectWithoutItemsInput = {
+  where: Prisma.itemTypeWhereUniqueInput
+  create: Prisma.XOR<Prisma.itemTypeCreateWithoutItemsInput, Prisma.itemTypeUncheckedCreateWithoutItemsInput>
 }
 
-export type ItemTypeUpsertWithoutItemsInput = {
-  update: Prisma.XOR<Prisma.ItemTypeUpdateWithoutItemsInput, Prisma.ItemTypeUncheckedUpdateWithoutItemsInput>
-  create: Prisma.XOR<Prisma.ItemTypeCreateWithoutItemsInput, Prisma.ItemTypeUncheckedCreateWithoutItemsInput>
-  where?: Prisma.ItemTypeWhereInput
+export type itemTypeUpsertWithoutItemsInput = {
+  update: Prisma.XOR<Prisma.itemTypeUpdateWithoutItemsInput, Prisma.itemTypeUncheckedUpdateWithoutItemsInput>
+  create: Prisma.XOR<Prisma.itemTypeCreateWithoutItemsInput, Prisma.itemTypeUncheckedCreateWithoutItemsInput>
+  where?: Prisma.itemTypeWhereInput
 }
 
-export type ItemTypeUpdateToOneWithWhereWithoutItemsInput = {
-  where?: Prisma.ItemTypeWhereInput
-  data: Prisma.XOR<Prisma.ItemTypeUpdateWithoutItemsInput, Prisma.ItemTypeUncheckedUpdateWithoutItemsInput>
+export type itemTypeUpdateToOneWithWhereWithoutItemsInput = {
+  where?: Prisma.itemTypeWhereInput
+  data: Prisma.XOR<Prisma.itemTypeUpdateWithoutItemsInput, Prisma.itemTypeUncheckedUpdateWithoutItemsInput>
 }
 
-export type ItemTypeUpdateWithoutItemsInput = {
+export type itemTypeUpdateWithoutItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  user?: Prisma.UserUpdateOneWithoutItemTypesNestedInput
+  user?: Prisma.userUpdateOneWithoutItemTypesNestedInput
 }
 
-export type ItemTypeUncheckedUpdateWithoutItemsInput = {
+export type itemTypeUncheckedUpdateWithoutItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -515,7 +515,7 @@ export type ItemTypeUncheckedUpdateWithoutItemsInput = {
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type ItemTypeCreateManyUserInput = {
+export type itemTypeCreateManyUserInput = {
   id?: string
   name: string
   icon: string
@@ -523,25 +523,25 @@ export type ItemTypeCreateManyUserInput = {
   isSystem?: boolean
 }
 
-export type ItemTypeUpdateWithoutUserInput = {
+export type itemTypeUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  items?: Prisma.ItemUpdateManyWithoutItemTypeNestedInput
+  items?: Prisma.itemUpdateManyWithoutItemTypeNestedInput
 }
 
-export type ItemTypeUncheckedUpdateWithoutUserInput = {
+export type itemTypeUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
   color?: Prisma.StringFieldUpdateOperationsInput | string
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  items?: Prisma.ItemUncheckedUpdateManyWithoutItemTypeNestedInput
+  items?: Prisma.itemUncheckedUpdateManyWithoutItemTypeNestedInput
 }
 
-export type ItemTypeUncheckedUpdateManyWithoutUserInput = {
+export type itemTypeUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   icon?: Prisma.StringFieldUpdateOperationsInput | string
@@ -576,43 +576,43 @@ export type ItemTypeCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
  * ItemTypeCountOutputType without action
  */
 export type ItemTypeCountOutputTypeCountItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ItemWhereInput
+  where?: Prisma.itemWhereInput
 }
 
 
-export type ItemTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+export type itemTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   icon?: boolean
   color?: boolean
   isSystem?: boolean
   userId?: boolean
-  user?: boolean | Prisma.ItemType$userArgs<ExtArgs>
-  items?: boolean | Prisma.ItemType$itemsArgs<ExtArgs>
+  user?: boolean | Prisma.itemType$userArgs<ExtArgs>
+  items?: boolean | Prisma.itemType$itemsArgs<ExtArgs>
   _count?: boolean | Prisma.ItemTypeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["itemType"]>
 
-export type ItemTypeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+export type itemTypeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   icon?: boolean
   color?: boolean
   isSystem?: boolean
   userId?: boolean
-  user?: boolean | Prisma.ItemType$userArgs<ExtArgs>
+  user?: boolean | Prisma.itemType$userArgs<ExtArgs>
 }, ExtArgs["result"]["itemType"]>
 
-export type ItemTypeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+export type itemTypeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   icon?: boolean
   color?: boolean
   isSystem?: boolean
   userId?: boolean
-  user?: boolean | Prisma.ItemType$userArgs<ExtArgs>
+  user?: boolean | Prisma.itemType$userArgs<ExtArgs>
 }, ExtArgs["result"]["itemType"]>
 
-export type ItemTypeSelectScalar = {
+export type itemTypeSelectScalar = {
   id?: boolean
   name?: boolean
   icon?: boolean
@@ -621,24 +621,24 @@ export type ItemTypeSelectScalar = {
   userId?: boolean
 }
 
-export type ItemTypeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "icon" | "color" | "isSystem" | "userId", ExtArgs["result"]["itemType"]>
-export type ItemTypeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.ItemType$userArgs<ExtArgs>
-  items?: boolean | Prisma.ItemType$itemsArgs<ExtArgs>
+export type itemTypeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "icon" | "color" | "isSystem" | "userId", ExtArgs["result"]["itemType"]>
+export type itemTypeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.itemType$userArgs<ExtArgs>
+  items?: boolean | Prisma.itemType$itemsArgs<ExtArgs>
   _count?: boolean | Prisma.ItemTypeCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type ItemTypeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.ItemType$userArgs<ExtArgs>
+export type itemTypeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.itemType$userArgs<ExtArgs>
 }
-export type ItemTypeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.ItemType$userArgs<ExtArgs>
+export type itemTypeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.itemType$userArgs<ExtArgs>
 }
 
-export type $ItemTypePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  name: "ItemType"
+export type $itemTypePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  name: "itemType"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs> | null
-    items: Prisma.$ItemPayload<ExtArgs>[]
+    user: Prisma.$userPayload<ExtArgs> | null
+    items: Prisma.$itemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -651,18 +651,18 @@ export type $ItemTypePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   composites: {}
 }
 
-export type ItemTypeGetPayload<S extends boolean | null | undefined | ItemTypeDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$ItemTypePayload, S>
+export type itemTypeGetPayload<S extends boolean | null | undefined | itemTypeDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$itemTypePayload, S>
 
-export type ItemTypeCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> =
-  Omit<ItemTypeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+export type itemTypeCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> =
+  Omit<itemTypeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
     select?: ItemTypeCountAggregateInputType | true
   }
 
-export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-  [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ItemType'], meta: { name: 'ItemType' } }
+export interface itemTypeDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+  [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['itemType'], meta: { name: 'itemType' } }
   /**
    * Find zero or one ItemType that matches the filter.
-   * @param {ItemTypeFindUniqueArgs} args - Arguments to find a ItemType
+   * @param {itemTypeFindUniqueArgs} args - Arguments to find a ItemType
    * @example
    * // Get one ItemType
    * const itemType = await prisma.itemType.findUnique({
@@ -671,12 +671,12 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   }
    * })
    */
-  findUnique<T extends ItemTypeFindUniqueArgs>(args: Prisma.SelectSubset<T, ItemTypeFindUniqueArgs<ExtArgs>>): Prisma.Prisma__ItemTypeClient<runtime.Types.Result.GetResult<Prisma.$ItemTypePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  findUnique<T extends itemTypeFindUniqueArgs>(args: Prisma.SelectSubset<T, itemTypeFindUniqueArgs<ExtArgs>>): Prisma.Prisma__itemTypeClient<runtime.Types.Result.GetResult<Prisma.$itemTypePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find one ItemType that matches the filter or throw an error with `error.code='P2025'`
    * if no matches were found.
-   * @param {ItemTypeFindUniqueOrThrowArgs} args - Arguments to find a ItemType
+   * @param {itemTypeFindUniqueOrThrowArgs} args - Arguments to find a ItemType
    * @example
    * // Get one ItemType
    * const itemType = await prisma.itemType.findUniqueOrThrow({
@@ -685,13 +685,13 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   }
    * })
    */
-  findUniqueOrThrow<T extends ItemTypeFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, ItemTypeFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__ItemTypeClient<runtime.Types.Result.GetResult<Prisma.$ItemTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  findUniqueOrThrow<T extends itemTypeFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, itemTypeFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__itemTypeClient<runtime.Types.Result.GetResult<Prisma.$itemTypePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find the first ItemType that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {ItemTypeFindFirstArgs} args - Arguments to find a ItemType
+   * @param {itemTypeFindFirstArgs} args - Arguments to find a ItemType
    * @example
    * // Get one ItemType
    * const itemType = await prisma.itemType.findFirst({
@@ -700,14 +700,14 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   }
    * })
    */
-  findFirst<T extends ItemTypeFindFirstArgs>(args?: Prisma.SelectSubset<T, ItemTypeFindFirstArgs<ExtArgs>>): Prisma.Prisma__ItemTypeClient<runtime.Types.Result.GetResult<Prisma.$ItemTypePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  findFirst<T extends itemTypeFindFirstArgs>(args?: Prisma.SelectSubset<T, itemTypeFindFirstArgs<ExtArgs>>): Prisma.Prisma__itemTypeClient<runtime.Types.Result.GetResult<Prisma.$itemTypePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find the first ItemType that matches the filter or
    * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {ItemTypeFindFirstOrThrowArgs} args - Arguments to find a ItemType
+   * @param {itemTypeFindFirstOrThrowArgs} args - Arguments to find a ItemType
    * @example
    * // Get one ItemType
    * const itemType = await prisma.itemType.findFirstOrThrow({
@@ -716,13 +716,13 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   }
    * })
    */
-  findFirstOrThrow<T extends ItemTypeFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, ItemTypeFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__ItemTypeClient<runtime.Types.Result.GetResult<Prisma.$ItemTypePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  findFirstOrThrow<T extends itemTypeFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, itemTypeFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__itemTypeClient<runtime.Types.Result.GetResult<Prisma.$itemTypePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Find zero or more ItemTypes that matches the filter.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {ItemTypeFindManyArgs} args - Arguments to filter and select certain fields only.
+   * @param {itemTypeFindManyArgs} args - Arguments to filter and select certain fields only.
    * @example
    * // Get all ItemTypes
    * const itemTypes = await prisma.itemType.findMany()
@@ -734,11 +734,11 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * const itemTypeWithIdOnly = await prisma.itemType.findMany({ select: { id: true } })
    * 
    */
-  findMany<T extends ItemTypeFindManyArgs>(args?: Prisma.SelectSubset<T, ItemTypeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+  findMany<T extends itemTypeFindManyArgs>(args?: Prisma.SelectSubset<T, itemTypeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$itemTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
   /**
    * Create a ItemType.
-   * @param {ItemTypeCreateArgs} args - Arguments to create a ItemType.
+   * @param {itemTypeCreateArgs} args - Arguments to create a ItemType.
    * @example
    * // Create one ItemType
    * const ItemType = await prisma.itemType.create({
@@ -748,11 +748,11 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * })
    * 
    */
-  create<T extends ItemTypeCreateArgs>(args: Prisma.SelectSubset<T, ItemTypeCreateArgs<ExtArgs>>): Prisma.Prisma__ItemTypeClient<runtime.Types.Result.GetResult<Prisma.$ItemTypePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  create<T extends itemTypeCreateArgs>(args: Prisma.SelectSubset<T, itemTypeCreateArgs<ExtArgs>>): Prisma.Prisma__itemTypeClient<runtime.Types.Result.GetResult<Prisma.$itemTypePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Create many ItemTypes.
-   * @param {ItemTypeCreateManyArgs} args - Arguments to create many ItemTypes.
+   * @param {itemTypeCreateManyArgs} args - Arguments to create many ItemTypes.
    * @example
    * // Create many ItemTypes
    * const itemType = await prisma.itemType.createMany({
@@ -762,11 +762,11 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * })
    *     
    */
-  createMany<T extends ItemTypeCreateManyArgs>(args?: Prisma.SelectSubset<T, ItemTypeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+  createMany<T extends itemTypeCreateManyArgs>(args?: Prisma.SelectSubset<T, itemTypeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
    * Create many ItemTypes and returns the data saved in the database.
-   * @param {ItemTypeCreateManyAndReturnArgs} args - Arguments to create many ItemTypes.
+   * @param {itemTypeCreateManyAndReturnArgs} args - Arguments to create many ItemTypes.
    * @example
    * // Create many ItemTypes
    * const itemType = await prisma.itemType.createManyAndReturn({
@@ -786,11 +786,11 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * Read more here: https://pris.ly/d/null-undefined
    * 
    */
-  createManyAndReturn<T extends ItemTypeCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ItemTypeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemTypePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+  createManyAndReturn<T extends itemTypeCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, itemTypeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$itemTypePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Delete a ItemType.
-   * @param {ItemTypeDeleteArgs} args - Arguments to delete one ItemType.
+   * @param {itemTypeDeleteArgs} args - Arguments to delete one ItemType.
    * @example
    * // Delete one ItemType
    * const ItemType = await prisma.itemType.delete({
@@ -800,11 +800,11 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * })
    * 
    */
-  delete<T extends ItemTypeDeleteArgs>(args: Prisma.SelectSubset<T, ItemTypeDeleteArgs<ExtArgs>>): Prisma.Prisma__ItemTypeClient<runtime.Types.Result.GetResult<Prisma.$ItemTypePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  delete<T extends itemTypeDeleteArgs>(args: Prisma.SelectSubset<T, itemTypeDeleteArgs<ExtArgs>>): Prisma.Prisma__itemTypeClient<runtime.Types.Result.GetResult<Prisma.$itemTypePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Update one ItemType.
-   * @param {ItemTypeUpdateArgs} args - Arguments to update one ItemType.
+   * @param {itemTypeUpdateArgs} args - Arguments to update one ItemType.
    * @example
    * // Update one ItemType
    * const itemType = await prisma.itemType.update({
@@ -817,11 +817,11 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * })
    * 
    */
-  update<T extends ItemTypeUpdateArgs>(args: Prisma.SelectSubset<T, ItemTypeUpdateArgs<ExtArgs>>): Prisma.Prisma__ItemTypeClient<runtime.Types.Result.GetResult<Prisma.$ItemTypePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  update<T extends itemTypeUpdateArgs>(args: Prisma.SelectSubset<T, itemTypeUpdateArgs<ExtArgs>>): Prisma.Prisma__itemTypeClient<runtime.Types.Result.GetResult<Prisma.$itemTypePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
   /**
    * Delete zero or more ItemTypes.
-   * @param {ItemTypeDeleteManyArgs} args - Arguments to filter ItemTypes to delete.
+   * @param {itemTypeDeleteManyArgs} args - Arguments to filter ItemTypes to delete.
    * @example
    * // Delete a few ItemTypes
    * const { count } = await prisma.itemType.deleteMany({
@@ -831,13 +831,13 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * })
    * 
    */
-  deleteMany<T extends ItemTypeDeleteManyArgs>(args?: Prisma.SelectSubset<T, ItemTypeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+  deleteMany<T extends itemTypeDeleteManyArgs>(args?: Prisma.SelectSubset<T, itemTypeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
    * Update zero or more ItemTypes.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {ItemTypeUpdateManyArgs} args - Arguments to update one or more rows.
+   * @param {itemTypeUpdateManyArgs} args - Arguments to update one or more rows.
    * @example
    * // Update many ItemTypes
    * const itemType = await prisma.itemType.updateMany({
@@ -850,11 +850,11 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * })
    * 
    */
-  updateMany<T extends ItemTypeUpdateManyArgs>(args: Prisma.SelectSubset<T, ItemTypeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+  updateMany<T extends itemTypeUpdateManyArgs>(args: Prisma.SelectSubset<T, itemTypeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
    * Update zero or more ItemTypes and returns the data updated in the database.
-   * @param {ItemTypeUpdateManyAndReturnArgs} args - Arguments to update many ItemTypes.
+   * @param {itemTypeUpdateManyAndReturnArgs} args - Arguments to update many ItemTypes.
    * @example
    * // Update many ItemTypes
    * const itemType = await prisma.itemType.updateManyAndReturn({
@@ -880,11 +880,11 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * Read more here: https://pris.ly/d/null-undefined
    * 
    */
-  updateManyAndReturn<T extends ItemTypeUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ItemTypeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemTypePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+  updateManyAndReturn<T extends itemTypeUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, itemTypeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$itemTypePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one ItemType.
-   * @param {ItemTypeUpsertArgs} args - Arguments to update or create a ItemType.
+   * @param {itemTypeUpsertArgs} args - Arguments to update or create a ItemType.
    * @example
    * // Update or create a ItemType
    * const itemType = await prisma.itemType.upsert({
@@ -899,14 +899,14 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   }
    * })
    */
-  upsert<T extends ItemTypeUpsertArgs>(args: Prisma.SelectSubset<T, ItemTypeUpsertArgs<ExtArgs>>): Prisma.Prisma__ItemTypeClient<runtime.Types.Result.GetResult<Prisma.$ItemTypePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+  upsert<T extends itemTypeUpsertArgs>(args: Prisma.SelectSubset<T, itemTypeUpsertArgs<ExtArgs>>): Prisma.Prisma__itemTypeClient<runtime.Types.Result.GetResult<Prisma.$itemTypePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
   /**
    * Count the number of ItemTypes.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {ItemTypeCountArgs} args - Arguments to filter ItemTypes to count.
+   * @param {itemTypeCountArgs} args - Arguments to filter ItemTypes to count.
    * @example
    * // Count the number of ItemTypes
    * const count = await prisma.itemType.count({
@@ -915,8 +915,8 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   }
    * })
   **/
-  count<T extends ItemTypeCountArgs>(
-    args?: Prisma.Subset<T, ItemTypeCountArgs>,
+  count<T extends itemTypeCountArgs>(
+    args?: Prisma.Subset<T, itemTypeCountArgs>,
   ): Prisma.PrismaPromise<
     T extends runtime.Types.Utils.Record<'select', any>
       ? T['select'] extends true
@@ -955,7 +955,7 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * Group by ItemType.
    * Note, that providing `undefined` is treated as the value not being there.
    * Read more here: https://pris.ly/d/null-undefined
-   * @param {ItemTypeGroupByArgs} args - Group by arguments.
+   * @param {itemTypeGroupByArgs} args - Group by arguments.
    * @example
    * // Group by city, order by createdAt, get count
    * const result = await prisma.user.groupBy({
@@ -970,14 +970,14 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * 
   **/
   groupBy<
-    T extends ItemTypeGroupByArgs,
+    T extends itemTypeGroupByArgs,
     HasSelectOrTake extends Prisma.Or<
       Prisma.Extends<'skip', Prisma.Keys<T>>,
       Prisma.Extends<'take', Prisma.Keys<T>>
     >,
     OrderByArg extends Prisma.True extends HasSelectOrTake
-      ? { orderBy: ItemTypeGroupByArgs['orderBy'] }
-      : { orderBy?: ItemTypeGroupByArgs['orderBy'] },
+      ? { orderBy: itemTypeGroupByArgs['orderBy'] }
+      : { orderBy?: itemTypeGroupByArgs['orderBy'] },
     OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>,
     ByFields extends Prisma.MaybeTupleToUnion<T['by']>,
     ByValid extends Prisma.Has<ByFields, OrderFields>,
@@ -1026,23 +1026,23 @@ export interface ItemTypeDelegate<ExtArgs extends runtime.Types.Extensions.Inter
           ? never
           : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
       }[OrderFields]
-  >(args: Prisma.SubsetIntersection<T, ItemTypeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetItemTypeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  >(args: Prisma.SubsetIntersection<T, itemTypeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetItemTypeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
 /**
- * Fields of the ItemType model
+ * Fields of the itemType model
  */
-readonly fields: ItemTypeFieldRefs;
+readonly fields: itemTypeFieldRefs;
 }
 
 /**
- * The delegate class that acts as a "Promise-like" for ItemType.
+ * The delegate class that acts as a "Promise-like" for itemType.
  * Why is this prefixed with `Prisma__`?
  * Because we want to prevent naming conflicts as mentioned in
  * https://github.com/prisma/prisma-client-js/issues/707
  */
-export interface Prisma__ItemTypeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+export interface Prisma__itemTypeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.ItemType$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ItemType$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  items<T extends Prisma.ItemType$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ItemType$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  user<T extends Prisma.itemType$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.itemType$userArgs<ExtArgs>>): Prisma.Prisma__userClient<runtime.Types.Result.GetResult<Prisma.$userPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  items<T extends Prisma.itemType$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.itemType$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$itemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1069,472 +1069,472 @@ export interface Prisma__ItemTypeClient<T, Null = never, ExtArgs extends runtime
 
 
 /**
- * Fields of the ItemType model
+ * Fields of the itemType model
  */
-export interface ItemTypeFieldRefs {
-  readonly id: Prisma.FieldRef<"ItemType", 'String'>
-  readonly name: Prisma.FieldRef<"ItemType", 'String'>
-  readonly icon: Prisma.FieldRef<"ItemType", 'String'>
-  readonly color: Prisma.FieldRef<"ItemType", 'String'>
-  readonly isSystem: Prisma.FieldRef<"ItemType", 'Boolean'>
-  readonly userId: Prisma.FieldRef<"ItemType", 'String'>
+export interface itemTypeFieldRefs {
+  readonly id: Prisma.FieldRef<"itemType", 'String'>
+  readonly name: Prisma.FieldRef<"itemType", 'String'>
+  readonly icon: Prisma.FieldRef<"itemType", 'String'>
+  readonly color: Prisma.FieldRef<"itemType", 'String'>
+  readonly isSystem: Prisma.FieldRef<"itemType", 'Boolean'>
+  readonly userId: Prisma.FieldRef<"itemType", 'String'>
 }
     
 
 // Custom InputTypes
 /**
- * ItemType findUnique
+ * itemType findUnique
  */
-export type ItemTypeFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemType
+   * Select specific fields to fetch from the itemType
    */
-  select?: Prisma.ItemTypeSelect<ExtArgs> | null
+  select?: Prisma.itemTypeSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemType
+   * Omit specific fields from the itemType
    */
-  omit?: Prisma.ItemTypeOmit<ExtArgs> | null
+  omit?: Prisma.itemTypeOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemTypeInclude<ExtArgs> | null
+  include?: Prisma.itemTypeInclude<ExtArgs> | null
   /**
-   * Filter, which ItemType to fetch.
+   * Filter, which itemType to fetch.
    */
-  where: Prisma.ItemTypeWhereUniqueInput
+  where: Prisma.itemTypeWhereUniqueInput
 }
 
 /**
- * ItemType findUniqueOrThrow
+ * itemType findUniqueOrThrow
  */
-export type ItemTypeFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemType
+   * Select specific fields to fetch from the itemType
    */
-  select?: Prisma.ItemTypeSelect<ExtArgs> | null
+  select?: Prisma.itemTypeSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemType
+   * Omit specific fields from the itemType
    */
-  omit?: Prisma.ItemTypeOmit<ExtArgs> | null
+  omit?: Prisma.itemTypeOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemTypeInclude<ExtArgs> | null
+  include?: Prisma.itemTypeInclude<ExtArgs> | null
   /**
-   * Filter, which ItemType to fetch.
+   * Filter, which itemType to fetch.
    */
-  where: Prisma.ItemTypeWhereUniqueInput
+  where: Prisma.itemTypeWhereUniqueInput
 }
 
 /**
- * ItemType findFirst
+ * itemType findFirst
  */
-export type ItemTypeFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemType
+   * Select specific fields to fetch from the itemType
    */
-  select?: Prisma.ItemTypeSelect<ExtArgs> | null
+  select?: Prisma.itemTypeSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemType
+   * Omit specific fields from the itemType
    */
-  omit?: Prisma.ItemTypeOmit<ExtArgs> | null
+  omit?: Prisma.itemTypeOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemTypeInclude<ExtArgs> | null
+  include?: Prisma.itemTypeInclude<ExtArgs> | null
   /**
-   * Filter, which ItemType to fetch.
+   * Filter, which itemType to fetch.
    */
-  where?: Prisma.ItemTypeWhereInput
+  where?: Prisma.itemTypeWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of ItemTypes to fetch.
+   * Determine the order of itemTypes to fetch.
    */
-  orderBy?: Prisma.ItemTypeOrderByWithRelationInput | Prisma.ItemTypeOrderByWithRelationInput[]
+  orderBy?: Prisma.itemTypeOrderByWithRelationInput | Prisma.itemTypeOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
-   * Sets the position for searching for ItemTypes.
+   * Sets the position for searching for itemTypes.
    */
-  cursor?: Prisma.ItemTypeWhereUniqueInput
+  cursor?: Prisma.itemTypeWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` ItemTypes from the position of the cursor.
+   * Take `±n` itemTypes from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` ItemTypes.
+   * Skip the first `n` itemTypes.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    * 
-   * Filter by unique combinations of ItemTypes.
+   * Filter by unique combinations of itemTypes.
    */
   distinct?: Prisma.ItemTypeScalarFieldEnum | Prisma.ItemTypeScalarFieldEnum[]
 }
 
 /**
- * ItemType findFirstOrThrow
+ * itemType findFirstOrThrow
  */
-export type ItemTypeFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemType
+   * Select specific fields to fetch from the itemType
    */
-  select?: Prisma.ItemTypeSelect<ExtArgs> | null
+  select?: Prisma.itemTypeSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemType
+   * Omit specific fields from the itemType
    */
-  omit?: Prisma.ItemTypeOmit<ExtArgs> | null
+  omit?: Prisma.itemTypeOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemTypeInclude<ExtArgs> | null
+  include?: Prisma.itemTypeInclude<ExtArgs> | null
   /**
-   * Filter, which ItemType to fetch.
+   * Filter, which itemType to fetch.
    */
-  where?: Prisma.ItemTypeWhereInput
+  where?: Prisma.itemTypeWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of ItemTypes to fetch.
+   * Determine the order of itemTypes to fetch.
    */
-  orderBy?: Prisma.ItemTypeOrderByWithRelationInput | Prisma.ItemTypeOrderByWithRelationInput[]
+  orderBy?: Prisma.itemTypeOrderByWithRelationInput | Prisma.itemTypeOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
-   * Sets the position for searching for ItemTypes.
+   * Sets the position for searching for itemTypes.
    */
-  cursor?: Prisma.ItemTypeWhereUniqueInput
+  cursor?: Prisma.itemTypeWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` ItemTypes from the position of the cursor.
+   * Take `±n` itemTypes from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` ItemTypes.
+   * Skip the first `n` itemTypes.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    * 
-   * Filter by unique combinations of ItemTypes.
+   * Filter by unique combinations of itemTypes.
    */
   distinct?: Prisma.ItemTypeScalarFieldEnum | Prisma.ItemTypeScalarFieldEnum[]
 }
 
 /**
- * ItemType findMany
+ * itemType findMany
  */
-export type ItemTypeFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemType
+   * Select specific fields to fetch from the itemType
    */
-  select?: Prisma.ItemTypeSelect<ExtArgs> | null
+  select?: Prisma.itemTypeSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemType
+   * Omit specific fields from the itemType
    */
-  omit?: Prisma.ItemTypeOmit<ExtArgs> | null
+  omit?: Prisma.itemTypeOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemTypeInclude<ExtArgs> | null
+  include?: Prisma.itemTypeInclude<ExtArgs> | null
   /**
-   * Filter, which ItemTypes to fetch.
+   * Filter, which itemTypes to fetch.
    */
-  where?: Prisma.ItemTypeWhereInput
+  where?: Prisma.itemTypeWhereInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
    * 
-   * Determine the order of ItemTypes to fetch.
+   * Determine the order of itemTypes to fetch.
    */
-  orderBy?: Prisma.ItemTypeOrderByWithRelationInput | Prisma.ItemTypeOrderByWithRelationInput[]
+  orderBy?: Prisma.itemTypeOrderByWithRelationInput | Prisma.itemTypeOrderByWithRelationInput[]
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
    * 
-   * Sets the position for listing ItemTypes.
+   * Sets the position for listing itemTypes.
    */
-  cursor?: Prisma.ItemTypeWhereUniqueInput
+  cursor?: Prisma.itemTypeWhereUniqueInput
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Take `±n` ItemTypes from the position of the cursor.
+   * Take `±n` itemTypes from the position of the cursor.
    */
   take?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
    * 
-   * Skip the first `n` ItemTypes.
+   * Skip the first `n` itemTypes.
    */
   skip?: number
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
    * 
-   * Filter by unique combinations of ItemTypes.
+   * Filter by unique combinations of itemTypes.
    */
   distinct?: Prisma.ItemTypeScalarFieldEnum | Prisma.ItemTypeScalarFieldEnum[]
 }
 
 /**
- * ItemType create
+ * itemType create
  */
-export type ItemTypeCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemType
+   * Select specific fields to fetch from the itemType
    */
-  select?: Prisma.ItemTypeSelect<ExtArgs> | null
+  select?: Prisma.itemTypeSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemType
+   * Omit specific fields from the itemType
    */
-  omit?: Prisma.ItemTypeOmit<ExtArgs> | null
+  omit?: Prisma.itemTypeOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemTypeInclude<ExtArgs> | null
+  include?: Prisma.itemTypeInclude<ExtArgs> | null
   /**
-   * The data needed to create a ItemType.
+   * The data needed to create a itemType.
    */
-  data: Prisma.XOR<Prisma.ItemTypeCreateInput, Prisma.ItemTypeUncheckedCreateInput>
+  data: Prisma.XOR<Prisma.itemTypeCreateInput, Prisma.itemTypeUncheckedCreateInput>
 }
 
 /**
- * ItemType createMany
+ * itemType createMany
  */
-export type ItemTypeCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * The data used to create many ItemTypes.
+   * The data used to create many itemTypes.
    */
-  data: Prisma.ItemTypeCreateManyInput | Prisma.ItemTypeCreateManyInput[]
+  data: Prisma.itemTypeCreateManyInput | Prisma.itemTypeCreateManyInput[]
   skipDuplicates?: boolean
 }
 
 /**
- * ItemType createManyAndReturn
+ * itemType createManyAndReturn
  */
-export type ItemTypeCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemType
+   * Select specific fields to fetch from the itemType
    */
-  select?: Prisma.ItemTypeSelectCreateManyAndReturn<ExtArgs> | null
+  select?: Prisma.itemTypeSelectCreateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemType
+   * Omit specific fields from the itemType
    */
-  omit?: Prisma.ItemTypeOmit<ExtArgs> | null
+  omit?: Prisma.itemTypeOmit<ExtArgs> | null
   /**
-   * The data used to create many ItemTypes.
+   * The data used to create many itemTypes.
    */
-  data: Prisma.ItemTypeCreateManyInput | Prisma.ItemTypeCreateManyInput[]
+  data: Prisma.itemTypeCreateManyInput | Prisma.itemTypeCreateManyInput[]
   skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemTypeIncludeCreateManyAndReturn<ExtArgs> | null
+  include?: Prisma.itemTypeIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
- * ItemType update
+ * itemType update
  */
-export type ItemTypeUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemType
+   * Select specific fields to fetch from the itemType
    */
-  select?: Prisma.ItemTypeSelect<ExtArgs> | null
+  select?: Prisma.itemTypeSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemType
+   * Omit specific fields from the itemType
    */
-  omit?: Prisma.ItemTypeOmit<ExtArgs> | null
+  omit?: Prisma.itemTypeOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemTypeInclude<ExtArgs> | null
+  include?: Prisma.itemTypeInclude<ExtArgs> | null
   /**
-   * The data needed to update a ItemType.
+   * The data needed to update a itemType.
    */
-  data: Prisma.XOR<Prisma.ItemTypeUpdateInput, Prisma.ItemTypeUncheckedUpdateInput>
+  data: Prisma.XOR<Prisma.itemTypeUpdateInput, Prisma.itemTypeUncheckedUpdateInput>
   /**
-   * Choose, which ItemType to update.
+   * Choose, which itemType to update.
    */
-  where: Prisma.ItemTypeWhereUniqueInput
+  where: Prisma.itemTypeWhereUniqueInput
 }
 
 /**
- * ItemType updateMany
+ * itemType updateMany
  */
-export type ItemTypeUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * The data used to update ItemTypes.
+   * The data used to update itemTypes.
    */
-  data: Prisma.XOR<Prisma.ItemTypeUpdateManyMutationInput, Prisma.ItemTypeUncheckedUpdateManyInput>
+  data: Prisma.XOR<Prisma.itemTypeUpdateManyMutationInput, Prisma.itemTypeUncheckedUpdateManyInput>
   /**
-   * Filter which ItemTypes to update
+   * Filter which itemTypes to update
    */
-  where?: Prisma.ItemTypeWhereInput
+  where?: Prisma.itemTypeWhereInput
   /**
-   * Limit how many ItemTypes to update.
+   * Limit how many itemTypes to update.
    */
   limit?: number
 }
 
 /**
- * ItemType updateManyAndReturn
+ * itemType updateManyAndReturn
  */
-export type ItemTypeUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemType
+   * Select specific fields to fetch from the itemType
    */
-  select?: Prisma.ItemTypeSelectUpdateManyAndReturn<ExtArgs> | null
+  select?: Prisma.itemTypeSelectUpdateManyAndReturn<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemType
+   * Omit specific fields from the itemType
    */
-  omit?: Prisma.ItemTypeOmit<ExtArgs> | null
+  omit?: Prisma.itemTypeOmit<ExtArgs> | null
   /**
-   * The data used to update ItemTypes.
+   * The data used to update itemTypes.
    */
-  data: Prisma.XOR<Prisma.ItemTypeUpdateManyMutationInput, Prisma.ItemTypeUncheckedUpdateManyInput>
+  data: Prisma.XOR<Prisma.itemTypeUpdateManyMutationInput, Prisma.itemTypeUncheckedUpdateManyInput>
   /**
-   * Filter which ItemTypes to update
+   * Filter which itemTypes to update
    */
-  where?: Prisma.ItemTypeWhereInput
+  where?: Prisma.itemTypeWhereInput
   /**
-   * Limit how many ItemTypes to update.
+   * Limit how many itemTypes to update.
    */
   limit?: number
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemTypeIncludeUpdateManyAndReturn<ExtArgs> | null
+  include?: Prisma.itemTypeIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
- * ItemType upsert
+ * itemType upsert
  */
-export type ItemTypeUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemType
+   * Select specific fields to fetch from the itemType
    */
-  select?: Prisma.ItemTypeSelect<ExtArgs> | null
+  select?: Prisma.itemTypeSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemType
+   * Omit specific fields from the itemType
    */
-  omit?: Prisma.ItemTypeOmit<ExtArgs> | null
+  omit?: Prisma.itemTypeOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemTypeInclude<ExtArgs> | null
+  include?: Prisma.itemTypeInclude<ExtArgs> | null
   /**
-   * The filter to search for the ItemType to update in case it exists.
+   * The filter to search for the itemType to update in case it exists.
    */
-  where: Prisma.ItemTypeWhereUniqueInput
+  where: Prisma.itemTypeWhereUniqueInput
   /**
-   * In case the ItemType found by the `where` argument doesn't exist, create a new ItemType with this data.
+   * In case the itemType found by the `where` argument doesn't exist, create a new itemType with this data.
    */
-  create: Prisma.XOR<Prisma.ItemTypeCreateInput, Prisma.ItemTypeUncheckedCreateInput>
+  create: Prisma.XOR<Prisma.itemTypeCreateInput, Prisma.itemTypeUncheckedCreateInput>
   /**
-   * In case the ItemType was found with the provided `where` argument, update it with this data.
+   * In case the itemType was found with the provided `where` argument, update it with this data.
    */
-  update: Prisma.XOR<Prisma.ItemTypeUpdateInput, Prisma.ItemTypeUncheckedUpdateInput>
+  update: Prisma.XOR<Prisma.itemTypeUpdateInput, Prisma.itemTypeUncheckedUpdateInput>
 }
 
 /**
- * ItemType delete
+ * itemType delete
  */
-export type ItemTypeDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemType
+   * Select specific fields to fetch from the itemType
    */
-  select?: Prisma.ItemTypeSelect<ExtArgs> | null
+  select?: Prisma.itemTypeSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemType
+   * Omit specific fields from the itemType
    */
-  omit?: Prisma.ItemTypeOmit<ExtArgs> | null
+  omit?: Prisma.itemTypeOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemTypeInclude<ExtArgs> | null
+  include?: Prisma.itemTypeInclude<ExtArgs> | null
   /**
-   * Filter which ItemType to delete.
+   * Filter which itemType to delete.
    */
-  where: Prisma.ItemTypeWhereUniqueInput
+  where: Prisma.itemTypeWhereUniqueInput
 }
 
 /**
- * ItemType deleteMany
+ * itemType deleteMany
  */
-export type ItemTypeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Filter which ItemTypes to delete
+   * Filter which itemTypes to delete
    */
-  where?: Prisma.ItemTypeWhereInput
+  where?: Prisma.itemTypeWhereInput
   /**
-   * Limit how many ItemTypes to delete.
+   * Limit how many itemTypes to delete.
    */
   limit?: number
 }
 
 /**
- * ItemType.user
+ * itemType.user
  */
-export type ItemType$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemType$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the User
+   * Select specific fields to fetch from the user
    */
-  select?: Prisma.UserSelect<ExtArgs> | null
+  select?: Prisma.userSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the User
+   * Omit specific fields from the user
    */
-  omit?: Prisma.UserOmit<ExtArgs> | null
+  omit?: Prisma.userOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
+  include?: Prisma.userInclude<ExtArgs> | null
+  where?: Prisma.userWhereInput
 }
 
 /**
- * ItemType.items
+ * itemType.items
  */
-export type ItemType$itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemType$itemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Item
+   * Select specific fields to fetch from the item
    */
-  select?: Prisma.ItemSelect<ExtArgs> | null
+  select?: Prisma.itemSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Item
+   * Omit specific fields from the item
    */
-  omit?: Prisma.ItemOmit<ExtArgs> | null
+  omit?: Prisma.itemOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemInclude<ExtArgs> | null
-  where?: Prisma.ItemWhereInput
-  orderBy?: Prisma.ItemOrderByWithRelationInput | Prisma.ItemOrderByWithRelationInput[]
-  cursor?: Prisma.ItemWhereUniqueInput
+  include?: Prisma.itemInclude<ExtArgs> | null
+  where?: Prisma.itemWhereInput
+  orderBy?: Prisma.itemOrderByWithRelationInput | Prisma.itemOrderByWithRelationInput[]
+  cursor?: Prisma.itemWhereUniqueInput
   take?: number
   skip?: number
   distinct?: Prisma.ItemScalarFieldEnum | Prisma.ItemScalarFieldEnum[]
 }
 
 /**
- * ItemType without action
+ * itemType without action
  */
-export type ItemTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type itemTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the ItemType
+   * Select specific fields to fetch from the itemType
    */
-  select?: Prisma.ItemTypeSelect<ExtArgs> | null
+  select?: Prisma.itemTypeSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the ItemType
+   * Omit specific fields from the itemType
    */
-  omit?: Prisma.ItemTypeOmit<ExtArgs> | null
+  omit?: Prisma.itemTypeOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.ItemTypeInclude<ExtArgs> | null
+  include?: Prisma.itemTypeInclude<ExtArgs> | null
 }
