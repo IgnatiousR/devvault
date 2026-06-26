@@ -108,15 +108,16 @@ export interface ItemTypeCount {
 const ITEM_TYPE_ORDER = ['snippet', 'prompt', 'command', 'note', 'file', 'image', 'link'];
 
 export async function getItemsByTypeCount(userId: string): Promise<ItemTypeCount[]> {
-  const itemTypes = await prisma.itemType.findMany({
-    where: { isSystem: true },
-  });
-
-  const counts = await prisma.item.groupBy({
-    by: ['itemTypeId'],
-    where: { userId },
-    _count: true,
-  });
+  const [itemTypes, counts] = await Promise.all([
+    prisma.itemType.findMany({
+      where: { isSystem: true },
+    }),
+    prisma.item.groupBy({
+      by: ['itemTypeId'],
+      where: { userId },
+      _count: true,
+    }),
+  ]);
 
   const countMap = new Map(counts.map(c => [c.itemTypeId, c._count]));
 

@@ -145,6 +145,9 @@ model Item {
   @@index([itemTypeId])
   @@index([isFavorite])
   @@index([isPinned])
+  @@index([userId, isPinned])
+  @@index([userId, updatedAt])
+  @@index([userId, itemTypeId])
   @@map("items")
 }
 
@@ -176,6 +179,8 @@ model ItemCollection {
   addedAt DateTime @default(now())
 
   @@id([itemId, collectionId])
+  @@index([itemId])
+  @@index([collectionId])
   @@map("item_collections")
 }
 

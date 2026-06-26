@@ -2,7 +2,6 @@ import { TopBar } from "@/components/dashboard/TopBar";
 import { AppSidebar } from "@/components/sidebar/Sidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { prisma } from "@/lib/prisma";
-import { getCollectionsWithStats } from "@/lib/db/collections";
 import { getItemsByTypeCount } from "@/lib/db/items";
 
 export default async function DashboardLayout({
@@ -30,14 +29,11 @@ export default async function DashboardLayout({
     );
   }
 
-  const [collections, itemTypes] = await Promise.all([
-    getCollectionsWithStats(user.id),
-    getItemsByTypeCount(user.id),
-  ]);
+  const itemTypes = await getItemsByTypeCount(user.id);
 
   return (
     <SidebarProvider>
-      <AppSidebar user={user} collections={collections} itemTypes={itemTypes} />
+      <AppSidebar user={user} collections={[]} itemTypes={itemTypes} />
       <SidebarInset>
         <TopBar />
         <main className="min-h-screen">
