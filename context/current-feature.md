@@ -29,7 +29,9 @@ Completed
 - Prisma Postgres quickstart: https://www.prisma.io/docs/getting-started/prisma-orm/quickstart/prisma-postgres
 - Better Auth docs: https://www.better-auth.com/docs
 - Better Auth Prisma integration: https://www.better-auth.com/docs/integrations/prisma
+- Better Auth Prisma adapter: https://better-auth.com/docs/adapters/prisma
 - Better Auth GitHub provider: https://www.better-auth.com/docs/authentication/github
+- Prisma + Better Auth + Next.js guide: https://www.prisma.io/docs/guides/authentication/better-auth/nextjs
 
 ## Notes
 <!-- Any extra notes -->
