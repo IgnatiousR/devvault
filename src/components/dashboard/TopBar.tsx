@@ -3,18 +3,11 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useSession, signOut } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { useSession } from "@/lib/auth-client";
+import { UserMenu } from "@/components/auth/user-menu";
 
 export function TopBar() {
   const { data: session } = useSession();
-  const router = useRouter();
-
-  const handleSignOut = async () => {
-    await signOut();
-    router.push("/sign-in");
-  };
 
   return (
     <header className="sticky top-0 h-16 shrink-0 border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 z-40 flex items-center justify-between px-4 md:px-8 transition-all ease-linear duration-200">
@@ -67,39 +60,7 @@ export function TopBar() {
           <span className="absolute top-2 right-2.5 w-1.5 h-1.5 `bg-brand-red rounded-full"></span>
         </button>
         {session?.user && (
-          <div className="flex items-center gap-2">
-            <div className="relative group">
-              <button className="w-9 h-9 flex items-center justify-center rounded-full bg-accent hover:bg-accent/80 transition-colors overflow-hidden">
-                {session.user.image ? (
-                  <Image
-                    src={session.user.image}
-                    alt={session.user.name || "User"}
-                    width={36}
-                    height={36}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="text-sm font-medium">
-                    {session.user.name?.charAt(0).toUpperCase() || "U"}
-                  </span>
-                )}
-              </button>
-              <div className="absolute right-0 top-full mt-1 w-48 rounded-lg border bg-background shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <div className="p-3 border-b">
-                  <p className="text-sm font-medium">{session.user.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {session.user.email}
-                  </p>
-                </div>
-                <button
-                  onClick={handleSignOut}
-                  className="w-full text-left px-3 py-2 text-sm hover:bg-accent transition-colors"
-                >
-                  Sign out
-                </button>
-              </div>
-            </div>
-          </div>
+          <UserMenu />
         )}
       </div>
     </header>

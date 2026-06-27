@@ -9,6 +9,7 @@
 ## References
 - @context/features/auth-phase-1-spec.md
 - @context/features/auth-phase-2-spec.md
+- @context/features/auth-phase-3-spec.md
 - @context/features/stats-sidebar-spec.md
 - @context/features/database-spec.md
 - @context/features/seed-spec.md
@@ -50,3 +51,5 @@
 - **Phase 11 Started**: Auth setup with Better Auth + GitHub Provider. Configuring Prisma v7 adapter, GitHub OAuth, route protection via Next.js 16 Proxy, and session management.
 - **Phase 11 Completed**: Better Auth configured with Prisma adapter, GitHub OAuth provider, and nextCookies plugin. Created API route handler, client auth utilities, proxy-based route protection for `/dashboard/*`, and sign-in page with GitHub button. Updated `.env.example` with correct env var names.
 - **Phase 12 Completed**: Email/Password authentication — updated sign-in page with email/password form, created sign-up page with registration form, added logout functionality in TopBar with user avatar dropdown, exported signUp from auth client. API route now fetches session user with isPro status. Spec: auth-phase-2-spec.md.
+- **Phase 13 Started**: Auth UI overhaul — custom sign-in/register pages, sidebar user section with dropdown, Better Auth session integration. Spec: auth-phase-3-spec.md.
+- **Phase 13 Completed**: Auth UI overhaul — created reusable auth components (GitHubButton, UserAvatar, SignInForm, RegisterForm, UserMenu), updated sign-in/sign-up pages to use new components, updated sidebar footer with UserMenu dropdown, updated TopBar to use UserMenu. Added accessibility features (aria-labels, keyboard navigation, loading states). Spec: auth-phase-3-spec.md.

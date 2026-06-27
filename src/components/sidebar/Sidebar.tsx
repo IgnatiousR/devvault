@@ -13,10 +13,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserMenu } from "@/components/auth/user-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDashboard } from "@/hooks/use-dashboard";
-import type { DashboardUser, ItemTypeCount, CollectionWithStats } from "@/lib/types/dashboard";
+import type { ItemTypeCount, CollectionWithStats } from "@/lib/types/dashboard";
 
 function SidebarLogo() {
   return (
@@ -231,9 +231,7 @@ function SidebarSkeleton() {
   );
 }
 
-function UserFooter({ user }: { user: DashboardUser | null }) {
-  if (!user) return null;
-
+function UserFooter() {
   return (
     <SidebarFooter className="p-3 space-y-4 mt-auto group-data-[collapsible=icon]:px-2">
       <div className="px-3 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
@@ -250,27 +248,7 @@ function UserFooter({ user }: { user: DashboardUser | null }) {
         </Link>
       </div>
       <div className="border-t border-border pt-4">
-        <div className="flex items-center justify-between p-2 group-data-[collapsible=icon]:p-0 rounded-lg hover:bg-accent/50 transition-colors cursor-pointer w-full group-data-[collapsible=icon]:justify-center">
-          <div className="flex items-center gap-3 min-w-0 group-data-[collapsible=icon]:gap-0">
-            <Avatar className="w-8 h-8 rounded-md border border-border shrink-0">
-              <AvatarImage src={user.image || undefined} alt={user.name || 'User'} />
-              <AvatarFallback className="rounded-md">
-                {user.name?.charAt(0) || 'U'}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col min-w-0 group-data-[collapsible=icon]:hidden">
-              <span className="text-xs font-semibold truncate">
-                {user.name || 'User'}
-              </span>
-              <span className="text-[10px] text-muted-foreground truncate">
-                {user.isPro ? 'Pro' : 'Free'}
-              </span>
-            </div>
-          </div>
-          <span className="material-symbols-outlined text-muted-foreground text-sm group-data-[collapsible=icon]:hidden">
-            unfold_more
-          </span>
-        </div>
+        <UserMenu />
       </div>
     </SidebarFooter>
   );
@@ -291,7 +269,7 @@ export function AppSidebar() {
         <div className="mx-4 h-px bg-border" />
         <CollectionsMenu collections={data.collections} />
       </SidebarContent>
-      <UserFooter user={data.user} />
+      <UserFooter />
     </Sidebar>
   );
 }
