@@ -6,6 +6,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { GitHubButton } from "./github-button";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface SignInFormProps {
   callbackURL?: string;
@@ -64,6 +65,10 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
     if (signInError) {
       setError(signInError.message || "Invalid email or password");
       setLoading(false);
+    } else {
+      toast.success("Welcome back!", {
+        description: "You have successfully signed in",
+      });
     }
   };
 
@@ -158,7 +163,7 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
 
       <p className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}
-        <Link href="/sign-up" className="text-red-500 hover:underline">
+        <Link href="/register" className="text-red-500 hover:underline">
           Create an account
         </Link>
       </p>

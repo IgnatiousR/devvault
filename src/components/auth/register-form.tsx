@@ -6,6 +6,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { GitHubButton } from "./github-button";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface RegisterFormProps {
   callbackURL?: string;
@@ -93,7 +94,10 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
       }
       setLoading(false);
     } else {
-      router.push("/sign-in");
+      toast.success("Account created successfully", {
+        description: "You can now log in with your credentials",
+      });
+      router.push("/login");
     }
   };
 
@@ -241,8 +245,8 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
 
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/sign-in" className="text-red-500 hover:underline">
-          Sign In
+        <Link href="/login" className="text-red-500 hover:underline">
+          Login
         </Link>
       </p>
     </div>

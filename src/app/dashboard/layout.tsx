@@ -1,4 +1,4 @@
-import { TopBar } from "@/components/dashboard/TopBar";
+import { TopBar } from "@/components/dashboard/top-bar";
 import { AppSidebar } from "@/components/sidebar/Sidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 

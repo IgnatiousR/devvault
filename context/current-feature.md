@@ -35,6 +35,11 @@
 - GitHub OAuth via `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` env vars
 - Named export for proxy (not default export)
 - Model names are lowercase (user, item, etc.) with `@@map` for table names
+- Reuse existing auth files: `lib/auth.ts`, `lib/auth-client.ts`, `app/api/auth/[...all]/route.ts`
+- Do NOT create new Prisma client, Better Auth client, or introduce NextAuth/Auth.js
+- Use Better Auth v1.6 + Prisma 7 + Next.js 16 APIs
+- Preserve existing sidebar behavior, documentation link, and dashboard data
+- Create reusable initials generation helper
 
 ## History
 <!-- Keep this updated. Earliest to latest -->
@@ -52,4 +57,5 @@
 - **Phase 11 Completed**: Better Auth configured with Prisma adapter, GitHub OAuth provider, and nextCookies plugin. Created API route handler, client auth utilities, proxy-based route protection for `/dashboard/*`, and sign-in page with GitHub button. Updated `.env.example` with correct env var names.
 - **Phase 12 Completed**: Email/Password authentication — updated sign-in page with email/password form, created sign-up page with registration form, added logout functionality in TopBar with user avatar dropdown, exported signUp from auth client. API route now fetches session user with isPro status. Spec: auth-phase-2-spec.md.
 - **Phase 13 Started**: Auth UI overhaul — custom sign-in/register pages, sidebar user section with dropdown, Better Auth session integration. Spec: auth-phase-3-spec.md.
-- **Phase 13 Completed**: Auth UI overhaul — created reusable auth components (GitHubButton, UserAvatar, SignInForm, RegisterForm, UserMenu), updated sign-in/sign-up pages to use new components, updated sidebar footer with UserMenu dropdown, updated TopBar to use UserMenu. Added accessibility features (aria-labels, keyboard navigation, loading states). Spec: auth-phase-3-spec.md.
+- **Phase 13 Completed**: Auth UI overhaul — created reusable auth components (GitHubButton, UserAvatar, SignInForm, RegisterForm, UserMenu), updated sign-in/sign-up pages to use new components, updated sidebar footer with UserMenu dropdown, updated TopBar to use UserMenu. Added accessibility features (aria-labels, keyboard navigation, loading states). Fixed register route from `/sign-up` to `/register`. Updated sidebar to display user name and email below avatar. Spec: auth-phase-3-spec.md.
+- **Phase 13 Fix**: Fixed duplicate user icons in sidebar. Modified UserMenu component to accept `showUserInfo` prop. Sidebar now shows avatar, name, and email in a single clickable element that opens dropdown with Profile and Sign Out options. Removed duplicate static user info section.

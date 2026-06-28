@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { UserAvatar } from "./user-avatar";
+import { toast } from "sonner";
 
-export function UserMenu() {
+export function UserMenu({ showUserInfo = false }: { showUserInfo?: boolean }) {
   const { data: session } = useSession();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +38,10 @@ export function UserMenu() {
   const handleSignOut = async () => {
     setIsSigningOut(true);
     await signOut();
-    router.push("/sign-in");
+    toast.success("Signed out", {
+      description: "You have been logged out successfully",
+    });
+    router.push("/login");
   };
 
   if (!session?.user) return null;
@@ -49,18 +53,24 @@ export function UserMenu() {
         aria-label="User menu"
         aria-expanded={isOpen}
         aria-haspopup="true"
-        className="flex items-center gap-2 rounded-md p-1 hover:bg-accent transition-colors"
+        className="flex items-center gap-2 rounded-md p-1 hover:bg-accent transition-colors w-full"
       >
         <UserAvatar
           user={session.user}
           className="w-8 h-8 rounded-md"
         />
+        {showUserInfo && (
+          <div className="text-left group-data-[collapsible=icon]:hidden">
+            <p className="text-sm font-medium">{session.user.name}</p>
+            <p className="text-xs text-muted-foreground truncate">{session.user.email}</p>
+          </div>
+        )}
       </button>
 
       {isOpen && (
         <div
           role="menu"
-          className="absolute right-0 top-full mt-1 w-56 rounded-lg border bg-background shadow-lg z-50"
+          className="absolute right-0 bottom-full mb-1 w-56 rounded-lg border bg-background shadow-lg z-50"
         >
           <div className="p-3 border-b">
             <p className="text-sm font-medium">{session.user.name}</p>

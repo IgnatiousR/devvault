@@ -1,4 +1,4 @@
-import { MainContent } from "@/components/main/MainContent";
+import { MainContent } from "@/components/main/main-content";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

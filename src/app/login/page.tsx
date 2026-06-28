@@ -1,5 +1,3 @@
-"use client";
-
 import { Suspense } from "react";
 import { SignInForm } from "@/components/auth/sign-in-form";
 
@@ -11,7 +9,7 @@ function SignInContent() {
   );
 }
 
-export default function SignInPage() {
+export default function LoginPage() {
   return (
     <Suspense
       fallback={

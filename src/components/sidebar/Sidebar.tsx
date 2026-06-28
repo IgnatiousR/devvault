@@ -24,8 +24,7 @@ function SidebarLogo() {
       <div className="flex items-center gap-2 w-full group-data-[collapsible=icon]:justify-center">
         <div className="w-6 h-6 shrink-0 bg-brand-red rounded-md flex items-center justify-center">
           <span
-            className="material-symbols-outlined text-white text-[14px]"
-            style={{ fontVariationSettings: "'FILL' 1" }}
+            className="material-symbols-outlined text-white text-[14px] [font-variation-settings:'FILL_1']"
           >
             security
           </span>
@@ -85,8 +84,8 @@ function RecentCollectionsSection({ collections }: { collections: CollectionWith
               className="font-medium text-sm transition-all text-muted-foreground"
             >
               <span
-                className="w-2 h-2 shrink-0 rounded-full"
-                style={{ backgroundColor: collection.mostUsedType?.color || '#6b7280' }}
+                className="w-2 h-2 shrink-0 rounded-full bg-current"
+                style={{ color: collection.mostUsedType?.color || '#6b7280' }}
               ></span>
               <span>{collection.name}</span>
             </SidebarMenuButton>
@@ -161,7 +160,7 @@ function ItemTypesMenu({ itemTypes }: { itemTypes: ItemTypeCount[] }) {
               className="font-medium text-sm transition-all text-muted-foreground"
             >
               <span
-                className="material-symbols-outlined opacity-70 text-sm shrink-0"
+                className="material-symbols-outlined opacity-70 text-sm shrink-0 text-current"
                 style={{ color: itemType.color }}
               >
                 {itemType.icon}
@@ -248,7 +247,7 @@ function UserFooter() {
         </Link>
       </div>
       <div className="border-t border-border pt-4">
-        <UserMenu />
+        <UserMenu showUserInfo={true} />
       </div>
     </SidebarFooter>
   );
