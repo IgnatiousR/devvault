@@ -10,7 +10,7 @@
       },
       "models": [
         {
-          "id": "qwen/qwen3.5-4b"
+          "id": "qwen3.5-2b-mtp"
         }
       ]
     }
