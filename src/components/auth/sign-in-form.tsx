@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "@/lib/auth-client";
+import { signIn, sendVerificationEmail } from "@/lib/auth-client";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
@@ -23,6 +23,8 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
   const callbackURL = initialCallbackURL || searchParams.get("callbackUrl") || "/dashboard";
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState<string>("");
+  const [resending, setResending] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<SignInFieldErrors>({});
 
   const validateForm = (email: string, password: string): boolean => {
@@ -63,11 +65,35 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
     });
 
     if (signInError) {
-      setError(signInError.message || "Invalid email or password");
+      if (signInError.status === 403) {
+        setUnverifiedEmail(email);
+        setError("");
+      } else {
+        setError(signInError.message || "Invalid email or password");
+      }
       setLoading(false);
     } else {
       toast.success("Welcome back!", {
         description: "You have successfully signed in",
+      });
+    }
+  };
+
+  const handleResendEmail = async () => {
+    setResending(true);
+    const { error } = await sendVerificationEmail({
+      email: unverifiedEmail,
+      callbackURL: "/dashboard",
+    });
+    setResending(false);
+
+    if (error) {
+      toast.error("Failed to resend verification email", {
+        description: error.message || "Please try again later",
+      });
+    } else {
+      toast.success("Verification email sent", {
+        description: `We've sent a new verification link to ${unverifiedEmail}`,
       });
     }
   };
@@ -87,6 +113,29 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
           className="rounded-md bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-500"
         >
           {error}
+        </div>
+      )}
+
+      {unverifiedEmail && (
+        <div
+          role="alert"
+          className="rounded-md bg-yellow-500/10 border border-yellow-500/20 p-4 text-sm"
+        >
+          <p className="font-medium text-yellow-600 mb-2">
+            Please verify your email address
+          </p>
+          <p className="text-muted-foreground mb-3">
+            We sent a verification link to{" "}
+            <span className="font-medium text-foreground">{unverifiedEmail}</span>.
+            Please check your inbox and click the link to verify your account.
+          </p>
+          <button
+            onClick={handleResendEmail}
+            disabled={resending}
+            className="text-sm font-medium text-yellow-600 hover:underline disabled:opacity-50"
+          >
+            {resending ? "Sending..." : "Resend verification email"}
+          </button>
         </div>
       )}
 

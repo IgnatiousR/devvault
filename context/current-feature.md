@@ -1,4 +1,4 @@
-# Current Feature:
+# Current Feature: Email Verification on Registration
 
 ## Status
 <!-- Not Started|In Progress|Completed -->
@@ -24,6 +24,7 @@
 - Better Auth Prisma adapter: https://better-auth.com/docs/adapters/prisma
 - Better Auth GitHub provider: https://www.better-auth.com/docs/authentication/github
 - Prisma + Better Auth + Next.js guide: https://www.prisma.io/docs/guides/authentication/better-auth/nextjs
+- Resend docs: https://resend.com/docs/send-with-nextjs
 
 ## Notes
 <!-- Any extra notes -->
@@ -59,3 +60,5 @@
 - **Phase 13 Started**: Auth UI overhaul — custom sign-in/register pages, sidebar user section with dropdown, Better Auth session integration. Spec: auth-phase-3-spec.md.
 - **Phase 13 Completed**: Auth UI overhaul — created reusable auth components (GitHubButton, UserAvatar, SignInForm, RegisterForm, UserMenu), updated sign-in/sign-up pages to use new components, updated sidebar footer with UserMenu dropdown, updated TopBar to use UserMenu. Added accessibility features (aria-labels, keyboard navigation, loading states). Fixed register route from `/sign-up` to `/register`. Updated sidebar to display user name and email below avatar. Spec: auth-phase-3-spec.md.
 - **Phase 13 Fix**: Fixed duplicate user icons in sidebar. Modified UserMenu component to accept `showUserInfo` prop. Sidebar now shows avatar, name, and email in a single clickable element that opens dropdown with Profile and Sign Out options. Removed duplicate static user info section.
+- **Phase 14 Started**: Email verification on registration — using Resend for email delivery, Better Auth email verification flow, verification page, resend functionality.
+- **Phase 14 Completed**: Email verification on registration — installed Resend SDK, created email utility with HTML template, configured Better Auth with email verification (requireEmailVerification: true, sendOnSignUp: true), created /verify page for token verification, updated register form to show "Check your email" state with resend button, updated sign-in form to handle 403 unverified email error with resend option, exported sendVerificationEmail and verifyEmail from auth client, updated .env.example with RESEND_API_KEY and EMAIL_FROM.
