@@ -19,7 +19,7 @@ export const auth = betterAuth({
       void sendEmail({
         to: user.email,
         subject: "Verify your email address",
-        html: generateVerificationEmailHtml(url),
+        react: generateVerificationEmailHtml(url),
       });
     },
   },

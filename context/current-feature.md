@@ -1,4 +1,4 @@
-# Current Feature: Email Verification on Registration
+# Current Feature:
 
 ## Status
 <!-- Not Started|In Progress|Completed -->
@@ -24,7 +24,9 @@
 - Better Auth Prisma adapter: https://better-auth.com/docs/adapters/prisma
 - Better Auth GitHub provider: https://www.better-auth.com/docs/authentication/github
 - Prisma + Better Auth + Next.js guide: https://www.prisma.io/docs/guides/authentication/better-auth/nextjs
-- Resend docs: https://resend.com/docs/send-with-nextjs
+- Brevo SMTP docs: https://developers.brevo.com/docs/send-a-transactional-email
+- nodemailer docs: https://nodemailer.com/about/
+- React Email render: https://react.email/docs/render
 
 ## Notes
 <!-- Any extra notes -->
@@ -62,3 +64,4 @@
 - **Phase 13 Fix**: Fixed duplicate user icons in sidebar. Modified UserMenu component to accept `showUserInfo` prop. Sidebar now shows avatar, name, and email in a single clickable element that opens dropdown with Profile and Sign Out options. Removed duplicate static user info section.
 - **Phase 14 Started**: Email verification on registration — using Resend for email delivery, Better Auth email verification flow, verification page, resend functionality.
 - **Phase 14 Completed**: Email verification on registration — installed Resend SDK, created email utility with HTML template, configured Better Auth with email verification (requireEmailVerification: true, sendOnSignUp: true), created /verify page for token verification, updated register form to show "Check your email" state with resend button, updated sign-in form to handle 403 unverified email error with resend option, exported sendVerificationEmail and verifyEmail from auth client, updated .env.example with RESEND_API_KEY and EMAIL_FROM.
+- **Phase 15 Completed**: Replaced Resend with Brevo SMTP for email delivery. Removed `resend` package, installed `nodemailer` + `@types/nodemailer`. Updated `src/lib/email.ts` to use nodemailer transport with Brevo SMTP relay (`smtp-relay.brevo.com:587`). Kept React Email template component, rendering to HTML via `@react-email/render`. Updated `.env` with Brevo SMTP credentials (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM`).
