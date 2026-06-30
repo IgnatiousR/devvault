@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
-import { render } from "@react-email/render";
+import { render } from "react-email";
 import { VerificationEmail } from "../components/emails/verification-email";
+import { ForgotPasswordEmail } from "../components/emails/forgot-password-email";
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -33,4 +34,8 @@ export async function sendEmail({
 
 export function generateVerificationEmailHtml(url: string) {
   return VerificationEmail({ url });
+}
+
+export function generateForgotPasswordEmailHtml(url: string) {
+  return ForgotPasswordEmail({ url });
 }

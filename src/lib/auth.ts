@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { prisma } from "./prisma";
-import { sendEmail, generateVerificationEmailHtml } from "./email";
+import { sendEmail, generateVerificationEmailHtml, generateForgotPasswordEmailHtml } from "./email";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -11,6 +11,13 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
+    sendResetPassword: async ({ user, url }) => {
+      void sendEmail({
+        to: user.email,
+        subject: "Reset your DevVault password",
+        react: generateForgotPasswordEmailHtml(url),
+      });
+    },
   },
   emailVerification: {
     sendOnSignUp: true,

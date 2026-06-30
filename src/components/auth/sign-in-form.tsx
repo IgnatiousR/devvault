@@ -7,6 +7,7 @@ import Link from "next/link";
 import { GitHubButton } from "./github-button";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { Eye, EyeSlash } from "@phosphor-icons/react";
 
 interface SignInFormProps {
   callbackURL?: string;
@@ -26,6 +27,7 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
   const [unverifiedEmail, setUnverifiedEmail] = useState<string>("");
   const [resending, setResending] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<SignInFieldErrors>({});
+  const [showPassword, setShowPassword] = useState(false);
 
   const validateForm = (email: string, password: string): boolean => {
     const errors: SignInFieldErrors = {};
@@ -171,22 +173,44 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
           >
             Password
           </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            aria-invalid={!!fieldErrors.password}
-            aria-describedby={fieldErrors.password ? "password-error" : undefined}
-            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-            placeholder="••••••••"
-          />
+          <div className="relative">
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              required
+              aria-invalid={!!fieldErrors.password}
+              aria-describedby={fieldErrors.password ? "password-error" : undefined}
+              className="w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+              placeholder="••••••••"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? (
+                <EyeSlash className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
+            </button>
+          </div>
           {fieldErrors.password && (
             <p id="password-error" className="mt-1 text-xs text-red-500">
               {fieldErrors.password}
             </p>
           )}
+          <div className="text-right">
+            <Link
+              href="/forgot-password"
+              className="text-xs text-red-500 hover:underline"
+            >
+              Forgot password?
+            </Link>
+          </div>
         </div>
         <button
           type="submit"

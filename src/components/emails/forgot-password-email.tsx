@@ -10,32 +10,33 @@ import {
   Text,
 } from "react-email";
 
-interface VerificationEmailProps {
+interface ForgotPasswordEmailProps {
   url: string;
 }
 
-export function VerificationEmail({ url }: VerificationEmailProps) {
+export function ForgotPasswordEmail({ url }: ForgotPasswordEmailProps) {
   return (
     <Html>
       <Head />
-      <Preview>Verify your email address for DevVault</Preview>
+      <Preview>Reset your DevVault password</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Heading style={h1}>Verify Your Email</Heading>
+          <Heading style={h1}>Reset Your Password</Heading>
           <Text style={text}>
-            Thanks for signing up for DevVault! Please click the button below
-            to verify your email address.
+            We received a request to reset the password for your DevVault
+            account. Click the button below to choose a new password.
           </Text>
           <Text style={buttonWrapper}>
             <Link href={url} style={button}>
-              Verify Email Address
+              Reset Password
             </Link>
           </Text>
-          <Text style={footer}>
-            If you didn&apos;t create an account, you can safely ignore this email.
+          <Text style={text}>
+            If you didn&apos;t request a password reset, you can safely ignore
+            this email. Your password will remain unchanged.
           </Text>
           <Text style={footer}>
-            This verification link will expire in 24 hours.
+            This reset link will expire in 1 hour.
           </Text>
         </Container>
       </Body>
