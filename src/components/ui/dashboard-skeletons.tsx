@@ -100,3 +100,55 @@ export function DashboardContentSkeleton() {
     </div>
   );
 }
+
+export function ProfileContentSkeleton() {
+  return (
+    <div className="space-y-8">
+      {/* User Info Card Skeleton */}
+      <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
+        <div className="flex items-center gap-6">
+          <Skeleton className="h-20 w-20 rounded-full" />
+          <div className="flex-1">
+            <Skeleton className="h-6 w-48 mb-2" />
+            <Skeleton className="h-4 w-64 mb-2" />
+            <Skeleton className="h-3 w-32" />
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Section Skeleton */}
+      <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
+        <Skeleton className="h-6 w-32 mb-4" />
+        <div className="grid grid-cols-2 gap-4">
+          <Skeleton className="h-16 w-full" />
+          <Skeleton className="h-16 w-full" />
+        </div>
+      </div>
+
+      {/* Item Type Breakdown Skeleton */}
+      <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
+        <Skeleton className="h-6 w-48 mb-4" />
+        <div className="space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Skeleton className="h-8 w-8 rounded" />
+                <Skeleton className="h-4 w-24" />
+              </div>
+              <Skeleton className="h-4 w-12" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Account Actions Skeleton */}
+      <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
+        <Skeleton className="h-6 w-36 mb-4" />
+        <div className="flex gap-4">
+          <Skeleton className="h-10 w-32" />
+          <Skeleton className="h-10 w-32" />
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,10 +1,15 @@
 # Current Feature:
 
 ## Status
-<!-- Not Started|In Progress|Completed -->
+In Progress
 
 ## Goals
 <!-- Goals & requirements -->
+- Create profile page at `/profile` route
+- Display user info: email, name, avatar (GitHub or initials), account creation date
+- Show usage stats: total items, total collections, breakdown by item type
+- Add account actions: change password (email users only), delete account with confirmation
+- Follow existing codebase patterns for data fetching and components
 
 ## References
 - @context/features/auth-phase-1-spec.md
@@ -14,6 +19,7 @@
 - @context/features/database-spec.md
 - @context/features/seed-spec.md
 - @context/features/dashboard-items-spec.md
+- @context/features/profile-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -67,3 +73,5 @@
 - **Phase 15 Completed**: Replaced Resend with Brevo SMTP for email delivery. Removed `resend` package, installed `nodemailer` + `@types/nodemailer`. Updated `src/lib/email.ts` to use nodemailer transport with Brevo SMTP relay (`smtp-relay.brevo.com:587`). Kept React Email template component, rendering to HTML via `@react-email/render`. Updated `.env` with Brevo SMTP credentials (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM`).
 - **Phase 16 Started**: Forgot/Reset password flow — Better Auth `sendResetPassword` callback, `ForgotPasswordEmail` template, `/forgot-password` and `/reset-password` pages, sign-in form "Forgot password?" link, Brevo SMTP email delivery.
 - **Phase 16 Completed**: Forgot/Reset password — added `sendResetPassword` callback to Better Auth config, created `ForgotPasswordEmail` React Email template, created `/forgot-password` page with email form and success state, created `/reset-password` page with token-based new password form and validation (8+ chars, confirm match, invalid token handling), added "Forgot password?" link to sign-in form below password field, exported `requestPasswordReset` and `resetPassword` from auth client, fixed stale `.env.example` (Replaced `RESEND_API_KEY` with actual Brevo SMTP vars). Suspense boundary added for `useSearchParams()` in reset-password page.
+- **Phase 17 Started**: Profile page — user info display, usage stats, change password (email users only), delete account with confirmation, protected route.
+- **Phase 17 Completed**: Profile page implemented with user info (avatar, email, name, creation date, Pro badge), usage stats (total items, collections), item type breakdown with icons/colors, change password dialog (email users only), delete account alert dialog with confirmation, protected route via proxy. Created: `/profile` page, `profile-content.tsx` client component, `use-profile` hook, `/api/profile` route, `/api/profile/change-password` route, `/api/profile/delete-account` route, `dialog.tsx` and `alert-dialog.tsx` UI components, profile types and DB queries, profile skeleton. Updated proxy to protect `/profile` route.
