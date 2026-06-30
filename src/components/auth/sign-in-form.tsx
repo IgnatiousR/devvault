@@ -7,16 +7,13 @@ import Link from "next/link";
 import { GitHubButton } from "./github-button";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Eye, EyeSlash } from "@phosphor-icons/react";
+import { PasswordInput } from "./password-input";
+import { EmailInput } from "./email-input";
+import { validateSignInForm, type ValidationErrors } from "@/lib/validation";
 
 interface SignInFormProps {
   callbackURL?: string;
   className?: string;
-}
-
-interface SignInFieldErrors {
-  email?: string;
-  password?: string;
 }
 
 export function SignInForm({ callbackURL: initialCallbackURL, className }: SignInFormProps) {
@@ -26,25 +23,7 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
   const [loading, setLoading] = useState(false);
   const [unverifiedEmail, setUnverifiedEmail] = useState<string>("");
   const [resending, setResending] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<SignInFieldErrors>({});
-  const [showPassword, setShowPassword] = useState(false);
-
-  const validateForm = (email: string, password: string): boolean => {
-    const errors: SignInFieldErrors = {};
-
-    if (!email) {
-      errors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errors.email = "Please enter a valid email";
-    }
-
-    if (!password) {
-      errors.password = "Password is required";
-    }
-
-    setFieldErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
+  const [fieldErrors, setFieldErrors] = useState<Pick<ValidationErrors, "email" | "password">>({});
 
   const handleEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,7 +34,10 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    if (!validateForm(email, password)) {
+    const errors = validateSignInForm(email, password);
+    setFieldErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
       setLoading(false);
       return;
     }
@@ -149,16 +131,13 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
           >
             Email
           </label>
-          <input
+          <EmailInput
             id="email"
             name="email"
-            type="email"
             autoComplete="email"
             required
-            aria-invalid={!!fieldErrors.email}
+            error={fieldErrors.email}
             aria-describedby={fieldErrors.email ? "email-error" : undefined}
-            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-            placeholder="you@example.com"
           />
           {fieldErrors.email && (
             <p id="email-error" className="mt-1 text-xs text-red-500">
@@ -173,31 +152,13 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
           >
             Password
           </label>
-          <div className="relative">
-            <input
-              id="password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              autoComplete="current-password"
-              required
-              aria-invalid={!!fieldErrors.password}
-              aria-describedby={fieldErrors.password ? "password-error" : undefined}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-              placeholder="••••••••"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? (
-                <EyeSlash className="h-4 w-4" />
-              ) : (
-                <Eye className="h-4 w-4" />
-              )}
-            </button>
-          </div>
+          <PasswordInput
+            id="password"
+            name="password"
+            autoComplete="current-password"
+            error={fieldErrors.password}
+            aria-describedby={fieldErrors.password ? "password-error" : undefined}
+          />
           {fieldErrors.password && (
             <p id="password-error" className="mt-1 text-xs text-red-500">
               {fieldErrors.password}

@@ -6,7 +6,9 @@ import Link from "next/link";
 import { GitHubButton } from "./github-button";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Eye, EyeSlash } from "@phosphor-icons/react";
+import { PasswordInput } from "./password-input";
+import { EmailInput } from "./email-input";
+import { validateRegisterForm, type ValidationErrors } from "@/lib/validation";
 
 interface RegisterFormProps {
   callbackURL?: string;
@@ -18,53 +20,7 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
   const [loading, setLoading] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState<string>("");
   const [resending, setResending] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<{
-    name?: string;
-    email?: string;
-    password?: string;
-    confirmPassword?: string;
-  }>({});
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const validateForm = (
-    name: string,
-    email: string,
-    password: string,
-    confirmPassword: string
-  ): boolean => {
-    const errors: {
-      name?: string;
-      email?: string;
-      password?: string;
-      confirmPassword?: string;
-    } = {};
-
-    if (!name) {
-      errors.name = "Name is required";
-    }
-
-    if (!email) {
-      errors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errors.email = "Please enter a valid email";
-    }
-
-    if (!password) {
-      errors.password = "Password is required";
-    } else if (password.length < 8) {
-      errors.password = "Password must be at least 8 characters";
-    }
-
-    if (!confirmPassword) {
-      errors.confirmPassword = "Please confirm your password";
-    } else if (password !== confirmPassword) {
-      errors.confirmPassword = "Passwords do not match";
-    }
-
-    setFieldErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
+  const [fieldErrors, setFieldErrors] = useState<ValidationErrors>({});
 
   const handleEmailSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,7 +33,10 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
 
-    if (!validateForm(name, email, password, confirmPassword)) {
+    const errors = validateRegisterForm(name, email, password, confirmPassword);
+    setFieldErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
       setLoading(false);
       return;
     }
@@ -216,16 +175,11 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
           >
             Email
           </label>
-          <input
+          <EmailInput
             id="email"
             name="email"
-            type="email"
-            autoComplete="email"
-            required
-            aria-invalid={!!fieldErrors.email}
+            error={fieldErrors.email}
             aria-describedby={fieldErrors.email ? "email-error" : undefined}
-            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-            placeholder="you@example.com"
           />
           {fieldErrors.email && (
             <p id="email-error" className="mt-1 text-xs text-red-500">
@@ -240,32 +194,13 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
           >
             Password
           </label>
-          <div className="relative">
-            <input
-              id="password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              autoComplete="new-password"
-              required
-              minLength={8}
-              aria-invalid={!!fieldErrors.password}
-              aria-describedby={fieldErrors.password ? "password-error" : undefined}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-              placeholder="••••••••"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? (
-                <EyeSlash className="h-4 w-4" />
-              ) : (
-                <Eye className="h-4 w-4" />
-              )}
-            </button>
-          </div>
+          <PasswordInput
+            id="password"
+            name="password"
+            autoComplete="new-password"
+            error={fieldErrors.password}
+            aria-describedby={fieldErrors.password ? "password-error" : undefined}
+          />
           {fieldErrors.password ? (
             <p id="password-error" className="mt-1 text-xs text-red-500">
               {fieldErrors.password}
@@ -283,31 +218,13 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
           >
             Confirm Password
           </label>
-          <div className="relative">
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type={showConfirmPassword ? "text" : "password"}
-              autoComplete="new-password"
-              required
-              aria-invalid={!!fieldErrors.confirmPassword}
-              aria-describedby={fieldErrors.confirmPassword ? "confirm-password-error" : undefined}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-              placeholder="••••••••"
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-            >
-              {showConfirmPassword ? (
-                <EyeSlash className="h-4 w-4" />
-              ) : (
-                <Eye className="h-4 w-4" />
-              )}
-            </button>
-          </div>
+          <PasswordInput
+            id="confirmPassword"
+            name="confirmPassword"
+            autoComplete="new-password"
+            error={fieldErrors.confirmPassword}
+            aria-describedby={fieldErrors.confirmPassword ? "confirm-password-error" : undefined}
+          />
           {fieldErrors.confirmPassword && (
             <p id="confirm-password-error" className="mt-1 text-xs text-red-500">
               {fieldErrors.confirmPassword}

@@ -1,5 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
+// fallow-ignore-next-line unused-export
 export function StatsCardsSkeleton() {
   return (
     <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -13,6 +14,7 @@ export function StatsCardsSkeleton() {
   );
 }
 
+// fallow-ignore-next-line unused-export
 export function CollectionCardSkeleton() {
   return (
     <div className="bg-card border border-border rounded-xl p-5">
@@ -32,6 +34,7 @@ export function CollectionCardSkeleton() {
   );
 }
 
+// fallow-ignore-next-line unused-export
 export function CollectionsSkeleton() {
   return (
     <section>
@@ -51,6 +54,7 @@ export function CollectionsSkeleton() {
   );
 }
 
+// fallow-ignore-next-line unused-export
 export function ItemCardSkeleton() {
   return (
     <div className="bg-card border border-border rounded-xl overflow-hidden p-6">
@@ -69,6 +73,7 @@ export function ItemCardSkeleton() {
   );
 }
 
+// fallow-ignore-next-line unused-export
 export function ItemsSkeleton({ count = 6 }: { count?: number }) {
   return (
     <section>

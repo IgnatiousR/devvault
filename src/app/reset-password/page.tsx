@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { resetPassword } from "@/lib/auth-client";
 import { toast } from "sonner";
-import { Eye, EyeSlash } from "@phosphor-icons/react";
+import { PasswordInput } from "@/components/auth/password-input";
 
 function ResetPasswordContent() {
   const searchParams = useSearchParams();
@@ -16,8 +16,6 @@ function ResetPasswordContent() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   if (error === "INVALID_TOKEN" || !token) {
     return (
@@ -120,31 +118,14 @@ function ResetPasswordContent() {
             >
               New password
             </label>
-            <div className="relative">
-            <input
+            <PasswordInput
               id="newPassword"
               name="newPassword"
-              type={showPassword ? "text" : "password"}
-              autoComplete="new-password"
-              required
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-              placeholder="••••••••"
+              autoComplete="new-password"
+              required
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? (
-                <EyeSlash className="h-4 w-4" />
-              ) : (
-                <Eye className="h-4 w-4" />
-              )}
-            </button>
-            </div>
           </div>
           <div>
             <label
@@ -153,31 +134,14 @@ function ResetPasswordContent() {
             >
               Confirm password
             </label>
-            <div className="relative">
-            <input
+            <PasswordInput
               id="confirmPassword"
               name="confirmPassword"
-              type={showConfirmPassword ? "text" : "password"}
-              autoComplete="new-password"
-              required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 pr-10 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-              placeholder="••••••••"
+              autoComplete="new-password"
+              required
             />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-            >
-              {showConfirmPassword ? (
-                <EyeSlash className="h-4 w-4" />
-              ) : (
-                <Eye className="h-4 w-4" />
-              )}
-            </button>
-            </div>
           </div>
           <button
             type="submit"

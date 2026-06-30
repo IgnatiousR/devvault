@@ -1,3 +1,5 @@
+// fallow-ignore-file unused-file
+// fallow-ignore-file complexity
 import "dotenv/config";
 import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
