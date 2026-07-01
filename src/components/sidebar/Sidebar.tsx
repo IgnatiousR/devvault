@@ -16,7 +16,8 @@ import {
 import { UserMenu } from "@/components/auth/user-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDashboard } from "@/hooks/use-dashboard";
-import type { ItemTypeCount, CollectionWithStats } from "@/lib/types/dashboard";
+import { getColorTextClass } from "@/lib/color-utils";
+import type { ItemTypeCount, CollectionWithStats } from "@/types/dashboard";
 
 function SidebarLogo() {
   return (
@@ -84,8 +85,7 @@ function RecentCollectionsSection({ collections }: { collections: CollectionWith
               className="font-medium text-sm transition-all text-muted-foreground"
             >
               <span
-                className="w-2 h-2 shrink-0 rounded-full bg-current"
-                style={{ color: collection.mostUsedType?.color || '#6b7280' }}
+                className={`w-2 h-2 shrink-0 rounded-full ${getColorTextClass(collection.mostUsedType?.color)}`}
               ></span>
               <span>{collection.name}</span>
             </SidebarMenuButton>
@@ -160,8 +160,7 @@ function ItemTypesMenu({ itemTypes }: { itemTypes: ItemTypeCount[] }) {
               className="font-medium text-sm transition-all text-muted-foreground"
             >
               <span
-                className="material-symbols-outlined opacity-70 text-sm shrink-0 text-current"
-                style={{ color: itemType.color }}
+                className={`material-symbols-outlined opacity-70 text-sm shrink-0 ${getColorTextClass(itemType.color)}`}
               >
                 {itemType.icon}
               </span>

@@ -1,3 +1,4 @@
+// fallow-ignore-next-line unused-files
 export enum ItemType {
   Snippet = "Snippet",
   Prompt = "Prompt",

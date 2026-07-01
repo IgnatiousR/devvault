@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma"
-import { ItemTypeCount } from "@/lib/types/profile"
+import { ItemTypeCount } from "@/types/profile"
 
 export async function getUserProfile(userId: string) {
   const user = await prisma.user.findUnique({

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ProfileData } from "@/lib/types/profile"
+import { ProfileData } from "@/types/profile"
 
 interface UseProfileReturn {
   data: ProfileData | null
@@ -38,7 +38,11 @@ export function useProfile(): UseProfileReturn {
   useEffect(() => {
     const controller = new AbortController()
 
-    fetchProfile()
+    async function load() {
+      await fetchProfile()
+    }
+
+    load()
 
     return () => {
       controller.abort()

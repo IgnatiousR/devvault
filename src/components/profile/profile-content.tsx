@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useSession, signOut } from "@/lib/auth-client"
+import { signOut } from "@/lib/auth-client"
 import { useProfile } from "@/hooks/use-profile"
 import { ProfileContentSkeleton } from "@/components/ui/dashboard-skeletons"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
@@ -35,6 +35,8 @@ import {
   ShieldCheck,
   Warning
 } from "@phosphor-icons/react"
+import { getColorBgAlphaClass, getColorTextClass } from "@/lib/color-utils"
+import { Spinner } from "@/components/ui/spinner"
 
 function getInitials(name: string | null, email: string): string {
   if (name) {
@@ -50,13 +52,13 @@ function getInitials(name: string | null, email: string): string {
 
 export function ProfileContent() {
   const router = useRouter()
-  const { data: session } = useSession()
   const { data: profile, isLoading, error, refetch } = useProfile()
-  
+
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false)
   const [isDeleteAccountOpen, setIsDeleteAccountOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-  
+  const [deleteConfirmation, setDeleteConfirmation] = useState("")
+
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -154,8 +156,11 @@ export function ProfileContent() {
     } finally {
       setIsDeleting(false)
       setIsDeleteAccountOpen(false)
+      setDeleteConfirmation("")
     }
   }
+
+  const isDeleteConfirmationValid = profile?.user?.email && deleteConfirmation === profile.user.email
 
   return (
     <div className="space-y-8">
@@ -219,12 +224,10 @@ export function ProfileContent() {
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className="w-8 h-8 rounded flex items-center justify-center"
-                    style={{ backgroundColor: `${itemType.color}20` }}
+                    className={`w-8 h-8 rounded flex items-center justify-center ${getColorBgAlphaClass(itemType.color)}`}
                   >
                     <span
-                      className="material-symbols-outlined text-lg"
-                      style={{ color: itemType.color }}
+                      className={`material-symbols-outlined text-lg ${getColorTextClass(itemType.color)}`}
                     >
                       {itemType.icon}
                     </span>
@@ -323,7 +326,9 @@ export function ProfileContent() {
             <Button
               onClick={handleChangePassword}
               disabled={isChangingPassword || !currentPassword || !newPassword || !confirmPassword}
+              className="gap-2"
             >
+              {isChangingPassword && <Spinner size="sm" />}
               {isChangingPassword ? "Changing..." : "Change Password"}
             </Button>
           </DialogFooter>
@@ -343,17 +348,34 @@ export function ProfileContent() {
               All your data, including items, collections, and settings will be permanently deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteAccount}
-              disabled={isDeleting}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              {isDeleting ? "Deleting..." : "Delete Account"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
+
+          <div className="space-y-4">
+            <div className="rounded-lg border border-border bg-muted/50 p-4">
+              <p className="text-sm text-muted-foreground">
+                To confirm, type <span className="font-medium text-foreground">{profile?.user?.email}</span> in the box below
+              </p>
+              <Input
+                type="text"
+                value={deleteConfirmation}
+                onChange={(e) => setDeleteConfirmation(e.target.value)}
+                placeholder={profile?.user?.email || ""}
+                className="mt-2"
+                disabled={isDeleting}
+              />
+            </div>
+
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDeleteAccount}
+                disabled={isDeleting || !isDeleteConfirmationValid}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90 gap-2"
+              >
+                {isDeleting && <Spinner size="sm" />}
+                {isDeleting ? "Deleting..." : "Delete Account"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </div>
         </AlertDialogContent>
       </AlertDialog>
     </div>

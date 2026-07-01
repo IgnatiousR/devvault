@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { auth } from "@/lib/auth"
+import { changePasswordSchema } from "@/lib/schemas"
 
 export async function POST(request: Request) {
   try {
@@ -13,21 +14,17 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { currentPassword, newPassword } = body
+    const result = changePasswordSchema.safeParse(body)
 
-    if (!currentPassword || !newPassword) {
+    if (!result.success) {
+      const firstError = result.error.issues[0];
       return NextResponse.json(
-        { error: "Current password and new password are required" },
+        { error: firstError?.message || "Invalid input" },
         { status: 400 }
       )
     }
 
-    if (newPassword.length < 8) {
-      return NextResponse.json(
-        { error: "New password must be at least 8 characters" },
-        { status: 400 }
-      )
-    }
+    const { currentPassword, newPassword } = result.data
 
     // Use Better Auth to update password
     await auth.api.changePassword({

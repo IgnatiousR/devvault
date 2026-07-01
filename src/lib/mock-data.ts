@@ -1,5 +1,5 @@
-import { Collection, Item, ItemType } from "./types";
-import { User } from "./types";
+// fallow-ignore-next-line unused-files
+import { Collection, Item, ItemType, User } from "@/types";
 
 export const collections: Collection[] = [
   { id: "1", name: "Web Utilities", resourceCount: 12, isFavorite: true },
@@ -11,7 +11,8 @@ export const items: Item[] = [
   {
     id: "item-1",
     title: "Tailwind Config",
-    description: "Enterprise level configuration including custom theme tokens for responsive layouts",
+    description:
+      "Enterprise level configuration including custom theme tokens for responsive layouts",
     itemType: ItemType.Snippet,
     collectionId: "1",
     tags: ["#tailwind", "#css", "#frontend"],
@@ -23,7 +24,8 @@ export const items: Item[] = [
   {
     id: "item-2",
     title: "System Architect Prompt",
-    description: "Specialized prompt for designing distributed microservices architecture",
+    description:
+      "Specialized prompt for designing distributed microservices architecture",
     itemType: ItemType.Prompt,
     collectionId: "2",
     tags: ["#ml-prompts", "#architecture"],
@@ -34,7 +36,8 @@ export const items: Item[] = [
   {
     id: "item-3",
     title: "Docker Cleanup",
-    description: "Shell script to purge unused docker volumes, containers, and dangling images",
+    description:
+      "Shell script to purge unused docker volumes, containers, and dangling images",
     itemType: ItemType.Command,
     collectionId: "3",
     tags: ["#docker", "#bash"],
@@ -45,7 +48,8 @@ export const items: Item[] = [
   {
     id: "item-4",
     title: "React Query Notes",
-    description: "Best practices for mutation handling and automatic query invalidation",
+    description:
+      "Best practices for mutation handling and automatic query invalidation",
     itemType: ItemType.Note,
     collectionId: "1",
     tags: ["#react", "#javascript"],
@@ -55,7 +59,8 @@ export const items: Item[] = [
   {
     id: "item-5",
     title: "Design System Link",
-    description: "Master Figma file for the corporate design system and UI components",
+    description:
+      "Master Figma file for the corporate design system and UI components",
     itemType: ItemType.Link,
     collectionId: "1",
     tags: ["#ui", "#figma"],
@@ -65,7 +70,8 @@ export const items: Item[] = [
   {
     id: "item-6",
     title: "Next.js Middleware Auth",
-    description: "Snippet for handling authentication via edge middleware in Next.js",
+    description:
+      "Snippet for handling authentication via edge middleware in Next.js",
     itemType: ItemType.Snippet,
     collectionId: "1",
     tags: ["#nextjs", "#auth"],
@@ -86,7 +92,8 @@ export const items: Item[] = [
   {
     id: "item-8",
     title: "Git Rebase Workflow",
-    description: "Notes on how to properly do an interactive rebase without losing history",
+    description:
+      "Notes on how to properly do an interactive rebase without losing history",
     itemType: ItemType.Note,
     collectionId: "3",
     tags: ["#git", "#workflow"],

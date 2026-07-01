@@ -1,8 +1,8 @@
-// fallow-ignore-file complexity
+// eslint-disable-file @typescript-eslint/no-unused-vars
 import "dotenv/config";
 import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import bcrypt from "bcryptjs";
+import { hashPassword } from "better-auth/crypto";
 
 const connectionString = process.env.DATABASE_URL!;
 const adapter = new PrismaPg(connectionString);
@@ -10,7 +10,7 @@ const prisma = new PrismaClient({ adapter });
 
 async function main() {
   // ─── Demo User ──────────────────────────────────────────────────────
-  const hashedPassword = await bcrypt.hash("12345678", 12);
+  const hashedPassword = await hashPassword("12345678");
   const user = await prisma.user.upsert({
     where: { email: "demo@devvault.io" },
     update: {},

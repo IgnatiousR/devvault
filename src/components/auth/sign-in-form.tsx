@@ -9,7 +9,10 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { PasswordInput } from "./password-input";
 import { EmailInput } from "./email-input";
-import { validateSignInForm, type ValidationErrors } from "@/lib/validation";
+import { signInSchema, type SignInInput } from "@/lib/schemas";
+import { Spinner } from "@/components/ui/spinner";
+
+type FieldErrors = Partial<Record<keyof SignInInput, string>>;
 
 interface SignInFormProps {
   callbackURL?: string;
@@ -23,7 +26,7 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
   const [loading, setLoading] = useState(false);
   const [unverifiedEmail, setUnverifiedEmail] = useState<string>("");
   const [resending, setResending] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<Pick<ValidationErrors, "email" | "password">>({});
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const handleEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,13 +37,22 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    const errors = validateSignInForm(email, password);
-    setFieldErrors(errors);
+    const result = signInSchema.safeParse({ email, password });
 
-    if (Object.keys(errors).length > 0) {
+    if (!result.success) {
+      const errors: FieldErrors = {};
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0] as keyof SignInInput;
+        if (field) {
+          errors[field] = issue.message;
+        }
+      });
+      setFieldErrors(errors);
       setLoading(false);
       return;
     }
+
+    setFieldErrors({});
 
     const { error: signInError } = await signIn.email({
       email,
@@ -176,8 +188,9 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
         <button
           type="submit"
           disabled={loading}
-          className="flex w-full items-center justify-center rounded-md bg-red-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-md bg-red-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
         >
+          {loading && <Spinner size="sm" />}
           {loading ? "Signing in..." : "Sign In"}
         </button>
       </form>

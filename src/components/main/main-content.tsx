@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useDashboard } from "@/hooks/use-dashboard";
 import { DashboardContentSkeleton } from "@/components/ui/dashboard-skeletons";
-import type { CollectionWithStats, DashboardItem } from "@/lib/types/dashboard";
+import type { CollectionWithStats, DashboardItem } from "@/types/dashboard";
 
 function colorToBgClass(color: string): string {
   const map: Record<string, string> = {

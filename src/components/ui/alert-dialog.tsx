@@ -6,8 +6,21 @@ import { Dialog as AlertDialogPrimitive } from "@base-ui/react/dialog"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
-function AlertDialog({ ...props }: AlertDialogPrimitive.Root.Props) {
-  return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const DialogContext = React.createContext<{ onOpenChange?: (...args: any[]) => void } | null>(null)
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function AlertDialog({ onOpenChange, ...props }: any) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleOpenChange = React.useCallback((open: boolean, _eventDetails: unknown) => {
+    onOpenChange?.(open)
+  }, [onOpenChange])
+
+  return (
+    <DialogContext.Provider value={{ onOpenChange: handleOpenChange }}>
+      <AlertDialogPrimitive.Root data-slot="alert-dialog" onOpenChange={handleOpenChange} {...props} />
+    </DialogContext.Provider>
+  )
 }
 
 function AlertDialogPortal({ ...props }: AlertDialogPrimitive.Portal.Props) {
@@ -107,13 +120,20 @@ function AlertDialogAction({
 
 function AlertDialogCancel({
   className,
+  onClick,
   ...props
-}: React.ComponentProps<typeof Button>) {
+}: React.ComponentProps<typeof Button> & { onClick?: () => void }) {
+  const context = React.useContext(DialogContext)
+
   return (
     <Button
       data-slot="alert-dialog-cancel"
       variant="outline"
       className={cn(className)}
+      onClick={(e) => {
+        onClick?.(e)
+        context?.onOpenChange?.(false)
+      }}
       {...props}
     />
   )

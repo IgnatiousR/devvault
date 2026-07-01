@@ -1,15 +1,10 @@
 # Current Feature:
 
 ## Status
-In Progress
+<!-- Not Started | In Progress | Completed -->
 
 ## Goals
 <!-- Goals & requirements -->
-- Create profile page at `/profile` route
-- Display user info: email, name, avatar (GitHub or initials), account creation date
-- Show usage stats: total items, total collections, breakdown by item type
-- Add account actions: change password (email users only), delete account with confirmation
-- Follow existing codebase patterns for data fetching and components
 
 ## References
 - @context/features/auth-phase-1-spec.md

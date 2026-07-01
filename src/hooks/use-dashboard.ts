@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { DashboardData } from "@/lib/types/dashboard";
+import type { DashboardData } from "@/types/dashboard";
 
 interface UseDashboardResult {
   data: DashboardData | null;

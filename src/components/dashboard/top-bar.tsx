@@ -1,22 +1,27 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 
 export function TopBar() {
+  const [shortcut, setShortcut] = useState("Ctrl+K");
+
+  useEffect(() => {
+    const isMac = navigator.userAgent.includes("Mac");
+    setShortcut(isMac ? "⌘K" : "Ctrl+K");
+  }, []);
   return (
     <header className="sticky top-0 h-16 shrink-0 border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 z-40 flex items-center justify-between px-4 md:px-8 transition-all ease-linear duration-200">
-      <div className="flex items-center gap-2 flex-1 max-w-md relative">
+      <div className="flex items-center gap-2 flex-1 max-w-md">
         <SidebarTrigger />
-        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm ml-8">
-          search
-        </span>
-        <Input
-          className="w-full h-9 bg-muted/50 border-input rounded-md pl-9 pr-4 ml-8 text-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring transition-all"
-          placeholder="Search... (⌘K)"
-          type="text"
-        />
+        <InputGroup className="ml-8 h-9 bg-muted/50 rounded-md">
+          <InputGroupInput placeholder={`Search... (${shortcut})`} className="text-sm" />
+          <InputGroupAddon align="inline-start">
+            <span className="material-symbols-outlined text-muted-foreground text-sm">search</span>
+          </InputGroupAddon>
+        </InputGroup>
       </div>
       <div className="flex items-center gap-3">
         <div className="hidden md:flex items-center gap-1 mr-2">

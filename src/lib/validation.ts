@@ -1,3 +1,4 @@
+// fallow-ignore-next-line unused-files
 export interface ValidationErrors {
   name?: string;
   email?: string;
@@ -5,7 +6,6 @@ export interface ValidationErrors {
   confirmPassword?: string;
 }
 
-// fallow-ignore-next-line unused-export
 export function validateEmail(email: string): string | undefined {
   if (!email) {
     return "Email is required";
@@ -16,7 +16,6 @@ export function validateEmail(email: string): string | undefined {
   return undefined;
 }
 
-// fallow-ignore-next-line unused-export
 export function validatePassword(password: string): string | undefined {
   if (!password) {
     return "Password is required";
@@ -27,7 +26,6 @@ export function validatePassword(password: string): string | undefined {
   return undefined;
 }
 
-// fallow-ignore-next-line unused-export
 export function validateName(name: string): string | undefined {
   if (!name) {
     return "Name is required";
@@ -35,10 +33,9 @@ export function validateName(name: string): string | undefined {
   return undefined;
 }
 
-// fallow-ignore-next-line unused-export
 export function validateConfirmPassword(
   password: string,
-  confirmPassword: string
+  confirmPassword: string,
 ): string | undefined {
   if (!confirmPassword) {
     return "Please confirm your password";
@@ -53,7 +50,7 @@ export function validateRegisterForm(
   name: string,
   email: string,
   password: string,
-  confirmPassword: string
+  confirmPassword: string,
 ): ValidationErrors {
   const errors: ValidationErrors = {};
 
@@ -66,7 +63,10 @@ export function validateRegisterForm(
   const passwordError = validatePassword(password);
   if (passwordError) errors.password = passwordError;
 
-  const confirmPasswordError = validateConfirmPassword(password, confirmPassword);
+  const confirmPasswordError = validateConfirmPassword(
+    password,
+    confirmPassword,
+  );
   if (confirmPasswordError) errors.confirmPassword = confirmPasswordError;
 
   return errors;
@@ -74,7 +74,7 @@ export function validateRegisterForm(
 
 export function validateSignInForm(
   email: string,
-  password: string
+  password: string,
 ): Pick<ValidationErrors, "email" | "password"> {
   const errors: Pick<ValidationErrors, "email" | "password"> = {};
 

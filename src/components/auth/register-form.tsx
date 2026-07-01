@@ -8,7 +8,10 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { PasswordInput } from "./password-input";
 import { EmailInput } from "./email-input";
-import { validateRegisterForm, type ValidationErrors } from "@/lib/validation";
+import { registerSchema, type RegisterInput } from "@/lib/schemas";
+import { Spinner } from "@/components/ui/spinner";
+
+type FieldErrors = Partial<Record<keyof RegisterInput, string>>;
 
 interface RegisterFormProps {
   callbackURL?: string;
@@ -20,7 +23,7 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
   const [loading, setLoading] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState<string>("");
   const [resending, setResending] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<ValidationErrors>({});
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const handleEmailSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,13 +36,22 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
 
-    const errors = validateRegisterForm(name, email, password, confirmPassword);
-    setFieldErrors(errors);
+    const result = registerSchema.safeParse({ name, email, password, confirmPassword });
 
-    if (Object.keys(errors).length > 0) {
+    if (!result.success) {
+      const errors: FieldErrors = {};
+      result.error.issues.forEach((issue) => {
+        const field = issue.path[0] as keyof RegisterInput;
+        if (field) {
+          errors[field] = issue.message;
+        }
+      });
+      setFieldErrors(errors);
       setLoading(false);
       return;
     }
+
+    setFieldErrors({});
 
     const { error: signUpError } = await signUp.email({
       name,
@@ -234,8 +246,9 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
         <button
           type="submit"
           disabled={loading}
-          className="flex w-full items-center justify-center rounded-md bg-red-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-md bg-red-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
         >
+          {loading && <Spinner size="sm" />}
           {loading ? "Creating account..." : "Create Account"}
         </button>
       </form>
