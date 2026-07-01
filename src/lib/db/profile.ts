@@ -11,7 +11,7 @@ export async function getUserProfile(userId: string) {
       image: true,
       createdAt: true,
       isPro: true,
-      account: {
+      accounts: {
         select: {
           providerId: true,
         },
@@ -30,7 +30,7 @@ export async function getUserProfile(userId: string) {
     image: user.image,
     createdAt: user.createdAt.toISOString(),
     isPro: user.isPro,
-    hasPassword: user.account.some((acc) => acc.providerId === "credential"),
+    hasPassword: user.accounts.some((acc) => acc.providerId === "credential"),
   }
 }
 

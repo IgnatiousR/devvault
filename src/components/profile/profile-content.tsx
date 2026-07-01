@@ -194,15 +194,15 @@ export function ProfileContent() {
 
       {/* Stats Section */}
       <section className="bg-card border border-border rounded-xl p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-foreground mb-4">Usage Statistics</h2>
+        <h2 className="text-2xl font-semibold text-foreground mb-4">Usage Statistics</h2>
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-muted/50 rounded-lg p-4">
             <p className="text-sm text-muted-foreground mb-1">Total Items</p>
-            <p className="text-3xl font-bold text-foreground">{stats.totalItems}</p>
+            <p className="text-2xl font-bold text-foreground">{stats.totalItems}</p>
           </div>
           <div className="bg-muted/50 rounded-lg p-4">
             <p className="text-sm text-muted-foreground mb-1">Total Collections</p>
-            <p className="text-3xl font-bold text-foreground">{stats.totalCollections}</p>
+            <p className="text-2xl font-bold text-foreground">{stats.totalCollections}</p>
           </div>
         </div>
       </section>
@@ -210,7 +210,7 @@ export function ProfileContent() {
       {/* Item Type Breakdown */}
       {stats.itemTypeBreakdown.length > 0 && (
         <section className="bg-card border border-border rounded-xl p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-foreground mb-4">Items by Type</h2>
+          <h2 className="text-2xl font-semibold text-foreground mb-4">Items by Type</h2>
           <div className="space-y-3">
             {stats.itemTypeBreakdown.map((itemType) => (
               <div
@@ -240,7 +240,7 @@ export function ProfileContent() {
 
       {/* Account Actions */}
       <section className="bg-card border border-border rounded-xl p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-foreground mb-4">Account Actions</h2>
+        <h2 className="text-2xl font-semibold text-foreground mb-4">Account Actions</h2>
         <div className="flex flex-wrap gap-4">
           {user.hasPassword && (
             <Button

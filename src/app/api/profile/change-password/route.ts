@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     }
 
     // Use Better Auth to update password
-    await auth.api.updatePassword({
+    await auth.api.changePassword({
       headers: await headers(),
       body: {
         currentPassword,

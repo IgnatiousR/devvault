@@ -17,11 +17,6 @@ export async function DELETE() {
 
     // Delete user data in the correct order (due to foreign key constraints)
     await prisma.$transaction([
-      // Delete item-tag relations
-      prisma.itemTag.deleteMany({
-        where: { item: { userId } },
-      }),
-      
       // Delete item-collection relations
       prisma.itemCollection.deleteMany({
         where: { item: { userId } },

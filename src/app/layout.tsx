@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "next-themes";
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react";
 
 const jetbrainsMono = JetBrains_Mono({subsets:['latin'],variable:'--font-mono'});
 
@@ -44,6 +46,8 @@ export default function RootLayout({
             {children}
           </TooltipProvider>
           <Toaster richColors position="top-right" />
+          <SpeedInsights />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
