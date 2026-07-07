@@ -1,17 +1,16 @@
 "use client";
 
-import { signUp, sendVerificationEmail } from "@/lib/auth-client";
 import { useState } from "react";
+import { signUp } from "@/lib/auth-client";
 import Link from "next/link";
-import { GitHubButton } from "./github-button";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
 import { PasswordInput } from "./password-input";
 import { EmailInput } from "./email-input";
-import { registerSchema, type RegisterInput } from "@/lib/schemas";
+import { registerSchema } from "@/lib/schemas";
 import { Spinner } from "@/components/ui/spinner";
-
-type FieldErrors = Partial<Record<keyof RegisterInput, string>>;
+import { useAuthForm } from "@/hooks/use-auth-form";
+import { AuthFormField } from "./auth-form-field";
+import { AuthFormDivider } from "./auth-form-divider";
 
 interface RegisterFormProps {
   callbackURL?: string;
@@ -19,11 +18,18 @@ interface RegisterFormProps {
 }
 
 export function RegisterForm({ callbackURL = "/dashboard", className }: RegisterFormProps) {
-  const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState(false);
+  const {
+    error,
+    setError,
+    loading,
+    setLoading,
+    fieldErrors,
+    resending,
+    validate,
+    resendVerificationEmail,
+  } = useAuthForm({ schema: registerSchema });
+
   const [registeredEmail, setRegisteredEmail] = useState<string>("");
-  const [resending, setResending] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const handleEmailSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,22 +42,10 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
 
-    const result = registerSchema.safeParse({ name, email, password, confirmPassword });
-
-    if (!result.success) {
-      const errors: FieldErrors = {};
-      result.error.issues.forEach((issue) => {
-        const field = issue.path[0] as keyof RegisterInput;
-        if (field) {
-          errors[field] = issue.message;
-        }
-      });
-      setFieldErrors(errors);
+    if (!validate({ name, email, password, confirmPassword })) {
       setLoading(false);
       return;
     }
-
-    setFieldErrors({});
 
     const { error: signUpError } = await signUp.email({
       name,
@@ -70,25 +64,6 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
     } else {
       setRegisteredEmail(email);
       setLoading(false);
-    }
-  };
-
-  const handleResendEmail = async () => {
-    setResending(true);
-    const { error } = await sendVerificationEmail({
-      email: registeredEmail,
-      callbackURL: "/dashboard",
-    });
-    setResending(false);
-
-    if (error) {
-      toast.error("Failed to resend verification email", {
-        description: error.message || "Please try again later",
-      });
-    } else {
-      toast.success("Verification email sent", {
-        description: `We've sent a new verification link to ${registeredEmail}`,
-      });
     }
   };
 
@@ -120,7 +95,7 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
         </p>
         <div className="space-y-3">
           <button
-            onClick={handleResendEmail}
+            onClick={() => resendVerificationEmail(registeredEmail)}
             disabled={resending}
             className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent disabled:opacity-50"
           >
@@ -156,13 +131,7 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
       )}
 
       <form onSubmit={handleEmailSignUp} className="space-y-4">
-        <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium mb-1.5"
-          >
-            Name
-          </label>
+        <AuthFormField htmlFor="name" label="Name" error={fieldErrors.name}>
           <input
             id="name"
             name="name"
@@ -174,38 +143,18 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
             className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
             placeholder="John Doe"
           />
-          {fieldErrors.name && (
-            <p id="name-error" className="mt-1 text-xs text-red-500">
-              {fieldErrors.name}
-            </p>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium mb-1.5"
-          >
-            Email
-          </label>
+        </AuthFormField>
+
+        <AuthFormField htmlFor="email" label="Email" error={fieldErrors.email}>
           <EmailInput
             id="email"
             name="email"
             error={fieldErrors.email}
             aria-describedby={fieldErrors.email ? "email-error" : undefined}
           />
-          {fieldErrors.email && (
-            <p id="email-error" className="mt-1 text-xs text-red-500">
-              {fieldErrors.email}
-            </p>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium mb-1.5"
-          >
-            Password
-          </label>
+        </AuthFormField>
+
+        <AuthFormField htmlFor="password" label="Password" error={fieldErrors.password} hint={!fieldErrors.password ? "Must be at least 8 characters" : undefined}>
           <PasswordInput
             id="password"
             name="password"
@@ -213,23 +162,9 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
             error={fieldErrors.password}
             aria-describedby={fieldErrors.password ? "password-error" : undefined}
           />
-          {fieldErrors.password ? (
-            <p id="password-error" className="mt-1 text-xs text-red-500">
-              {fieldErrors.password}
-            </p>
-          ) : (
-            <p className="mt-1 text-xs text-muted-foreground">
-              Must be at least 8 characters
-            </p>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="confirmPassword"
-            className="block text-sm font-medium mb-1.5"
-          >
-            Confirm Password
-          </label>
+        </AuthFormField>
+
+        <AuthFormField htmlFor="confirmPassword" label="Confirm Password" error={fieldErrors.confirmPassword}>
           <PasswordInput
             id="confirmPassword"
             name="confirmPassword"
@@ -237,12 +172,8 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
             error={fieldErrors.confirmPassword}
             aria-describedby={fieldErrors.confirmPassword ? "confirm-password-error" : undefined}
           />
-          {fieldErrors.confirmPassword && (
-            <p id="confirm-password-error" className="mt-1 text-xs text-red-500">
-              {fieldErrors.confirmPassword}
-            </p>
-          )}
-        </div>
+        </AuthFormField>
+
         <button
           type="submit"
           disabled={loading}
@@ -253,18 +184,7 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
         </button>
       </form>
 
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div>
-
-      <GitHubButton callbackURL={callbackURL} />
+      <AuthFormDivider callbackURL={callbackURL} />
 
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}

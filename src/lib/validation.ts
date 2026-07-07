@@ -1,4 +1,3 @@
-// fallow-ignore-next-line unused-files
 export interface ValidationErrors {
   name?: string;
   email?: string;

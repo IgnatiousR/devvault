@@ -101,3 +101,11 @@ Example v4 configuration:
 - No commented-out code unless specified
 - No unused imports or variables
 - Keep functions under 50 lines when possible
+
+## Testing
+
+- Use Vitest for unit testing
+- Test server actions and utilities (not components)
+- Place tests alongside source files: `src/lib/foo.test.ts`
+- Run `npm test` to execute tests, `npm run test:watch` during development
+- Aim for tests covering edge cases and error conditions

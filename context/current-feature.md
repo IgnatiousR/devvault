@@ -2,9 +2,15 @@
 
 ## Status
 <!-- Not Started | In Progress | Completed -->
+Completed
 
 ## Goals
 <!-- Goals & requirements -->
+- Create dynamic route `/items/[type]` (e.g., /items/snippets, /items/notes)
+- Fetch and display items filtered by type
+- Responsive grid of ItemCard components (two columns on md+)
+- Each card has left border colored by item type
+- Follow existing codebase patterns
 
 ## References
 - @context/features/auth-phase-1-spec.md
@@ -16,6 +22,7 @@
 - @context/features/dashboard-items-spec.md
 - @context/features/profile-spec.md
 - @context/features/rate-limiting-spec.md
+- @context/features/item-list-view-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -75,3 +82,6 @@
 - **Phase 18 Started**: Rate limiting on auth endpoints — Upstash Redis + `@upstash/ratelimit`, reusable utility, protection for login/register/forgot-password/reset-password/resend-verification/change-password/delete-account.
 - **Phase 18 Completed**: Rate limiting implemented — created `src/lib/rate-limit.ts` with Upstash Redis sliding window limiter, added rate limiting to Better Auth catch-all route (sign-in.email, sign-up.email, forgetPassword, resetPassword, sendVerificationEmail), and custom profile routes (change-password, delete-account). Configured IP+email keyed limiting for login/resend-verification, IP-only for others. Updated `.env.example`.
 - **Phase 19 Completed**: Auth page redirect for logged-in users — updated `src/proxy.ts` to redirect authenticated users from `/login`, `/register`, and `/forgot-password` to `/dashboard`. `/reset-password` left open (token-gated, not session-gated). Extended proxy matcher to cover guest-only routes.
+- **Phase 20 Started**: Item list view — dynamic route /items/[type] with type-filtered items, responsive ItemCard grid, colored left borders per item type. Spec: item-list-view-spec.md.
+- **Phase 20 Completed**: Item list view implemented — created `/items/[type]` dynamic route with server-side data fetching via `getItemsByType` DB query. Extracted `ItemCard` and `ListItem` into shared `src/components/items/item-card.tsx`. Created `ItemsListContent` client component with grid/list view toggle and responsive 2-column grid. Updated proxy matcher to protect `/items/:path*`. Build passes with dynamic route registered.
+- **Testing Setup Completed**: Installed Vitest for unit testing server actions and utilities. Configured `vitest.config.ts` with path aliases and coverage. Added test scripts to package.json (`npm test`, `npm run test:watch`, `npm run test:coverage`). Created initial tests for validation.ts, color-utils.ts, and rate-limit.ts. Updated workflow in ai-interaction.md and coding-standards.

@@ -10,25 +10,57 @@ const prisma = new PrismaClient({ adapter });
 
 async function main() {
   // ─── Demo User ──────────────────────────────────────────────────────
+  const DEMO_EMAIL = "demo@devvault.io";
   const hashedPassword = await hashPassword("12345678");
-  const user = await prisma.user.upsert({
-    where: { email: "demo@devvault.io" },
-    update: {},
-    create: {
-      email: "demo@devvault.io",
-      name: "Demo User",
-      emailVerified: true,
-      isPro: false,
-      accounts: {
-        create: {
-          accountId: "demo@devvault.io",
-          providerId: "credential",
-          password: hashedPassword,
-        },
+
+  // Find or create the demo user (without account)
+  let user = await prisma.user.findUnique({ where: { email: DEMO_EMAIL } });
+
+  if (user) {
+    // User exists — check if the credential account exists
+    const existingAccount = await prisma.account.findFirst({
+      where: {
+        userId: user.id,
+        accountId: DEMO_EMAIL,
+        providerId: "credential",
       },
+    });
+
+    if (existingAccount) {
+      console.log("Demo user and account already exist — skipping seed");
+      return;
+    }
+
+    // Account missing — clean up children and re-seed
+    console.log("Demo user exists but account missing — cleaning up and re-seeding");
+    await prisma.itemCollection.deleteMany({
+      where: { item: { userId: user.id } },
+    });
+    await prisma.item.deleteMany({ where: { userId: user.id } });
+    await prisma.collection.deleteMany({ where: { userId: user.id } });
+    await prisma.account.deleteMany({ where: { userId: user.id } });
+  } else {
+    // No user — create fresh
+    user = await prisma.user.create({
+      data: {
+        email: DEMO_EMAIL,
+        name: "Demo User",
+        emailVerified: true,
+        isPro: false,
+      },
+    });
+  }
+
+  // Create the credential account
+  await prisma.account.create({
+    data: {
+      accountId: DEMO_EMAIL,
+      providerId: "credential",
+      userId: user.id,
+      password: hashedPassword,
     },
   });
-  console.log("Seeded demo user");
+  console.log("Seeded demo user and credential account");
 
   // ─── System Item Types (Material Symbols icons) ─────────────────────
   const systemItemTypes = [

@@ -1,18 +1,18 @@
 "use client";
 
-import { signIn, sendVerificationEmail } from "@/lib/auth-client";
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { signIn } from "@/lib/auth-client";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { GitHubButton } from "./github-button";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { PasswordInput } from "./password-input";
 import { EmailInput } from "./email-input";
-import { signInSchema, type SignInInput } from "@/lib/schemas";
+import { signInSchema } from "@/lib/schemas";
 import { Spinner } from "@/components/ui/spinner";
-
-type FieldErrors = Partial<Record<keyof SignInInput, string>>;
+import { useAuthForm } from "@/hooks/use-auth-form";
+import { AuthFormField } from "./auth-form-field";
+import { AuthFormDivider } from "./auth-form-divider";
 
 interface SignInFormProps {
   callbackURL?: string;
@@ -22,11 +22,19 @@ interface SignInFormProps {
 export function SignInForm({ callbackURL: initialCallbackURL, className }: SignInFormProps) {
   const searchParams = useSearchParams();
   const callbackURL = initialCallbackURL || searchParams.get("callbackUrl") || "/dashboard";
-  const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState(false);
+
+  const {
+    error,
+    setError,
+    loading,
+    setLoading,
+    fieldErrors,
+    resending,
+    validate,
+    resendVerificationEmail,
+  } = useAuthForm({ schema: signInSchema });
+
   const [unverifiedEmail, setUnverifiedEmail] = useState<string>("");
-  const [resending, setResending] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
   const handleEmailSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,22 +45,10 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    const result = signInSchema.safeParse({ email, password });
-
-    if (!result.success) {
-      const errors: FieldErrors = {};
-      result.error.issues.forEach((issue) => {
-        const field = issue.path[0] as keyof SignInInput;
-        if (field) {
-          errors[field] = issue.message;
-        }
-      });
-      setFieldErrors(errors);
+    if (!validate({ email, password })) {
       setLoading(false);
       return;
     }
-
-    setFieldErrors({});
 
     const { error: signInError } = await signIn.email({
       email,
@@ -71,25 +67,6 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
     } else {
       toast.success("Welcome back!", {
         description: "You have successfully signed in",
-      });
-    }
-  };
-
-  const handleResendEmail = async () => {
-    setResending(true);
-    const { error } = await sendVerificationEmail({
-      email: unverifiedEmail,
-      callbackURL: "/dashboard",
-    });
-    setResending(false);
-
-    if (error) {
-      toast.error("Failed to resend verification email", {
-        description: error.message || "Please try again later",
-      });
-    } else {
-      toast.success("Verification email sent", {
-        description: `We've sent a new verification link to ${unverifiedEmail}`,
       });
     }
   };
@@ -126,7 +103,7 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
             Please check your inbox and click the link to verify your account.
           </p>
           <button
-            onClick={handleResendEmail}
+            onClick={() => resendVerificationEmail(unverifiedEmail)}
             disabled={resending}
             className="text-sm font-medium text-yellow-600 hover:underline disabled:opacity-50"
           >
@@ -136,13 +113,7 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
       )}
 
       <form onSubmit={handleEmailSignIn} className="space-y-4">
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium mb-1.5"
-          >
-            Email
-          </label>
+        <AuthFormField htmlFor="email" label="Email" error={fieldErrors.email}>
           <EmailInput
             id="email"
             name="email"
@@ -151,32 +122,19 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
             error={fieldErrors.email}
             aria-describedby={fieldErrors.email ? "email-error" : undefined}
           />
-          {fieldErrors.email && (
-            <p id="email-error" className="mt-1 text-xs text-red-500">
-              {fieldErrors.email}
-            </p>
-          )}
-        </div>
+        </AuthFormField>
+
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium mb-1.5"
-          >
-            Password
-          </label>
-          <PasswordInput
-            id="password"
-            name="password"
-            autoComplete="current-password"
-            error={fieldErrors.password}
-            aria-describedby={fieldErrors.password ? "password-error" : undefined}
-          />
-          {fieldErrors.password && (
-            <p id="password-error" className="mt-1 text-xs text-red-500">
-              {fieldErrors.password}
-            </p>
-          )}
-          <div className="text-right">
+          <AuthFormField htmlFor="password" label="Password" error={fieldErrors.password}>
+            <PasswordInput
+              id="password"
+              name="password"
+              autoComplete="current-password"
+              error={fieldErrors.password}
+              aria-describedby={fieldErrors.password ? "password-error" : undefined}
+            />
+          </AuthFormField>
+          <div className="text-right mt-2">
             <Link
               href="/forgot-password"
               className="text-xs text-red-500 hover:underline"
@@ -185,6 +143,7 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
             </Link>
           </div>
         </div>
+
         <button
           type="submit"
           disabled={loading}
@@ -195,18 +154,7 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
         </button>
       </form>
 
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div>
-
-      <GitHubButton callbackURL={callbackURL} />
+      <AuthFormDivider callbackURL={callbackURL} />
 
       <p className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}

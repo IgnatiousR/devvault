@@ -105,6 +105,40 @@ export interface ItemTypeCount {
   count: number;
 }
 
+export async function getItemsByType(userId: string, typeName: string): Promise<DashboardItem[]> {
+  const items = await prisma.item.findMany({
+    where: {
+      userId,
+      itemType: { name: { equals: typeName, mode: "insensitive" } },
+    },
+    include: {
+      itemType: true,
+      tags: true,
+      collections: {
+        include: { collection: true },
+        take: 1,
+      },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+
+  return items.map((item) => ({
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    isPinned: item.isPinned,
+    isFavorite: item.isFavorite,
+    itemType: {
+      name: item.itemType.name,
+      icon: item.itemType.icon,
+      color: item.itemType.color,
+    },
+    tags: item.tags.map((t) => t.name),
+    updatedAt: item.updatedAt,
+    collectionName: item.collections[0]?.collection.name ?? null,
+  }));
+}
+
 const ITEM_TYPE_ORDER = ['snippet', 'prompt', 'command', 'note', 'file', 'image', 'link'];
 
 export async function getItemsByTypeCount(userId: string): Promise<ItemTypeCount[]> {

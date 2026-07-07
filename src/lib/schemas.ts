@@ -19,7 +19,3 @@ export const signInSchema = z.object({
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(1, "Password is required"),
 });
-
-export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
-export type RegisterInput = z.infer<typeof registerSchema>;
-export type SignInInput = z.infer<typeof signInSchema>;
