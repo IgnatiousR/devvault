@@ -2,11 +2,23 @@ import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { rateLimit, getIpFromHeaders } from "@/lib/rate-limit"
 
 export async function DELETE() {
   try {
+    const headerList = await headers()
+    const ip = getIpFromHeaders(headerList)
+    const rl = await rateLimit(ip, 3, "1 h")
+    if (!rl.success) {
+      const retryAfter = Math.ceil((rl.reset - Date.now()) / 1000)
+      return NextResponse.json(
+        { error: `Too many attempts. Please try again in ${Math.ceil(retryAfter / 60)} minutes.` },
+        { status: 429, headers: { "Retry-After": String(retryAfter) } }
+      )
+    }
+
     const session = await auth.api.getSession({
-      headers: await headers(),
+      headers: headerList,
     })
 
     if (!session?.user?.id) {

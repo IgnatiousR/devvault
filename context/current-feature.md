@@ -1,4 +1,4 @@
-# Current Feature:
+# Current Feature
 
 ## Status
 <!-- Not Started | In Progress | Completed -->
@@ -15,6 +15,7 @@
 - @context/features/seed-spec.md
 - @context/features/dashboard-items-spec.md
 - @context/features/profile-spec.md
+- @context/features/rate-limiting-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -31,6 +32,7 @@
 
 ## Notes
 <!-- Any extra notes -->
+- Better Auth uses catch-all route `/api/auth/[...all]`; rate limit by sub-path (e.g. `/sign-in.email`, `/sign-up.email`)
 - Neon PostgreSQL with serverless driver (`@prisma/adapter-pg`)
 - Prisma client output: `../generated/prisma`
 - Development and production branches for database
@@ -70,3 +72,6 @@
 - **Phase 16 Completed**: Forgot/Reset password — added `sendResetPassword` callback to Better Auth config, created `ForgotPasswordEmail` React Email template, created `/forgot-password` page with email form and success state, created `/reset-password` page with token-based new password form and validation (8+ chars, confirm match, invalid token handling), added "Forgot password?" link to sign-in form below password field, exported `requestPasswordReset` and `resetPassword` from auth client, fixed stale `.env.example` (Replaced `RESEND_API_KEY` with actual Brevo SMTP vars). Suspense boundary added for `useSearchParams()` in reset-password page.
 - **Phase 17 Started**: Profile page — user info display, usage stats, change password (email users only), delete account with confirmation, protected route.
 - **Phase 17 Completed**: Profile page implemented with user info (avatar, email, name, creation date, Pro badge), usage stats (total items, collections), item type breakdown with icons/colors, change password dialog (email users only), delete account alert dialog with confirmation, protected route via proxy. Created: `/profile` page, `profile-content.tsx` client component, `use-profile` hook, `/api/profile` route, `/api/profile/change-password` route, `/api/profile/delete-account` route, `dialog.tsx` and `alert-dialog.tsx` UI components, profile types and DB queries, profile skeleton. Updated proxy to protect `/profile` route.
+- **Phase 18 Started**: Rate limiting on auth endpoints — Upstash Redis + `@upstash/ratelimit`, reusable utility, protection for login/register/forgot-password/reset-password/resend-verification/change-password/delete-account.
+- **Phase 18 Completed**: Rate limiting implemented — created `src/lib/rate-limit.ts` with Upstash Redis sliding window limiter, added rate limiting to Better Auth catch-all route (sign-in.email, sign-up.email, forgetPassword, resetPassword, sendVerificationEmail), and custom profile routes (change-password, delete-account). Configured IP+email keyed limiting for login/resend-verification, IP-only for others. Updated `.env.example`.
+- **Phase 19 Completed**: Auth page redirect for logged-in users — updated `src/proxy.ts` to redirect authenticated users from `/login`, `/register`, and `/forgot-password` to `/dashboard`. `/reset-password` left open (token-gated, not session-gated). Extended proxy matcher to cover guest-only routes.

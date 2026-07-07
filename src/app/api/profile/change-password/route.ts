@@ -2,9 +2,20 @@ import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import { auth } from "@/lib/auth"
 import { changePasswordSchema } from "@/lib/schemas"
+import { rateLimit, getIpFromHeaders } from "@/lib/rate-limit"
 
 export async function POST(request: Request) {
   try {
+    const ip = getIpFromHeaders(await headers())
+    const rl = await rateLimit(ip, 5, "15 m")
+    if (!rl.success) {
+      const retryAfter = Math.ceil((rl.reset - Date.now()) / 1000)
+      return NextResponse.json(
+        { error: `Too many attempts. Please try again in ${Math.ceil(retryAfter / 60)} minutes.` },
+        { status: 429, headers: { "Retry-After": String(retryAfter) } }
+      )
+    }
+
     const session = await auth.api.getSession({
       headers: await headers(),
     })
