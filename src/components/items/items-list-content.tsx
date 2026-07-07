@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { ItemCard, ListItem } from "@/components/items/item-card";
+import { ItemDrawer } from "@/components/items/item-drawer";
+import { useItemDetail } from "@/hooks/use-item-detail";
 import type { DashboardItem } from "@/types/dashboard";
 
 function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode: "grid" | "list") => void }) {
@@ -38,6 +40,7 @@ interface ItemsListContentProps {
 
 export function ItemsListContent({ typeName, items }: ItemsListContentProps) {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const { data: selectedItem, isLoading: isDrawerLoading, error: drawerError, open: openDrawer, close: closeDrawer, isOpen: isDrawerOpen } = useItemDetail();
 
   return (
     <div>
@@ -58,13 +61,20 @@ export function ItemsListContent({ typeName, items }: ItemsListContentProps) {
         <div className={viewMode === "grid" ? "grid grid-cols-2 md:grid-cols-3 gap-6" : "flex flex-col gap-3"}>
           {items.map(item => (
             viewMode === "grid" ? (
-              <ItemCard key={item.id} item={item} />
+              <ItemCard key={item.id} item={item} onItemClick={openDrawer} />
             ) : (
-              <ListItem key={item.id} item={item} />
+              <ListItem key={item.id} item={item} onItemClick={openDrawer} />
             )
           ))}
         </div>
       )}
+      <ItemDrawer
+        isOpen={isDrawerOpen}
+        onClose={closeDrawer}
+        item={selectedItem}
+        isLoading={isDrawerLoading}
+        error={drawerError}
+      />
     </div>
   );
 }

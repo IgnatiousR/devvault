@@ -24,6 +24,17 @@ export interface DashboardItem {
   collectionName: string | null;
 }
 
+export interface ItemDetail extends DashboardItem {
+  content: string | null;
+  language: string | null;
+  url: string | null;
+  fileUrl: string | null;
+  fileName: string | null;
+  fileSize: number | null;
+  createdAt: string;
+  collections: { id: string; name: string }[];
+}
+
 export interface ItemTypeCount {
   name: string;
   icon: string;

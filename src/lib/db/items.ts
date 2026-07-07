@@ -1,5 +1,37 @@
 import { prisma } from "@/lib/prisma";
 
+export interface UpdateItemData {
+  title: string;
+  description?: string | null;
+  content?: string | null;
+  language?: string | null;
+  url?: string | null;
+  tags: string[];
+}
+
+export interface ItemDetail {
+  id: string;
+  title: string;
+  description: string | null;
+  content: string | null;
+  language: string | null;
+  url: string | null;
+  fileUrl: string | null;
+  fileName: string | null;
+  fileSize: number | null;
+  isPinned: boolean;
+  isFavorite: boolean;
+  itemType: {
+    name: string;
+    icon: string;
+    color: string;
+  };
+  tags: string[];
+  collections: { id: string; name: string }[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface DashboardItem {
   id: string;
   title: string;
@@ -165,4 +197,210 @@ export async function getItemsByTypeCount(userId: string): Promise<ItemTypeCount
     const bIndex = ITEM_TYPE_ORDER.indexOf(b.name.toLowerCase());
     return aIndex - bIndex;
   });
+}
+
+export async function getItemById(itemId: string, userId: string): Promise<ItemDetail | null> {
+  const item = await prisma.item.findFirst({
+    where: { id: itemId, userId },
+    include: {
+      itemType: true,
+      tags: true,
+      collections: {
+        include: { collection: true },
+      },
+    },
+  });
+
+  if (!item) return null;
+
+  return {
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    content: item.content,
+    language: item.language,
+    url: item.url,
+    fileUrl: item.fileUrl,
+    fileName: item.fileName,
+    fileSize: item.fileSize,
+    isPinned: item.isPinned,
+    isFavorite: item.isFavorite,
+    itemType: {
+      name: item.itemType.name,
+      icon: item.itemType.icon,
+      color: item.itemType.color,
+    },
+    tags: item.tags.map((t) => t.name),
+    collections: item.collections.map((ic) => ({
+      id: ic.collection.id,
+      name: ic.collection.name,
+    })),
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+  };
+}
+
+export async function updateItem(
+  itemId: string,
+  userId: string,
+  data: UpdateItemData
+): Promise<ItemDetail | null> {
+  const item = await prisma.item.findFirst({
+    where: { id: itemId, userId },
+  });
+
+  if (!item) return null;
+
+  // Disconnect all existing tags and connect-or-create new ones
+  const tagOperations = data.tags.map((tagName) =>
+    prisma.tag.upsert({
+      where: { name: tagName },
+      update: {},
+      create: { name: tagName },
+    })
+  );
+
+  const tags = await Promise.all(tagOperations);
+  const tagIds = tags.map((tag) => tag.id);
+
+  const updated = await prisma.item.update({
+    where: { id: itemId },
+    data: {
+      title: data.title,
+      description: data.description ?? null,
+      content: data.content ?? null,
+      language: data.language ?? null,
+      url: data.url ?? null,
+      tags: {
+        set: tagIds.map((id) => ({ id })),
+      },
+    },
+    include: {
+      itemType: true,
+      tags: true,
+      collections: {
+        include: { collection: true },
+      },
+    },
+  });
+
+  return {
+    id: updated.id,
+    title: updated.title,
+    description: updated.description,
+    content: updated.content,
+    language: updated.language,
+    url: updated.url,
+    fileUrl: updated.fileUrl,
+    fileName: updated.fileName,
+    fileSize: updated.fileSize,
+    isPinned: updated.isPinned,
+    isFavorite: updated.isFavorite,
+    itemType: {
+      name: updated.itemType.name,
+      icon: updated.itemType.icon,
+      color: updated.itemType.color,
+    },
+    tags: updated.tags.map((t) => t.name),
+    collections: updated.collections.map((ic) => ({
+      id: ic.collection.id,
+      name: ic.collection.name,
+    })),
+    createdAt: updated.createdAt,
+    updatedAt: updated.updatedAt,
+  };
+}
+
+export async function deleteItem(
+  itemId: string,
+  userId: string
+): Promise<boolean> {
+  const item = await prisma.item.findFirst({
+    where: { id: itemId, userId },
+  });
+
+  if (!item) return false;
+
+  await prisma.item.delete({ where: { id: itemId } });
+  return true;
+}
+
+export interface CreateItemData {
+  title: string;
+  description?: string | null;
+  content?: string | null;
+  language?: string | null;
+  url?: string | null;
+  tags: string[];
+  itemTypeId: string;
+}
+
+export async function createItem(
+  userId: string,
+  data: CreateItemData
+): Promise<ItemDetail | null> {
+  const itemType = await prisma.itemType.findFirst({
+    where: { id: data.itemTypeId },
+  });
+
+  if (!itemType) return null;
+
+  const tagOperations = data.tags.map((tagName) =>
+    prisma.tag.upsert({
+      where: { name: tagName },
+      update: {},
+      create: { name: tagName },
+    })
+  );
+
+  const tags = await Promise.all(tagOperations);
+  const tagIds = tags.map((tag) => tag.id);
+
+  const item = await prisma.item.create({
+    data: {
+      title: data.title,
+      description: data.description ?? null,
+      content: data.content ?? null,
+      language: data.language ?? null,
+      url: data.url ?? null,
+      userId,
+      itemTypeId: data.itemTypeId,
+      tags: {
+        connect: tagIds.map((id) => ({ id })),
+      },
+    },
+    include: {
+      itemType: true,
+      tags: true,
+      collections: {
+        include: { collection: true },
+      },
+    },
+  });
+
+  return {
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    content: item.content,
+    language: item.language,
+    url: item.url,
+    fileUrl: item.fileUrl,
+    fileName: item.fileName,
+    fileSize: item.fileSize,
+    isPinned: item.isPinned,
+    isFavorite: item.isFavorite,
+    itemType: {
+      name: item.itemType.name,
+      icon: item.itemType.icon,
+      color: item.itemType.color,
+    },
+    tags: item.tags.map((t) => t.name),
+    collections: item.collections.map((ic) => ({
+      id: ic.collection.id,
+      name: ic.collection.name,
+    })),
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+  };
 }

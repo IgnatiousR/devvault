@@ -38,13 +38,16 @@ function formatRelativeTime(dateString: string): string {
   return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-export function ItemCard({ item }: { item: DashboardItem }) {
+export function ItemCard({ item, onItemClick }: { item: DashboardItem; onItemClick?: (itemId: string) => void }) {
   const colors = getItemColorClasses(item.itemType.name);
   const icon = item.itemType.icon;
   const relativeTime = formatRelativeTime(item.updatedAt);
 
   return (
-    <div className={`relative bg-card border border-border rounded-xl overflow-hidden hover:ring-1 hover:ring-${colors.text.split('-')[1]}/50 ${colors.hoverBorder} transition-all cursor-pointer group`}>
+    <div
+      className={`relative bg-card border border-border rounded-xl overflow-hidden hover:ring-1 hover:ring-${colors.text.split('-')[1]}/50 ${colors.hoverBorder} transition-all cursor-pointer group`}
+      onClick={() => onItemClick?.(item.id)}
+    >
       <div className={`absolute inset-y-4 left-0 w-1 ${colorToBgClass(item.itemType.color)} rounded-r-full`}></div>
       <div className="p-6 pl-8">
         <div className="flex items-center justify-between mb-5">
@@ -76,13 +79,16 @@ export function ItemCard({ item }: { item: DashboardItem }) {
   );
 }
 
-export function ListItem({ item }: { item: DashboardItem }) {
+export function ListItem({ item, onItemClick }: { item: DashboardItem; onItemClick?: (itemId: string) => void }) {
   const colors = getItemColorClasses(item.itemType.name);
   const icon = item.itemType.icon;
   const relativeTime = formatRelativeTime(item.updatedAt);
 
   return (
-    <div className={`relative bg-card border border-border rounded-xl p-4 hover:ring-1 hover:ring-${colors.text.split('-')[1]}/50 ${colors.hoverBorder} transition-all cursor-pointer group flex items-center gap-4`}>
+    <div
+      className={`relative bg-card border border-border rounded-xl p-4 hover:ring-1 hover:ring-${colors.text.split('-')[1]}/50 ${colors.hoverBorder} transition-all cursor-pointer group flex items-center gap-4`}
+      onClick={() => onItemClick?.(item.id)}
+    >
       <div className={`absolute inset-y-4 left-0 w-1 ${colorToBgClass(item.itemType.color)} rounded-r-full`}></div>
       <div className={`w-10 h-10 rounded border border-border ${colors.bg} flex items-center justify-center shrink-0`}>
         <span className={`material-symbols-outlined ${colors.text} text-[18px]`}>

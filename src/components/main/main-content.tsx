@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useDashboard } from "@/hooks/use-dashboard";
+import { useItemDetail } from "@/hooks/use-item-detail";
 import { DashboardContentSkeleton } from "@/components/ui/dashboard-skeletons";
 import { ItemCard, ListItem } from "@/components/items/item-card";
+import { ItemDrawer } from "@/components/items/item-drawer";
 import type { CollectionWithStats, DashboardItem } from "@/types/dashboard";
 
 function colorToBgClass(color: string): string {
@@ -152,9 +154,10 @@ function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode
 interface ItemsSectionProps {
   title: string;
   items: DashboardItem[];
+  onItemClick?: (itemId: string) => void;
 }
 
-function ItemsSection({ title, items }: ItemsSectionProps) {
+function ItemsSection({ title, items, onItemClick }: ItemsSectionProps) {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   return (
@@ -166,9 +169,9 @@ function ItemsSection({ title, items }: ItemsSectionProps) {
       <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "flex flex-col gap-3"}>
         {items.map(item => (
           viewMode === "grid" ? (
-            <ItemCard key={item.id} item={item} />
+            <ItemCard key={item.id} item={item} onItemClick={onItemClick} />
           ) : (
-            <ListItem key={item.id} item={item} />
+            <ListItem key={item.id} item={item} onItemClick={onItemClick} />
           )
         ))}
       </div>
@@ -178,6 +181,7 @@ function ItemsSection({ title, items }: ItemsSectionProps) {
 
 export function MainContent() {
   const { data, isLoading } = useDashboard();
+  const { data: selectedItem, isLoading: isDrawerLoading, error: drawerError, open: openDrawer, close: closeDrawer, isOpen: isDrawerOpen } = useItemDetail();
 
   if (isLoading || !data) {
     return <DashboardContentSkeleton />;
@@ -193,9 +197,16 @@ export function MainContent() {
       />
       <RecentCollectionsSection collections={data.collections} />
       {data.pinnedItems.length > 0 && (
-        <ItemsSection title="Pinned Items" items={data.pinnedItems} />
+        <ItemsSection title="Pinned Items" items={data.pinnedItems} onItemClick={openDrawer} />
       )}
-      <ItemsSection title="Recent Items" items={data.recentItems} />
+      <ItemsSection title="Recent Items" items={data.recentItems} onItemClick={openDrawer} />
+      <ItemDrawer
+        isOpen={isDrawerOpen}
+        onClose={closeDrawer}
+        item={selectedItem}
+        isLoading={isDrawerLoading}
+        error={drawerError}
+      />
     </div>
   );
 }

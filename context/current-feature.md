@@ -6,11 +6,27 @@ Completed
 
 ## Goals
 <!-- Goals & requirements -->
-- Create dynamic route `/items/[type]` (e.g., /items/snippets, /items/notes)
-- Fetch and display items filtered by type
-- Responsive grid of ItemCard components (two columns on md+)
-- Each card has left border colored by item type
-- Follow existing codebase patterns
+- New Item button in top bar opens create dialog
+- Type selector with 5 types: snippet, prompt, command, note, link
+- Dynamic fields based on type: title (required), description, content, language, url, tags
+- Server action `createItemAction` with Zod validation
+- Query function `createItem` in lib/db/items.ts
+- Toast on success, close dialog and refresh
+- Delete button in item drawer action bar
+- AlertDialog confirmation before deleting
+- Server action `deleteItemAction` with ownership check
+- Toast notification on success/error
+- Close drawer and refresh card list after delete
+- Edit button toggles drawer into edit mode inline
+- Action bar replaced with Save and Cancel buttons in edit mode
+- Editable fields: Title (text, required), Description (textarea), Tags (comma-separated input)
+- Type-specific fields: Content (textarea for snippet/prompt/command/note), Language (text for snippet/command), URL (text for link)
+- Non-editable: Item type, Collections, Created/Updated dates
+- Zod validation for all fields before save
+- Server action `updateItem(itemId, data)` in `src/actions/items.ts`
+- Tag handling: disconnect all existing, connect-or-create new
+- Toast notification on save success/error
+- Refresh drawer data and card list after save
 
 ## References
 - @context/features/auth-phase-1-spec.md
@@ -23,6 +39,9 @@ Completed
 - @context/features/profile-spec.md
 - @context/features/rate-limiting-spec.md
 - @context/features/item-list-view-spec.md
+- @context/features/item-drawer-spec.md
+- @context/features/item-drawer-edit-spec.md
+- @context/features/item-create-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -85,3 +104,11 @@ Completed
 - **Phase 20 Started**: Item list view — dynamic route /items/[type] with type-filtered items, responsive ItemCard grid, colored left borders per item type. Spec: item-list-view-spec.md.
 - **Phase 20 Completed**: Item list view implemented — created `/items/[type]` dynamic route with server-side data fetching via `getItemsByType` DB query. Extracted `ItemCard` and `ListItem` into shared `src/components/items/item-card.tsx`. Created `ItemsListContent` client component with grid/list view toggle and responsive 2-column grid. Updated proxy matcher to protect `/items/:path*`. Build passes with dynamic route registered.
 - **Testing Setup Completed**: Installed Vitest for unit testing server actions and utilities. Configured `vitest.config.ts` with path aliases and coverage. Added test scripts to package.json (`npm test`, `npm run test:watch`, `npm run test:coverage`). Created initial tests for validation.ts, color-utils.ts, and rate-limit.ts. Updated workflow in ai-interaction.md and coding-standards.
+- **Phase 21 Started**: Item drawer — right-side slide-in detail view using shadcn Sheet, opens on ItemCard click, action bar (Favorite, Pin, Copy, Edit, Delete), client wrapper for state, fetch on click via API, skeleton loading. Spec: item-drawer-spec.md.
+- **Phase 21 Completed**: Item drawer implemented — added `ItemDetail` type to `src/types/dashboard.ts`, created `getItemById` DB query in `src/lib/db/items.ts`, created `/api/items/[id]` API route with auth check, added `onItemClick` prop to `ItemCard` and `ListItem` components, created `useItemDetail` hook for client-side state management, created `ItemDrawer` component with shadcn Sheet (right-side slide-in), action bar (Favorite star, Pin, Copy, Edit, Delete), skeleton loading state, and metadata display (type, language, tags, collections). Wired up drawer in `MainContent` (dashboard) and `ItemsListContent` (items list page). TypeScript check passed. Spec: item-drawer-spec.md.
+- **Phase 22 Started**: Item drawer edit mode — inline edit toggle, Save/Cancel action bar, editable fields (Title, Description, Tags, Content, Language, URL), Zod validation, server action `updateItem`, tag disconnect/reconnect on save, toast notifications. Spec: item-drawer-edit-spec.md.
+- **Phase 22 Completed**: Item drawer edit mode implemented — added `UpdateItemData` interface and `updateItem` DB query function to `src/lib/db/items.ts` (disconnects all existing tags, connects/creates new ones via upsert). Created `src/actions/items.ts` with `updateItemAction` server action using Zod validation schema (title required, description/content/language nullable, url validated, tags array). Updated `ItemDrawer` component with edit mode state, form inputs for Title (inline), Description (textarea), Content (textarea for snippet/prompt/command/note), Language (input for snippet/command), URL (input for link), Tags (comma-separated input). Action bar toggles between Favorite/Pin/Copy/Edit/Delete (view mode) and Cancel/Save (edit mode). Toast notifications on save success/error. Calls `router.refresh()` after save to update card list. TypeScript check passed. Spec: item-drawer-edit-spec.md.
+- **Phase 23 Started**: Item delete functionality — delete button in drawer action bar, AlertDialog confirmation, `deleteItemAction` server action, toast notifications, close drawer and refresh after delete.
+- **Phase 23 Completed**: Item delete implemented — added `deleteItem` DB query function to `src/lib/db/items.ts` with ownership check. Added `deleteItemAction` server action to `src/actions/items.ts` with Zod validation. Updated `ItemDrawer` component with AlertDialog confirmation dialog (title, description, Cancel/Delete buttons), delete handler that calls server action, shows toast, closes drawer, and refreshes page. TypeScript check passed.
+- **Phase 24 Started**: Item create dialog — "New Item" button in top bar opens Dialog, type selector (snippet/prompt/command/note/link), dynamic fields based on type, `createItemAction` server action, `createItem` DB function, toast on success. Spec: item-create-spec.md.
+- **Phase 24 Completed**: Item create implemented — added `CreateItemData` interface and `createItem` DB function to `src/lib/db/items.ts` (upserts tags, creates item with relations). Added `createItemAction` server action to `src/actions/items.ts` with Zod validation (title required, url validated for link type, tags array). Created `src/components/dashboard/create-item-dialog.tsx` with type selector (5 types with icons), dynamic fields (title, description, content, language, url, tags), form state, loading state, and toast notifications. Updated `src/components/dashboard/top-bar.tsx` to wire "New Item" button to open dialog. TypeScript check passed. Spec: item-create-spec.md.
