@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { CodeEditor } from "@/components/ui/code-editor";
+import { MarkdownEditor } from "@/components/ui/markdown-editor";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   AlertDialog,
@@ -66,9 +68,10 @@ function formatDate(dateString: string): string {
   });
 }
 
-const EDITABLE_TYPES = ["snippet", "prompt", "command", "note"];
-const LANGUAGE_TYPES = ["snippet", "command"];
-const URL_TYPES = ["link"];
+const EDITABLE_TYPES = ["Snippet", "Prompt", "Command", "Note"];
+const CODE_TYPES = ["Snippet", "Command"];
+const LANGUAGE_TYPES = ["Snippet", "Command"];
+const URL_TYPES = ["Link"];
 
 function DrawerSkeleton() {
   return (
@@ -129,6 +132,19 @@ export function ItemDrawer({
     url: item?.url || "",
     tags: item?.tags.join(", ") || "",
   }));
+
+  useEffect(() => {
+    if (item && !isEditing) {
+      setEditData({
+        title: item.title,
+        description: item.description || "",
+        content: item.content || "",
+        language: item.language || "",
+        url: item.url || "",
+        tags: item.tags.join(", "),
+      });
+    }
+  }, [item, isEditing]);
 
   const handleCancel = () => {
     if (item) {
@@ -200,386 +216,420 @@ export function ItemDrawer({
 
   return (
     <>
-    <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent
-        side="right"
-        className="max-w-full w-[700px] sm:w-[700px] p-0 gap-0"
-        showCloseButton={!isEditing}
-      >
-        <div className="flex-1 overflow-y-auto">
-          {isLoading && <DrawerSkeleton />}
+      <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <SheetContent
+          side="right"
+          className="w-full sm:w-[600px] data-[side=right]:sm:max-w-[600px] p-0 gap-0"
+          showCloseButton={!isEditing}
+        >
+          <div className="flex-1 overflow-y-auto">
+            {isLoading && <DrawerSkeleton />}
 
-          {error && (
-            <div className="p-6 text-center text-destructive">
-              <p>{error}</p>
-            </div>
-          )}
+            {error && (
+              <div className="p-6 text-center text-destructive">
+                <p>{error}</p>
+              </div>
+            )}
 
-          {!isLoading && !error && item && (
-            <>
-              {/* Header: Icon + Title + Tags */}
-              <div className="p-6 pb-4">
-                <div className="flex items-start gap-3">
-                  <div
-                    className={`w-10 h-10 rounded-lg ${colors?.iconBg} flex items-center justify-center shrink-0`}
-                  >
-                    <span
-                      className={`material-symbols-outlined ${colors?.text}`}
+            {!isLoading && !error && item && (
+              <>
+                {/* Header: Icon + Title + Tags */}
+                <div className="p-6 pb-4">
+                  <div className="flex items-start gap-3">
+                    <div
+                      className={`w-10 h-10 rounded-lg ${colors?.iconBg} flex items-center justify-center shrink-0`}
                     >
-                      {item.itemType.icon}
-                    </span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    {isEditing ? (
-                      <Input
-                        value={editData.title}
-                        onChange={(e) =>
-                          setEditData({ ...editData, title: e.target.value })
-                        }
-                        className="text-lg font-bold h-auto py-0 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0"
-                        placeholder="Title"
-                      />
-                    ) : (
-                      <SheetTitle className="text-lg font-bold leading-tight">
-                        {item.title}
-                      </SheetTitle>
-                    )}
-                    <div className="flex flex-wrap gap-1.5 mt-2">
-                      <span className="px-2 py-0.5 rounded bg-secondary text-secondary-foreground text-xs font-medium">
-                        {item.itemType.name}
+                      <span
+                        className={`material-symbols-outlined ${colors?.text}`}
+                      >
+                        {item.itemType.icon}
                       </span>
-                      {!isEditing && item.language && (
-                        <span className="px-2 py-0.5 rounded bg-secondary text-secondary-foreground text-xs font-medium">
-                          {item.language}
-                        </span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      {isEditing ? (
+                        <Input
+                          value={editData.title}
+                          onChange={(e) =>
+                            setEditData({ ...editData, title: e.target.value })
+                          }
+                          className="text-lg font-bold h-auto py-0 border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0"
+                          placeholder="Title"
+                        />
+                      ) : (
+                        <SheetTitle className="text-lg font-bold leading-tight">
+                          {item.title}
+                        </SheetTitle>
                       )}
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        <span className="px-2 py-0.5 rounded bg-secondary text-secondary-foreground text-xs font-medium">
+                          {item.itemType.name}
+                        </span>
+                        {!isEditing && item.language && (
+                          <span className="px-2 py-0.5 rounded bg-secondary text-secondary-foreground text-xs font-medium">
+                            {item.language}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Action Bar */}
-              <div className="px-6 pb-4 flex items-center gap-1">
-                {isEditing ? (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="gap-1.5 text-muted-foreground"
-                      onClick={handleCancel}
-                      disabled={isSaving}
-                    >
-                      <span className="material-symbols-outlined text-lg">
-                        close
-                      </span>
-                      <span className="text-xs">Cancel</span>
-                    </Button>
-                    <div className="flex-1" />
-                    <Button
-                      size="sm"
-                      className="gap-1.5"
-                      onClick={handleSave}
-                      disabled={isSaving || !editData.title.trim()}
-                    >
-                      <span className="material-symbols-outlined text-lg">
-                        check
-                      </span>
-                      <span className="text-xs">
-                        {isSaving ? "Saving..." : "Save"}
-                      </span>
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className={`gap-1.5 ${item.isFavorite ? "text-yellow-500" : "text-muted-foreground"}`}
-                    >
-                      <span
-                        className="material-symbols-outlined text-lg"
-                        style={
-                          item.isFavorite
-                            ? { fontVariationSettings: "'FILL' 1" }
-                            : undefined
-                        }
-                      >
-                        star
-                      </span>
-                      <span className="text-xs">Favorite</span>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="gap-1.5 text-muted-foreground"
-                    >
-                      <span className="material-symbols-outlined text-lg">
-                        push_pin
-                      </span>
-                      <span className="text-xs">Pin</span>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="gap-1.5 text-muted-foreground"
-                    >
-                      <span className="material-symbols-outlined text-lg">
-                        content_copy
-                      </span>
-                      <span className="text-xs">Copy</span>
-                    </Button>
-                    <div className="flex-1" />
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="gap-1.5 text-muted-foreground"
-                      onClick={() => setIsEditing(true)}
-                    >
-                      <span className="material-symbols-outlined text-lg">
-                        edit
-                      </span>
-                      <span className="text-xs">Edit</span>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-destructive"
-                      onClick={() => setIsDeleteDialogOpen(true)}
-                    >
-                      <span className="material-symbols-outlined text-lg">
-                        delete
-                      </span>
-                    </Button>
-                  </>
-                )}
-              </div>
-
-              <div className="border-t border-border" />
-
-              {/* Content */}
-              <div className="p-6 space-y-6">
-                {/* Description */}
-                <div className="space-y-2">
-                  <h3 className="text-sm font-medium text-foreground">
-                    Description
-                  </h3>
+                {/* Action Bar */}
+                <div className="px-6 pb-4 flex items-center gap-1">
                   {isEditing ? (
-                    <Textarea
-                      value={editData.description}
-                      onChange={(e) =>
-                        setEditData({
-                          ...editData,
-                          description: e.target.value,
-                        })
-                      }
-                      className="min-h-[80px] resize-none"
-                      placeholder="Add a description..."
-                    />
-                  ) : item.description ? (
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {item.description}
-                    </p>
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="gap-1.5 text-muted-foreground"
+                        onClick={handleCancel}
+                        disabled={isSaving}
+                      >
+                        <span className="material-symbols-outlined text-lg">
+                          close
+                        </span>
+                        <span className="text-xs">Cancel</span>
+                      </Button>
+                      <div className="flex-1" />
+                      <Button
+                        size="sm"
+                        className="gap-1.5"
+                        onClick={handleSave}
+                        disabled={isSaving || !editData.title.trim()}
+                      >
+                        <span className="material-symbols-outlined text-lg">
+                          check
+                        </span>
+                        <span className="text-xs">
+                          {isSaving ? "Saving..." : "Save"}
+                        </span>
+                      </Button>
+                    </>
                   ) : (
-                    <p className="text-sm text-muted-foreground/50 italic">
-                      No description
-                    </p>
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={`gap-1.5 ${item.isFavorite ? "text-yellow-500" : "text-muted-foreground"}`}
+                      >
+                        <span
+                          className="material-symbols-outlined text-lg"
+                          style={
+                            item.isFavorite
+                              ? { fontVariationSettings: "'FILL' 1" }
+                              : undefined
+                          }
+                        >
+                          star
+                        </span>
+                        <span className="text-xs">Favorite</span>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="gap-1.5 text-muted-foreground"
+                      >
+                        <span className="material-symbols-outlined text-lg">
+                          push_pin
+                        </span>
+                        <span className="text-xs">Pin</span>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="gap-1.5 text-muted-foreground"
+                      >
+                        <span className="material-symbols-outlined text-lg">
+                          content_copy
+                        </span>
+                        <span className="text-xs">Copy</span>
+                      </Button>
+                      <div className="flex-1" />
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="gap-1.5 text-muted-foreground"
+                        onClick={() => setIsEditing(true)}
+                      >
+                        <span className="material-symbols-outlined text-lg">
+                          edit
+                        </span>
+                        <span className="text-xs">Edit</span>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-destructive"
+                        onClick={() => setIsDeleteDialogOpen(true)}
+                      >
+                        <span className="material-symbols-outlined text-lg">
+                          delete
+                        </span>
+                      </Button>
+                    </>
                   )}
                 </div>
 
-                {/* Code Content */}
-                {EDITABLE_TYPES.includes(item.itemType.name) && (
+                <div className="border-t border-border" />
+
+                {/* Content */}
+                <div className="p-6 space-y-6">
+                  {/* Description */}
                   <div className="space-y-2">
                     <h3 className="text-sm font-medium text-foreground">
-                      Content
+                      Description
                     </h3>
                     {isEditing ? (
                       <Textarea
-                        value={editData.content}
+                        value={editData.description}
                         onChange={(e) =>
-                          setEditData({ ...editData, content: e.target.value })
+                          setEditData({
+                            ...editData,
+                            description: e.target.value,
+                          })
                         }
-                        className="min-h-[150px] font-mono text-sm resize-none"
-                        placeholder="Add content..."
+                        className="min-h-[80px] resize-none"
+                        placeholder="Add a description..."
                       />
-                    ) : item.content ? (
-                      <div className="bg-muted/50 rounded-lg border border-border p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words overflow-hidden">
-                        {item.content}
-                      </div>
+                    ) : item.description ? (
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {item.description}
+                      </p>
                     ) : (
                       <p className="text-sm text-muted-foreground/50 italic">
-                        No content
+                        No description
                       </p>
                     )}
                   </div>
-                )}
 
-                {/* Language */}
-                {LANGUAGE_TYPES.includes(item.itemType.name) && (
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-foreground">
-                      Language
-                    </h3>
-                    {isEditing ? (
-                      <Input
-                        value={editData.language}
-                        onChange={(e) =>
-                          setEditData({ ...editData, language: e.target.value })
-                        }
-                        placeholder="e.g., javascript, python"
-                      />
-                    ) : item.language ? (
-                      <span className="text-sm text-muted-foreground">
-                        {item.language}
-                      </span>
-                    ) : (
-                      <p className="text-sm text-muted-foreground/50 italic">
-                        No language
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {/* URL */}
-                {URL_TYPES.includes(item.itemType.name) && (
-                  <div className="space-y-2">
-                    <h3 className="text-sm font-medium text-foreground">URL</h3>
-                    {isEditing ? (
-                      <Input
-                        value={editData.url}
-                        onChange={(e) =>
-                          setEditData({ ...editData, url: e.target.value })
-                        }
-                        placeholder="https://..."
-                      />
-                    ) : item.url ? (
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-primary hover:underline break-all"
-                      >
-                        {item.url}
-                      </a>
-                    ) : (
-                      <p className="text-sm text-muted-foreground/50 italic">
-                        No URL
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {/* Tags */}
-                <div className="space-y-2">
-                  <div className="flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-sm text-muted-foreground">
-                      tag
-                    </span>
-                    <h3 className="text-sm font-medium text-foreground">
-                      Tags
-                    </h3>
-                  </div>
-                  {isEditing ? (
-                    <Input
-                      value={editData.tags}
-                      onChange={(e) =>
-                        setEditData({ ...editData, tags: e.target.value })
-                      }
-                      placeholder="Comma-separated tags"
-                    />
-                  ) : item.tags.length > 0 ? (
-                    <div className="flex flex-wrap gap-2">
-                      {item.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2.5 py-1 rounded bg-secondary text-secondary-foreground text-xs font-medium"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                  {/* Code Content */}
+                  {EDITABLE_TYPES.includes(item.itemType.name) && (
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-foreground">
+                        Content
+                      </h3>
+                      {isEditing ? (
+                        CODE_TYPES.includes(item.itemType.name) ? (
+                          <CodeEditor
+                            value={editData.content}
+                            onChange={(v) =>
+                              setEditData({
+                                ...editData,
+                                content: v,
+                              })
+                            }
+                            language={item.language || "plaintext"}
+                            placeholder="Add content..."
+                          />
+                        ) : (
+                          <MarkdownEditor
+                            value={editData.content}
+                            onChange={(v) =>
+                              setEditData({
+                                ...editData,
+                                content: v,
+                              })
+                            }
+                            placeholder="Add content..."
+                          />
+                        )
+                      ) : item.content ? (
+                        CODE_TYPES.includes(item.itemType.name) ? (
+                          <CodeEditor
+                            value={item.content}
+                            language={item.language || "plaintext"}
+                            readOnly
+                          />
+                        ) : (
+                          <MarkdownEditor
+                            value={item.content}
+                            readOnly
+                          />
+                        )
+                      ) : (
+                        <p className="text-sm text-muted-foreground/50 italic">
+                          No content
+                        </p>
+                      )}
                     </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground/50 italic">
-                      No tags
-                    </p>
                   )}
-                </div>
 
-                {/* Collections (read-only) */}
-                {item.collections.length > 0 && (
+                  {/* Language */}
+                  {LANGUAGE_TYPES.includes(item.itemType.name) && (
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-foreground">
+                        Language
+                      </h3>
+                      {isEditing ? (
+                        <Input
+                          value={editData.language}
+                          onChange={(e) =>
+                            setEditData({
+                              ...editData,
+                              language: e.target.value,
+                            })
+                          }
+                          placeholder="e.g., javascript, python"
+                        />
+                      ) : item.language ? (
+                        <span className="text-sm text-muted-foreground">
+                          {item.language}
+                        </span>
+                      ) : (
+                        <p className="text-sm text-muted-foreground/50 italic">
+                          No language
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* URL */}
+                  {URL_TYPES.includes(item.itemType.name) && (
+                    <div className="space-y-2">
+                      <h3 className="text-sm font-medium text-foreground">
+                        URL
+                      </h3>
+                      {isEditing ? (
+                        <Input
+                          value={editData.url}
+                          onChange={(e) =>
+                            setEditData({ ...editData, url: e.target.value })
+                          }
+                          placeholder="https://..."
+                        />
+                      ) : item.url ? (
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-primary hover:underline break-all"
+                        >
+                          {item.url}
+                        </a>
+                      ) : (
+                        <p className="text-sm text-muted-foreground/50 italic">
+                          No URL
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Tags */}
                   <div className="space-y-2">
                     <div className="flex items-center gap-1.5">
                       <span className="material-symbols-outlined text-sm text-muted-foreground">
-                        folder
+                        tag
                       </span>
                       <h3 className="text-sm font-medium text-foreground">
-                        Collections
+                        Tags
                       </h3>
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {item.collections.map((collection) => (
-                        <span
-                          key={collection.id}
-                          className="px-2.5 py-1 rounded bg-secondary text-secondary-foreground text-xs font-medium"
-                        >
-                          {collection.name}
-                        </span>
-                      ))}
-                    </div>
+                    {isEditing ? (
+                      <Input
+                        value={editData.tags}
+                        onChange={(e) =>
+                          setEditData({ ...editData, tags: e.target.value })
+                        }
+                        placeholder="Comma-separated tags"
+                      />
+                    ) : item.tags.length > 0 ? (
+                      <div className="flex flex-wrap gap-2">
+                        {item.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="px-2.5 py-1 rounded bg-secondary text-secondary-foreground text-xs font-medium"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground/50 italic">
+                        No tags
+                      </p>
+                    )}
                   </div>
-                )}
 
-                {/* Details (read-only) */}
-                <div className="space-y-2">
-                  <div className="flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-sm text-muted-foreground">
-                      info
-                    </span>
-                    <h3 className="text-sm font-medium text-foreground">
-                      Details
-                    </h3>
-                  </div>
-                  <div className="space-y-1.5 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Created</span>
-                      <span className="text-foreground">
-                        {formatDate(item.createdAt)}
-                      </span>
+                  {/* Collections (read-only) */}
+                  {item.collections.length > 0 && (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-sm text-muted-foreground">
+                          folder
+                        </span>
+                        <h3 className="text-sm font-medium text-foreground">
+                          Collections
+                        </h3>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {item.collections.map((collection) => (
+                          <span
+                            key={collection.id}
+                            className="px-2.5 py-1 rounded bg-secondary text-secondary-foreground text-xs font-medium"
+                          >
+                            {collection.name}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Updated</span>
-                      <span className="text-foreground">
-                        {formatDate(item.updatedAt)}
+                  )}
+
+                  {/* Details (read-only) */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-sm text-muted-foreground">
+                        info
                       </span>
+                      <h3 className="text-sm font-medium text-foreground">
+                        Details
+                      </h3>
+                    </div>
+                    <div className="space-y-1.5 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Created</span>
+                        <span className="text-foreground">
+                          {formatDate(item.createdAt)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Updated</span>
+                        <span className="text-foreground">
+                          {formatDate(item.updatedAt)}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </>
-          )}
-        </div>
-      </SheetContent>
-    </Sheet>
+              </>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
 
-    <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Delete item</AlertDialogTitle>
-          <AlertDialogDescription>
-            Are you sure you want to delete &quot;{item?.title}&quot;? This action cannot be undone.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            variant="destructive"
-            onClick={handleDelete}
-            disabled={isDeleting}
-          >
-            {isDeleting ? "Deleting..." : "Delete"}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete item</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete &quot;{item?.title}&quot;? This
+              action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

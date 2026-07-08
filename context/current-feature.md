@@ -6,27 +6,18 @@ Completed
 
 ## Goals
 <!-- Goals & requirements -->
-- New Item button in top bar opens create dialog
-- Type selector with 5 types: snippet, prompt, command, note, link
-- Dynamic fields based on type: title (required), description, content, language, url, tags
-- Server action `createItemAction` with Zod validation
-- Query function `createItem` in lib/db/items.ts
-- Toast on success, close dialog and refresh
-- Delete button in item drawer action bar
-- AlertDialog confirmation before deleting
-- Server action `deleteItemAction` with ownership check
-- Toast notification on success/error
-- Close drawer and refresh card list after delete
-- Edit button toggles drawer into edit mode inline
-- Action bar replaced with Save and Cancel buttons in edit mode
-- Editable fields: Title (text, required), Description (textarea), Tags (comma-separated input)
-- Type-specific fields: Content (textarea for snippet/prompt/command/note), Language (text for snippet/command), URL (text for link)
-- Non-editable: Item type, Collections, Created/Updated dates
-- Zod validation for all fields before save
-- Server action `updateItem(itemId, data)` in `src/actions/items.ts`
-- Tag handling: disconnect all existing, connect-or-create new
-- Toast notification on save success/error
-- Refresh drawer data and card list after save
+- Create MarkdownEditor component with tabbed interface (Write/Preview)
+- Replace Textarea with MarkdownEditor for notes and prompts only
+- Keep CodeEditor for snippets and commands (no changes)
+- Use react-markdown with remark-gfm for GitHub Flavored Markdown support
+- Match existing dark theme styling (bg-[#1e1e1e] container, bg-[#2d2d2d] header)
+- Add copy button in header (same style as CodeEditor)
+- Support both display (readonly) and edit modes
+- In readonly mode, only show Preview tab
+- In edit mode, default to Write tab with Preview available
+- Headings, code blocks, inline code, lists, blockquotes, links, tables styled properly
+- Use custom CSS class (.markdown-preview) for reliable dark mode styling
+- Fluid height with max 400px, matching CodeEditor behavior
 
 ## References
 - @context/features/auth-phase-1-spec.md
@@ -42,6 +33,8 @@ Completed
 - @context/features/item-drawer-spec.md
 - @context/features/item-drawer-edit-spec.md
 - @context/features/item-create-spec.md
+- @context/features/code-editor-spec.md
+- @context/features/markdown-editor-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -112,3 +105,7 @@ Completed
 - **Phase 23 Completed**: Item delete implemented — added `deleteItem` DB query function to `src/lib/db/items.ts` with ownership check. Added `deleteItemAction` server action to `src/actions/items.ts` with Zod validation. Updated `ItemDrawer` component with AlertDialog confirmation dialog (title, description, Cancel/Delete buttons), delete handler that calls server action, shows toast, closes drawer, and refreshes page. TypeScript check passed.
 - **Phase 24 Started**: Item create dialog — "New Item" button in top bar opens Dialog, type selector (snippet/prompt/command/note/link), dynamic fields based on type, `createItemAction` server action, `createItem` DB function, toast on success. Spec: item-create-spec.md.
 - **Phase 24 Completed**: Item create implemented — added `CreateItemData` interface and `createItem` DB function to `src/lib/db/items.ts` (upserts tags, creates item with relations). Added `createItemAction` server action to `src/actions/items.ts` with Zod validation (title required, url validated for link type, tags array). Created `src/components/dashboard/create-item-dialog.tsx` with type selector (5 types with icons), dynamic fields (title, description, content, language, url, tags), form state, loading state, and toast notifications. Updated `src/components/dashboard/top-bar.tsx` to wire "New Item" button to open dialog. TypeScript check passed. Spec: item-create-spec.md.
+- **Phase 25 Started**: Code editor — Monaco Editor component for snippets/commands, dark theme, macOS window dots, copy button, language display, readonly/edit modes, fluid height with 400px max. Spec: code-editor-spec.md.
+- **Phase 25 Completed**: Code editor implemented — installed `@monaco-editor/react`, created `CodeEditor` component (`src/components/ui/code-editor.tsx`) with Monaco Editor dark theme, macOS-style window dots (red/yellow/green), copy button in header, language display, readonly/edit modes, fluid height with 400px max, custom scrollbar. Integrated into `ItemDrawer` for snippets/commands (view + edit modes) and `CreateItemDialog` for snippets/commands (edit mode). Added custom scrollbar CSS to `globals.css`. Build passes. Spec: code-editor-spec.md.
+- **Phase 26 Started**: Markdown editor — MarkdownEditor component with Write/Preview tabs, react-markdown + remark-gfm, dark theme styling, copy button, readonly/edit modes, custom .markdown-preview CSS. Replaces Textarea for notes and prompts. Spec: markdown-editor-spec.md.
+- **Phase 26 Completed**: Markdown editor implemented — installed `react-markdown`, `remark-gfm`, and `rehype-sanitize`. Created `MarkdownEditor` component (`src/components/ui/markdown-editor.tsx`) with Write/Preview tabs, react-markdown + remark-gfm for GFM support, rehype-sanitize for XSS protection, dark theme styling matching CodeEditor, copy button in header, readonly/edit modes, fluid height with 400px max. Added comprehensive `.markdown-preview` CSS styles for dark mode (headings, code blocks, inline code, lists, blockquotes, links, tables). Integrated into `ItemDrawer` for notes/prompts (edit + view modes) and `CreateItemDialog` for notes/prompts. Snippets/commands continue using CodeEditor. Build passes. Spec: markdown-editor-spec.md.
