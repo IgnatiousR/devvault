@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useState } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -14,10 +11,9 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { UserMenu } from "@/components/auth/user-menu";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useDashboard } from "@/hooks/use-dashboard";
 import { getColorTextClass } from "@/lib/color-utils";
-import type { ItemTypeCount, CollectionWithStats } from "@/types/dashboard";
+import type { SidebarCollection } from "@/lib/db/collections";
+import type { ItemTypeCount } from "@/lib/db/items";
 
 function SidebarLogo() {
   return (
@@ -38,7 +34,7 @@ function SidebarLogo() {
   );
 }
 
-function FavoritesSection({ collections }: { collections: CollectionWithStats[] }) {
+function FavoritesSection({ collections }: { collections: SidebarCollection[] }) {
   const favorites = collections.filter((c) => c.isFavorite);
 
   if (favorites.length === 0) return null;
@@ -66,7 +62,7 @@ function FavoritesSection({ collections }: { collections: CollectionWithStats[] 
   );
 }
 
-function RecentCollectionsSection({ collections }: { collections: CollectionWithStats[] }) {
+function RecentCollectionsSection({ collections }: { collections: SidebarCollection[] }) {
   const recent = collections.slice(0, 3);
 
   if (recent.length === 0) return null;
@@ -108,26 +104,14 @@ function RecentCollectionsSection({ collections }: { collections: CollectionWith
   );
 }
 
-function CollectionsMenu({ collections }: { collections: CollectionWithStats[] }) {
-  const [isOpen, setIsOpen] = useState(true);
-
+function CollectionsMenu({ collections }: { collections: SidebarCollection[] }) {
   return (
     <SidebarGroup>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full px-2 py-1 text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden hover:text-foreground transition-colors"
-      >
-        <span>Collections</span>
-        <span className="material-symbols-outlined text-sm">
-          {isOpen ? "expand_less" : "expand_more"}
-        </span>
-      </button>
-      {isOpen && (
-        <>
-          <FavoritesSection collections={collections} />
-          <RecentCollectionsSection collections={collections} />
-        </>
-      )}
+      <SidebarGroupLabel className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
+        Collections
+      </SidebarGroupLabel>
+      <FavoritesSection collections={collections} />
+      <RecentCollectionsSection collections={collections} />
     </SidebarGroup>
   );
 }
@@ -176,59 +160,6 @@ function ItemTypesMenu({ itemTypes }: { itemTypes: ItemTypeCount[] }) {
   );
 }
 
-function SidebarSkeleton() {
-  return (
-    <Sidebar collapsible="icon">
-      <SidebarLogo />
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
-            Types
-          </SidebarGroupLabel>
-          <SidebarMenu>
-            {Array.from({ length: 7 }).map((_, i) => (
-              <SidebarMenuItem key={i}>
-                <div className="flex items-center gap-2 px-2 py-1.5">
-                  <Skeleton className="w-4 h-4 rounded" />
-                  <Skeleton className="h-4 w-20" />
-                  <Skeleton className="h-3 w-6 ml-auto" />
-                </div>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
-        <div className="mx-4 h-px bg-border" />
-        <SidebarGroup>
-          <button className="flex items-center justify-between w-full px-2 py-1 text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
-            <span>Collections</span>
-          </button>
-          <SidebarMenu>
-            {Array.from({ length: 3 }).map((_, i) => (
-              <SidebarMenuItem key={i}>
-                <div className="flex items-center gap-2 px-2 py-1.5">
-                  <Skeleton className="w-2 h-2 rounded-full" />
-                  <Skeleton className="h-4 w-24" />
-                </div>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter className="p-3 space-y-4 mt-auto group-data-[collapsible=icon]:px-2">
-        <div className="border-t border-border pt-4">
-          <div className="flex items-center gap-3 p-2">
-            <Skeleton className="w-8 h-8 rounded-md" />
-            <div className="flex flex-col gap-1">
-              <Skeleton className="h-3 w-20" />
-              <Skeleton className="h-2 w-16" />
-            </div>
-          </div>
-        </div>
-      </SidebarFooter>
-    </Sidebar>
-  );
-}
-
 function UserFooter() {
   return (
     <SidebarFooter className="p-3 space-y-4 mt-auto group-data-[collapsible=icon]:px-2">
@@ -252,20 +183,36 @@ function UserFooter() {
   );
 }
 
-export function AppSidebar() {
-  const { data, isLoading } = useDashboard();
+interface AppSidebarProps {
+  itemTypes: ItemTypeCount[];
+  collections: SidebarCollection[];
+}
 
-  if (isLoading || !data) {
-    return <SidebarSkeleton />;
-  }
-
+export function AppSidebar({ itemTypes, collections }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon">
       <SidebarLogo />
       <SidebarContent>
-        <ItemTypesMenu itemTypes={data.itemTypesByCount} />
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                render={<Link href="/dashboard" />}
+                tooltip="Dashboard"
+                className="font-medium text-sm transition-all text-muted-foreground"
+              >
+                <span className="material-symbols-outlined opacity-70 text-sm shrink-0">
+                  dashboard
+                </span>
+                <span>Dashboard</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
         <div className="mx-4 h-px bg-border" />
-        <CollectionsMenu collections={data.collections} />
+        <ItemTypesMenu itemTypes={itemTypes} />
+        <div className="mx-4 h-px bg-border" />
+        <CollectionsMenu collections={collections} />
       </SidebarContent>
       <UserFooter />
     </Sidebar>

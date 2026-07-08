@@ -93,7 +93,7 @@ export function MarkdownEditor({
       {/* Content */}
       <div className="max-h-[400px] overflow-y-auto code-editor-scrollbar">
         {readOnly ? (
-          <div className="p-4 markdown-preview">
+          <div className="p-4 prose prose-invert prose-sm max-w-none">
             {value ? (
               <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{value}</Markdown>
             ) : (
@@ -108,7 +108,7 @@ export function MarkdownEditor({
             className="w-full min-h-[300px] p-4 bg-transparent text-sm text-[#cccccc] font-mono resize-none focus:outline-none placeholder:text-[#858585]"
           />
         ) : (
-          <div className="p-4 markdown-preview min-h-[300px]">
+          <div className="p-4 prose prose-invert prose-sm max-w-none min-h-[300px]">
             {value ? (
               <Markdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{value}</Markdown>
             ) : (

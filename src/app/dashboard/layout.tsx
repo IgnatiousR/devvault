@@ -1,15 +1,38 @@
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import { TopBar } from "@/components/dashboard/top-bar";
 import { AppSidebar } from "@/components/sidebar/Sidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { getItemsByTypeCount } from "@/lib/db/items";
+import { getSidebarCollections } from "@/lib/db/collections";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  const [itemTypesByCount, collections] = await Promise.all([
+    getItemsByTypeCount(session.user.id),
+    getSidebarCollections(session.user.id),
+  ]);
+
+  const serializedCollections = collections.map((c) => ({
+    ...c,
+    mostUsedType: c.mostUsedType,
+  }));
+
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar itemTypes={itemTypesByCount} collections={serializedCollections} />
       <SidebarInset>
         <TopBar />
         <main className="min-h-screen">

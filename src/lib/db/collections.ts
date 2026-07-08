@@ -76,3 +76,67 @@ export async function getCollectionsWithStats(
     };
   });
 }
+
+export interface SidebarCollection {
+  id: string;
+  name: string;
+  isFavorite: boolean;
+  mostUsedType: {
+    name: string;
+    icon: string;
+    color: string;
+  } | null;
+}
+
+export async function getSidebarCollections(userId: string): Promise<SidebarCollection[]> {
+  const collections = await prisma.collection.findMany({
+    where: { userId },
+    include: {
+      items: {
+        include: {
+          item: {
+            include: {
+              itemType: true,
+            },
+          },
+        },
+        take: 1,
+      },
+    },
+    orderBy: { updatedAt: "desc" },
+    take: 10,
+  });
+
+  return collections.map((collection) => {
+    const items = collection.items.map((ic) => ic.item);
+
+    let mostUsedType: SidebarCollection["mostUsedType"] = null;
+    if (items.length > 0) {
+      const typeCount = new Map<string, { name: string; icon: string; color: string; count: number }>();
+      for (const item of items) {
+        const t = item.itemType;
+        const existing = typeCount.get(t.id);
+        if (existing) {
+          existing.count++;
+        } else {
+          typeCount.set(t.id, { name: t.name, icon: t.icon, color: t.color, count: 1 });
+        }
+      }
+
+      let maxCount = 0;
+      for (const t of typeCount.values()) {
+        if (t.count > maxCount) {
+          maxCount = t.count;
+          mostUsedType = { name: t.name, icon: t.icon, color: t.color };
+        }
+      }
+    }
+
+    return {
+      id: collection.id,
+      name: collection.name,
+      isFavorite: collection.isFavorite,
+      mostUsedType,
+    };
+  });
+}
