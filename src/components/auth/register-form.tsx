@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { PasswordInput } from "./password-input";
 import { EmailInput } from "./email-input";
 import { registerSchema } from "@/lib/schemas";
+import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthForm } from "@/hooks/use-auth-form";
 import { AuthFormField } from "./auth-form-field";
@@ -94,13 +95,14 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
           Click the link in the email to verify your account. The link will expire in 24 hours.
         </p>
         <div className="space-y-3">
-          <button
+          <Button
+            variant="outline"
             onClick={() => resendVerificationEmail(registeredEmail)}
             disabled={resending}
             className="w-full rounded-md border border-input bg-background px-4 py-2.5 text-sm font-medium transition-colors hover:bg-accent disabled:opacity-50"
           >
             {resending ? "Sending..." : "Resend verification email"}
-          </button>
+          </Button>
           <Link
             href="/login"
             className="block w-full rounded-md bg-red-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600"
@@ -174,14 +176,14 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
           />
         </AuthFormField>
 
-        <button
+        <Button
           type="submit"
           disabled={loading}
           className="flex w-full items-center justify-center gap-2 rounded-md bg-red-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
         >
           {loading && <Spinner size="sm" />}
           {loading ? "Creating account..." : "Create Account"}
-        </button>
+        </Button>
       </form>
 
       <AuthFormDivider callbackURL={callbackURL} />

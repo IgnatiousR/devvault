@@ -121,6 +121,9 @@ const createItemSchema = z.object({
   content: z.string().nullable().optional(),
   language: z.string().nullable().optional(),
   url: z.string().url("Invalid URL format").nullable().optional(),
+  fileUrl: z.string().url("Invalid URL format").nullable().optional(),
+  fileName: z.string().nullable().optional(),
+  fileSize: z.number().nullable().optional(),
   tags: z.array(z.string().trim().min(1)),
   itemTypeId: z.string().min(1, "Item type is required"),
 });
@@ -166,6 +169,9 @@ export async function createItemAction(
     content: validation.data.content ?? null,
     language: validation.data.language ?? null,
     url: validation.data.url ?? null,
+    fileUrl: validation.data.fileUrl ?? null,
+    fileName: validation.data.fileName ?? null,
+    fileSize: validation.data.fileSize ?? null,
     tags: validation.data.tags,
     itemTypeId: validation.data.itemTypeId,
   });

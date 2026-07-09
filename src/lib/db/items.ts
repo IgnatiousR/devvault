@@ -1,4 +1,6 @@
 import { prisma } from "@/lib/prisma";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { filebaseClient, FILEBASE_BUCKET } from "@/lib/filebase";
 
 export interface UpdateItemData {
   title: string;
@@ -81,6 +83,9 @@ export async function getPinnedItems(userId: string): Promise<DashboardItem[]> {
     tags: item.tags.map((t) => t.name),
     updatedAt: item.updatedAt,
     collectionName: item.collections[0]?.collection.name ?? null,
+    fileUrl: item.fileUrl,
+    fileName: item.fileName,
+    fileSize: item.fileSize,
   }));
 }
 
@@ -118,6 +123,9 @@ export async function getRecentItems(
     tags: item.tags.map((t) => t.name),
     updatedAt: item.updatedAt,
     collectionName: item.collections[0]?.collection.name ?? null,
+    fileUrl: item.fileUrl,
+    fileName: item.fileName,
+    fileSize: item.fileSize,
   }));
 }
 
@@ -168,6 +176,9 @@ export async function getItemsByType(userId: string, typeName: string): Promise<
     tags: item.tags.map((t) => t.name),
     updatedAt: item.updatedAt,
     collectionName: item.collections[0]?.collection.name ?? null,
+    fileUrl: item.fileUrl,
+    fileName: item.fileName,
+    fileSize: item.fileSize,
   }));
 }
 
@@ -321,6 +332,23 @@ export async function deleteItem(
 
   if (!item) return false;
 
+  // Delete file from Filebase if attached
+  if (item.fileUrl) {
+    try {
+      const urlParts = new URL(item.fileUrl);
+      const key = urlParts.pathname.slice(1);
+      await filebaseClient.send(
+        new DeleteObjectCommand({
+          Bucket: FILEBASE_BUCKET,
+          Key: key,
+        })
+      );
+    } catch (error) {
+      console.error("Failed to delete file from Filebase:", error);
+      // Continue with DB delete even if file deletion fails
+    }
+  }
+
   await prisma.item.delete({ where: { id: itemId } });
   return true;
 }
@@ -331,6 +359,9 @@ export interface CreateItemData {
   content?: string | null;
   language?: string | null;
   url?: string | null;
+  fileUrl?: string | null;
+  fileName?: string | null;
+  fileSize?: number | null;
   tags: string[];
   itemTypeId: string;
 }
@@ -363,6 +394,9 @@ export async function createItem(
       content: data.content ?? null,
       language: data.language ?? null,
       url: data.url ?? null,
+      fileUrl: data.fileUrl ?? null,
+      fileName: data.fileName ?? null,
+      fileSize: data.fileSize ?? null,
       userId,
       itemTypeId: data.itemTypeId,
       tags: {

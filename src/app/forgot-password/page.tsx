@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { requestPasswordReset } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -98,13 +99,13 @@ export default function ForgotPasswordPage() {
               placeholder="you@example.com"
             />
           </div>
-          <button
+          <Button
             type="submit"
             disabled={loading}
             className="flex w-full items-center justify-center rounded-md bg-red-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
           >
             {loading ? "Sending reset link..." : "Send reset link"}
-          </button>
+          </Button>
         </form>
 
         <p className="text-center text-sm text-muted-foreground">

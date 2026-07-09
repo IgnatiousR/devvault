@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { CreateItemDialog } from "@/components/dashboard/create-item-dialog";
+import { CreateItemDialog } from "@/components/dashboard/create-dialog";
 
 export function TopBar() {
   const [shortcut, setShortcut] = useState("Ctrl+K");
@@ -60,12 +60,12 @@ export function TopBar() {
           New Item
         </Button>
         <div className="h-4 w-px bg-border mx-1"></div>
-        <button className="w-9 h-9 flex items-center justify-center rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors relative">
+        <Button variant="ghost" size="icon" className="relative">
           <span className="material-symbols-outlined text-lg">
             notifications
           </span>
           <span className="absolute top-2 right-2.5 w-1.5 h-1.5 `bg-brand-red rounded-full"></span>
-        </button>
+        </Button>
       </div>
     </header>
     <CreateItemDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} />

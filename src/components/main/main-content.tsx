@@ -4,35 +4,11 @@ import { useState } from "react";
 import { useDashboard } from "@/hooks/use-dashboard";
 import { useItemDetail } from "@/hooks/use-item-detail";
 import { DashboardContentSkeleton } from "@/components/ui/dashboard-skeletons";
+import { Button } from "@/components/ui/button";
 import { ItemCard, ListItem } from "@/components/items/item-card";
-import { ItemDrawer } from "@/components/items/item-drawer";
+import { ItemDrawer } from "@/components/items/drawer";
+import { getColorBgClass, getColorTextClass } from "@/lib/color-utils";
 import type { CollectionWithStats, DashboardItem } from "@/types/dashboard";
-
-function colorToBgClass(color: string): string {
-  const map: Record<string, string> = {
-    "#ef4444": "bg-[var(--color-brand-red)]",
-    "#f97316": "bg-orange-500",
-    "#f59e0b": "bg-amber-500",
-    "#fde047": "bg-yellow-500",
-    "#6b7280": "bg-gray-500",
-    "#ec4899": "bg-pink-500",
-    "#10b981": "bg-emerald-500",
-  };
-  return map[color] || "bg-blue-500";
-}
-
-function colorToTextClass(color: string): string {
-  const map: Record<string, string> = {
-    "#ef4444": "text-[var(--color-brand-red)]",
-    "#f97316": "text-orange-500",
-    "#f59e0b": "text-amber-500",
-    "#fde047": "text-yellow-500",
-    "#6b7280": "text-gray-500",
-    "#ec4899": "text-pink-500",
-    "#10b981": "text-emerald-500",
-  };
-  return map[color] || "text-blue-500";
-}
 
 function IconBadge({ icon, colorClass }: { icon: string; colorClass: string }) {
   return (
@@ -74,7 +50,7 @@ function StatsCards({ totalItems, totalCollections, favoriteItems, favoriteColle
 
 function CollectionCard({ collection }: { collection: CollectionWithStats }) {
   const borderBgClass = collection.mostUsedType
-    ? colorToBgClass(collection.mostUsedType.color)
+    ? getColorBgClass(collection.mostUsedType.color)
     : "bg-blue-500";
   const icons = collection.typeIcons || [];
 
@@ -92,7 +68,7 @@ function CollectionCard({ collection }: { collection: CollectionWithStats }) {
       </div>
       <div className="flex gap-2 pl-2">
         {icons.map((t, i) => (
-          <IconBadge key={i} icon={t.icon} colorClass={colorToTextClass(t.color)} />
+          <IconBadge key={i} icon={t.icon} colorClass={getColorTextClass(t.color)} />
         ))}
       </div>
     </div>
@@ -111,9 +87,9 @@ function RecentCollectionsSection({ collections }: RecentCollectionsSectionProps
           <h2 className="text-2xl font-semibold tracking-tight text-foreground">Recent Collections</h2>
           <p className="text-sm text-muted-foreground mt-1">Organize your resources by project or technology.</p>
         </div>
-        <button className="text-xs font-medium text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition-colors">
+        <Button variant="ghost" className="text-xs font-medium text-muted-foreground hover:text-foreground inline-flex items-center gap-1 transition-colors">
           View all <span className="material-symbols-outlined text-xs">chevron_right</span>
-        </button>
+        </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {collections.map(collection => (
@@ -127,7 +103,8 @@ function RecentCollectionsSection({ collections }: RecentCollectionsSectionProps
 function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode: "grid" | "list") => void }) {
   return (
     <div className="inline-flex items-center bg-muted/50 p-1 rounded-lg border border-border">
-      <button
+      <Button
+        variant="ghost"
         onClick={() => onChange("grid")}
         className={`px-3 py-1 text-[11px] font-medium uppercase tracking-wide rounded transition-colors ${
           mode === "grid"
@@ -136,8 +113,9 @@ function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode
         }`}
       >
         Grid
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="ghost"
         onClick={() => onChange("list")}
         className={`px-3 py-1 text-[11px] font-medium uppercase tracking-wide rounded transition-colors ${
           mode === "list"
@@ -146,7 +124,7 @@ function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode
         }`}
       >
         List
-      </button>
+      </Button>
     </div>
   );
 }

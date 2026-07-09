@@ -2,14 +2,18 @@
 
 import { useState } from "react";
 import { ItemCard, ListItem } from "@/components/items/item-card";
-import { ItemDrawer } from "@/components/items/item-drawer";
+import { ImageCard } from "@/components/items/image-card";
+import { FileRow } from "@/components/items/file-row";
+import { ItemDrawer } from "@/components/items/drawer";
+import { Button } from "@/components/ui/button";
 import { useItemDetail } from "@/hooks/use-item-detail";
 import type { DashboardItem } from "@/types/dashboard";
 
 function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode: "grid" | "list") => void }) {
   return (
     <div className="inline-flex items-center bg-muted/50 p-1 rounded-lg border border-border">
-      <button
+      <Button
+        variant="ghost"
         onClick={() => onChange("grid")}
         className={`px-3 py-1 text-[11px] font-medium uppercase tracking-wide rounded transition-colors ${
           mode === "grid"
@@ -18,8 +22,9 @@ function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode
         }`}
       >
         Grid
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="ghost"
         onClick={() => onChange("list")}
         className={`px-3 py-1 text-[11px] font-medium uppercase tracking-wide rounded transition-colors ${
           mode === "list"
@@ -28,7 +33,7 @@ function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode
         }`}
       >
         List
-      </button>
+      </Button>
     </div>
   );
 }
@@ -38,9 +43,12 @@ interface ItemsListContentProps {
   items: DashboardItem[];
 }
 
+const FIXED_LAYOUT_TYPES = ["image", "file"];
+
 export function ItemsListContent({ typeName, items }: ItemsListContentProps) {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const { data: selectedItem, isLoading: isDrawerLoading, error: drawerError, open: openDrawer, close: closeDrawer, isOpen: isDrawerOpen } = useItemDetail();
+  const showViewToggle = !FIXED_LAYOUT_TYPES.includes(typeName.toLowerCase());
 
   return (
     <div>
@@ -51,11 +59,23 @@ export function ItemsListContent({ typeName, items }: ItemsListContentProps) {
             {items.length} {items.length === 1 ? "item" : "items"}
           </p>
         </div>
-        <ViewToggle mode={viewMode} onChange={setViewMode} />
+        {showViewToggle && <ViewToggle mode={viewMode} onChange={setViewMode} />}
       </div>
       {items.length === 0 ? (
         <div className="text-center py-16">
           <p className="text-muted-foreground">No items found for this type.</p>
+        </div>
+      ) : typeName.toLowerCase() === "image" ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {items.map(item => (
+            <ImageCard key={item.id} item={item} onItemClick={openDrawer} />
+          ))}
+        </div>
+      ) : typeName.toLowerCase() === "file" ? (
+        <div className="flex flex-col gap-3">
+          {items.map(item => (
+            <FileRow key={item.id} item={item} onItemClick={openDrawer} />
+          ))}
         </div>
       ) : (
         <div className={viewMode === "grid" ? "grid grid-cols-2 md:grid-cols-3 gap-6" : "flex flex-col gap-3"}>

@@ -2,22 +2,16 @@
 
 ## Status
 <!-- Not Started | In Progress | Completed -->
-Completed
+In Progress
 
 ## Goals
 <!-- Goals & requirements -->
-- Create MarkdownEditor component with tabbed interface (Write/Preview)
-- Replace Textarea with MarkdownEditor for notes and prompts only
-- Keep CodeEditor for snippets and commands (no changes)
-- Use react-markdown with remark-gfm for GitHub Flavored Markdown support
-- Match existing dark theme styling (bg-[#1e1e1e] container, bg-[#2d2d2d] header)
-- Add copy button in header (same style as CodeEditor)
-- Support both display (readonly) and edit modes
-- In readonly mode, only show Preview tab
-- In edit mode, default to Write tab with Preview available
-- Headings, code blocks, inline code, lists, blockquotes, links, tables styled properly
-- Use custom CSS class (.markdown-preview) for reliable dark mode styling
-- Fluid height with max 400px, matching CodeEditor behavior
+- Single-column list layout with rows for file type items
+- Each row shows: file icon (by extension), file name, file size, upload date, download button
+- Row hover highlight
+- Click row opens ItemDrawer
+- Download button triggers direct download (stop propagation)
+- Responsive: stack info vertically on mobile
 
 ## References
 - @context/features/auth-phase-1-spec.md
@@ -35,6 +29,9 @@ Completed
 - @context/features/item-create-spec.md
 - @context/features/code-editor-spec.md
 - @context/features/markdown-editor-spec.md
+- @context/features/file-image-spec.md
+- @context/features/image-display-spec.md
+- @context/features/file-display-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -65,6 +62,9 @@ Completed
 - Use Better Auth v1.6 + Prisma 7 + Next.js 16 APIs
 - Preserve existing sidebar behavior, documentation link, and dashboard data
 - Create reusable initials generation helper
+- Filebase uses S3 API: endpoint `https://s3.filebase.io`, region `auto`, signature version `v4`
+- AWS SDK v3 compatible - use `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner`
+- Environment variables: FILEBASE_ACCESS_KEY, FILEBASE_SECRET_KEY, FILEBASE_BUCKET, FILEBASE_ENDPOINT
 
 ## History
 <!-- Keep this updated. Earliest to latest -->
@@ -109,3 +109,9 @@ Completed
 - **Phase 25 Completed**: Code editor implemented — installed `@monaco-editor/react`, created `CodeEditor` component (`src/components/ui/code-editor.tsx`) with Monaco Editor dark theme, macOS-style window dots (red/yellow/green), copy button in header, language display, readonly/edit modes, fluid height with 400px max, custom scrollbar. Integrated into `ItemDrawer` for snippets/commands (view + edit modes) and `CreateItemDialog` for snippets/commands (edit mode). Added custom scrollbar CSS to `globals.css`. Build passes. Spec: code-editor-spec.md.
 - **Phase 26 Started**: Markdown editor — MarkdownEditor component with Write/Preview tabs, react-markdown + remark-gfm, dark theme styling, copy button, readonly/edit modes, custom .markdown-preview CSS. Replaces Textarea for notes and prompts. Spec: markdown-editor-spec.md.
 - **Phase 26 Completed**: Markdown editor implemented — installed `react-markdown`, `remark-gfm`, and `rehype-sanitize`. Created `MarkdownEditor` component (`src/components/ui/markdown-editor.tsx`) with Write/Preview tabs, react-markdown + remark-gfm for GFM support, rehype-sanitize for XSS protection, dark theme styling matching CodeEditor, copy button in header, readonly/edit modes, fluid height with 400px max. Added comprehensive `.markdown-preview` CSS styles for dark mode (headings, code blocks, inline code, lists, blockquotes, links, tables). Integrated into `ItemDrawer` for notes/prompts (edit + view modes) and `CreateItemDialog` for notes/prompts. Snippets/commands continue using CodeEditor. Build passes. Spec: markdown-editor-spec.md.
+- **Phase 27 Started**: File/image upload with Filebase S3-compatible storage — upload API route, FileUpload component with drag-and-drop, file deletion on item delete, download proxy, preview display. Spec: file-image-spec.md.
+- **Phase 27 Completed**: File/image upload implemented — installed `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner`. Created `src/lib/filebase.ts` with S3Client config (endpoint `https://s3.filebase.io`, region `auto`). Created `/api/upload` POST route for multipart file upload with type/size validation. Created `/api/items/[id]/download` GET route as download proxy. Created `FileUpload` component (`src/components/ui/file-upload.tsx`) with drag-and-drop, progress indicator, file preview, and error handling. Updated `CreateItemDialog` with File/Image type options and integrated FileUpload. Updated `createItemAction` and `createItem` DB function to handle fileUrl/fileName/fileSize. Updated `deleteItem` to delete files from Filebase before DB delete. Updated `ItemDrawer` with Download button for file items and image/file preview section. Added `lucide-react` dependency. Build passes. Spec: file-image-spec.md.
+- **Phase 28 Started**: Image gallery view — thumbnail cards with 16:9 aspect ratio, 3-column grid, hover zoom effect. Spec: image-display-spec.md.
+- **Phase 28 Completed**: Image gallery view implemented — added `fileUrl` to `DashboardItem` type and DB queries. Created `ImageCard` component (`src/components/items/image-card.tsx`) with 16:9 aspect ratio thumbnail, `object-cover` for image fill, subtle hover zoom effect (scale-105 with 300ms transition), title and collection info below thumbnail. Updated `ItemsListContent` to use 3-column gallery grid with `ImageCard` when `typeName === "image"`. Other types continue using `ItemCard`/`ListItem`. Build passes. Spec: image-display-spec.md.
+- **Phase 29 Started**: File list view — single-column list layout for file type items, file icon by extension, file name, size, upload date, download button with stop propagation. Spec: file-display-spec.md.
+- **Phase 29 Completed**: File list view implemented — added `fileName` and `fileSize` to `DashboardItem` type and DB queries. Created `FileRow` component (`src/components/items/file-row.tsx`) with file icon by extension (pdf, txt, md, json, yaml, xml, csv, toml, ini), file name, size, upload date, download button with `stopPropagation`, row hover highlight, responsive layout. Updated `ItemsListContent` to use single-column list with `FileRow` when `typeName === "file"`. Build passes. Spec: file-display-spec.md.

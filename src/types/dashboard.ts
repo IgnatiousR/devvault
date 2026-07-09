@@ -22,6 +22,9 @@ export interface DashboardItem {
   tags: string[];
   updatedAt: string;
   collectionName: string | null;
+  fileUrl?: string | null;
+  fileName?: string | null;
+  fileSize?: number | null;
 }
 
 export interface ItemDetail extends DashboardItem {

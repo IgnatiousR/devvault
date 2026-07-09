@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { PasswordInput } from "./password-input";
 import { EmailInput } from "./email-input";
 import { signInSchema } from "@/lib/schemas";
+import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthForm } from "@/hooks/use-auth-form";
 import { AuthFormField } from "./auth-form-field";
@@ -102,13 +103,14 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
             <span className="font-medium text-foreground">{unverifiedEmail}</span>.
             Please check your inbox and click the link to verify your account.
           </p>
-          <button
+          <Button
+            variant="ghost"
             onClick={() => resendVerificationEmail(unverifiedEmail)}
             disabled={resending}
             className="text-sm font-medium text-yellow-600 hover:underline disabled:opacity-50"
           >
             {resending ? "Sending..." : "Resend verification email"}
-          </button>
+          </Button>
         </div>
       )}
 
@@ -144,14 +146,14 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
           </div>
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={loading}
           className="flex w-full items-center justify-center gap-2 rounded-md bg-red-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
         >
           {loading && <Spinner size="sm" />}
           {loading ? "Signing in..." : "Sign In"}
-        </button>
+        </Button>
       </form>
 
       <AuthFormDivider callbackURL={callbackURL} />

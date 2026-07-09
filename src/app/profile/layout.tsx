@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { TopBar } from "@/components/dashboard/top-bar";
-import { AppSidebar } from "@/components/sidebar/Sidebar";
+import { AppSidebar } from "@/components/sidebar/AppSidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { getItemsByTypeCount } from "@/lib/db/items";
 import { getSidebarCollections } from "@/lib/db/collections";

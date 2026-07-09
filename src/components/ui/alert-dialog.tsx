@@ -6,18 +6,18 @@ import { Dialog as AlertDialogPrimitive } from "@base-ui/react/dialog"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const DialogContext = React.createContext<{ onOpenChange?: (...args: any[]) => void } | null>(null)
+const DialogContext = React.createContext<{ onOpenChange?: (open: boolean) => void } | null>(null)
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function AlertDialog({ onOpenChange, ...props }: any) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+function AlertDialog({
+  onOpenChange,
+  ...props
+}: AlertDialogPrimitive.Root.Props & { onOpenChange?: (open: boolean) => void }) {
   const handleOpenChange = React.useCallback((open: boolean, _eventDetails: unknown) => {
     onOpenChange?.(open)
   }, [onOpenChange])
 
   return (
-    <DialogContext.Provider value={{ onOpenChange: handleOpenChange }}>
+    <DialogContext.Provider value={{ onOpenChange: handleOpenChange as (open: boolean) => void }}>
       <AlertDialogPrimitive.Root data-slot="alert-dialog" onOpenChange={handleOpenChange} {...props} />
     </DialogContext.Provider>
   )

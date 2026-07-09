@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { resetPassword } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/auth/password-input";
 
 function ResetPasswordContent() {
@@ -143,13 +144,13 @@ function ResetPasswordContent() {
               required
             />
           </div>
-          <button
+          <Button
             type="submit"
             disabled={loading}
             className="flex w-full items-center justify-center rounded-md bg-red-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
           >
             {loading ? "Resetting password..." : "Reset password"}
-          </button>
+          </Button>
         </form>
 
         <p className="text-center text-sm text-muted-foreground">
