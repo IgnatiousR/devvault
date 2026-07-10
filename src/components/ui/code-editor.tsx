@@ -91,7 +91,7 @@ export function CodeEditor({
             lineNumbers: "on",
             glyphMargin: false,
             folding: false,
-            lineDecorationsWidth: 0,
+            lineDecorationsWidth: 10,
             lineNumbersMinChars: 3,
             renderLineHighlight: "none",
             scrollbar: {

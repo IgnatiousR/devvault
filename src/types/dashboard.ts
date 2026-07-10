@@ -16,6 +16,8 @@ export interface DashboardItem {
   id: string;
   title: string;
   description: string | null;
+  content?: string | null;
+  url?: string | null;
   isPinned: boolean;
   isFavorite: boolean;
   itemType: DashboardItemType;

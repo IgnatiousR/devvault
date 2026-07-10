@@ -38,6 +38,8 @@ export interface DashboardItem {
   id: string;
   title: string;
   description: string | null;
+  content: string | null;
+  url: string | null;
   isPinned: boolean;
   isFavorite: boolean;
   itemType: {
@@ -73,6 +75,8 @@ export async function getPinnedItems(userId: string): Promise<DashboardItem[]> {
     id: item.id,
     title: item.title,
     description: item.description,
+    content: item.content,
+    url: item.url,
     isPinned: item.isPinned,
     isFavorite: item.isFavorite,
     itemType: {
@@ -113,6 +117,8 @@ export async function getRecentItems(
     id: item.id,
     title: item.title,
     description: item.description,
+    content: item.content,
+    url: item.url,
     isPinned: item.isPinned,
     isFavorite: item.isFavorite,
     itemType: {
@@ -166,6 +172,8 @@ export async function getItemsByType(userId: string, typeName: string): Promise<
     id: item.id,
     title: item.title,
     description: item.description,
+    content: item.content,
+    url: item.url,
     isPinned: item.isPinned,
     isFavorite: item.isFavorite,
     itemType: {

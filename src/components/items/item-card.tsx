@@ -1,6 +1,10 @@
+"use client";
+
+import { useState } from "react";
 import type { DashboardItem } from "@/types/dashboard";
 import { formatRelativeTime } from "@/lib/format-utils";
 import { getColorBgClass } from "@/lib/color-utils";
+import { toast } from "sonner";
 
 function getItemColorClasses(typeName: string) {
   const map: Record<string, { bg: string; text: string; hoverBorder: string; hoverText: string }> = {
@@ -13,10 +17,48 @@ function getItemColorClasses(typeName: string) {
   return map[typeName] || { bg: "bg-blue-500/10", text: "text-blue-500", hoverBorder: "hover:border-blue-500/30", hoverText: "group-hover:text-blue-400" };
 }
 
+const COPYABLE_TYPES = new Set(["snippet", "prompt", "command", "note", "link"]);
+
+function getCopyText(item: DashboardItem): string | null {
+  const typeName = item.itemType.name.toLowerCase();
+  if (!COPYABLE_TYPES.has(typeName)) return null;
+  if (typeName === "link") return item.url || null;
+  return item.content || null;
+}
+
+function CopyButton({ text }: { text: string }) {
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopy = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(text);
+      setIsCopied(true);
+      toast.success("Copied to clipboard");
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch {
+      toast.error("Failed to copy");
+    }
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="p-1.5 rounded-md opacity-0 group-hover:opacity-100 hover:bg-muted transition-all"
+      title="Copy content"
+    >
+      <span className="material-symbols-outlined text-[14px] text-muted-foreground">
+        {isCopied ? "check" : "content_copy"}
+      </span>
+    </button>
+  );
+}
+
 export function ItemCard({ item, onItemClick }: { item: DashboardItem; onItemClick?: (itemId: string) => void }) {
   const colors = getItemColorClasses(item.itemType.name);
   const icon = item.itemType.icon;
   const relativeTime = formatRelativeTime(item.updatedAt);
+  const copyText = getCopyText(item);
 
   return (
     <div
@@ -31,9 +73,12 @@ export function ItemCard({ item, onItemClick }: { item: DashboardItem; onItemCli
               {icon}
             </span>
           </div>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-            {item.itemType.name}
-          </span>
+          <div className="flex items-center gap-1">
+            {copyText && <CopyButton text={copyText} />}
+            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+              {item.itemType.name}
+            </span>
+          </div>
         </div>
         <h4 className={`font-semibold mb-2 ${colors.hoverText} transition-colors`}>{item.title}</h4>
         <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2">
@@ -58,6 +103,7 @@ export function ListItem({ item, onItemClick }: { item: DashboardItem; onItemCli
   const colors = getItemColorClasses(item.itemType.name);
   const icon = item.itemType.icon;
   const relativeTime = formatRelativeTime(item.updatedAt);
+  const copyText = getCopyText(item);
 
   return (
     <div
@@ -82,6 +128,7 @@ export function ListItem({ item, onItemClick }: { item: DashboardItem; onItemCli
         </p>
       </div>
       <div className="flex items-center gap-3 shrink-0">
+        {copyText && <CopyButton text={copyText} />}
         {item.collectionName && (
           <span className="text-[10px] font-semibold bg-muted/50 px-2 py-0.5 rounded-full border border-border text-muted-foreground uppercase tracking-tight hidden md:inline-block">
             {item.collectionName}
