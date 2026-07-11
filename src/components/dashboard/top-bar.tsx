@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { CreateItemDialog } from "@/components/dashboard/create-dialog";
+import { CreateCollectionDialog } from "@/components/dashboard/create-collection-dialog";
 
 export function TopBar() {
   const [shortcut, setShortcut] = useState("Ctrl+K");
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isCollectionCreateOpen, setIsCollectionCreateOpen] = useState(false);
 
   useEffect(() => {
     const isMac = navigator.userAgent.includes("Mac");
@@ -50,6 +52,7 @@ export function TopBar() {
         <Button
           variant="outline"
           className="h-9 px-4 text-sm font-medium btn-outline"
+          onClick={() => setIsCollectionCreateOpen(true)}
         >
           New Collection
         </Button>
@@ -69,6 +72,7 @@ export function TopBar() {
       </div>
     </header>
     <CreateItemDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+    <CreateCollectionDialog open={isCollectionCreateOpen} onOpenChange={setIsCollectionCreateOpen} />
     </>
   );
 }

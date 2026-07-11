@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useDashboard } from "@/hooks/use-dashboard";
 import { useItemDetail } from "@/hooks/use-item-detail";
 import { DashboardContentSkeleton } from "@/components/ui/dashboard-skeletons";
 import { Button } from "@/components/ui/button";
 import { ItemCard, ListItem } from "@/components/items/item-card";
 import { ItemDrawer } from "@/components/items/drawer";
 import { getColorBgClass, getColorTextClass } from "@/lib/color-utils";
-import type { CollectionWithStats, DashboardItem } from "@/types/dashboard";
+import type { CollectionWithStats, DashboardItem, DashboardData } from "@/types/dashboard";
 
 function IconBadge({ icon, colorClass }: { icon: string; colorClass: string }) {
   return (
@@ -157,11 +156,11 @@ function ItemsSection({ title, items, onItemClick }: ItemsSectionProps) {
   );
 }
 
-export function MainContent() {
-  const { data, isLoading } = useDashboard();
+export function MainContent({ initialData }: { initialData: DashboardData }) {
+  const data = initialData;
   const { data: selectedItem, isLoading: isDrawerLoading, error: drawerError, open: openDrawer, close: closeDrawer, isOpen: isDrawerOpen } = useItemDetail();
 
-  if (isLoading || !data) {
+  if (!data) {
     return <DashboardContentSkeleton />;
   }
 

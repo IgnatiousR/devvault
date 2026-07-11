@@ -2,16 +2,16 @@
 
 ## Status
 <!-- Not Started | In Progress | Completed -->
-In Progress
+Completed
 
 ## Goals
 <!-- Goals & requirements -->
-- Single-column list layout with rows for file type items
-- Each row shows: file icon (by extension), file name, file size, upload date, download button
-- Row hover highlight
-- Click row opens ItemDrawer
-- Download button triggers direct download (stop propagation)
-- Responsive: stack info vertically on mobile
+- "New Collection" button in top bar opens a modal dialog
+- Dialog has Name (required) and Description (optional) fields
+- Server action with Zod validation, auth check, DB insert
+- Toast on success or failure
+- Dashboard and sidebar update with new collection on save
+- Collections are user-scoped (userId from session)
 
 ## References
 - @context/features/auth-phase-1-spec.md
@@ -32,6 +32,7 @@ In Progress
 - @context/features/file-image-spec.md
 - @context/features/image-display-spec.md
 - @context/features/file-display-spec.md
+- @context/features/collection-create-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -115,3 +116,5 @@ In Progress
 - **Phase 28 Completed**: Image gallery view implemented — added `fileUrl` to `DashboardItem` type and DB queries. Created `ImageCard` component (`src/components/items/image-card.tsx`) with 16:9 aspect ratio thumbnail, `object-cover` for image fill, subtle hover zoom effect (scale-105 with 300ms transition), title and collection info below thumbnail. Updated `ItemsListContent` to use 3-column gallery grid with `ImageCard` when `typeName === "image"`. Other types continue using `ItemCard`/`ListItem`. Build passes. Spec: image-display-spec.md.
 - **Phase 29 Started**: File list view — single-column list layout for file type items, file icon by extension, file name, size, upload date, download button with stop propagation. Spec: file-display-spec.md.
 - **Phase 29 Completed**: File list view implemented — added `fileName` and `fileSize` to `DashboardItem` type and DB queries. Created `FileRow` component (`src/components/items/file-row.tsx`) with file icon by extension (pdf, txt, md, json, yaml, xml, csv, toml, ini), file name, size, upload date, download button with `stopPropagation`, row hover highlight, responsive layout. Updated `ItemsListContent` to use single-column list with `FileRow` when `typeName === "file"`. Build passes. Spec: file-display-spec.md.
+- **Phase 30 Started**: Collection create — "New Collection" button in top bar opens dialog with Name and Description fields, `createCollectionAction` server action, `createCollection` DB function, toast notifications, dashboard/sidebar refresh.
+- **Phase 30 Completed**: Collection create implemented — added `CreateCollectionData` and `CreatedCollection` interfaces and `createCollection` DB function to `src/lib/db/collections.ts`. Created `src/actions/collections.ts` with `createCollectionAction` server action using Zod validation (name required, description optional). Created `src/components/dashboard/create-collection-dialog.tsx` with Name input, Description textarea, loading state, and toast notifications. Wired "New Collection" button in `top-bar.tsx` to open dialog. Dashboard and sidebar refresh automatically via `router.refresh()`. Build passes.

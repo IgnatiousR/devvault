@@ -1,5 +1,41 @@
 import { prisma } from "@/lib/prisma";
 
+export interface CreateCollectionData {
+  name: string;
+  description?: string | null;
+}
+
+export interface CreatedCollection {
+  id: string;
+  name: string;
+  description: string | null;
+  isFavorite: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export async function createCollection(
+  userId: string,
+  data: CreateCollectionData
+): Promise<CreatedCollection | null> {
+  const collection = await prisma.collection.create({
+    data: {
+      name: data.name,
+      description: data.description ?? null,
+      userId,
+    },
+  });
+
+  return {
+    id: collection.id,
+    name: collection.name,
+    description: collection.description,
+    isFavorite: collection.isFavorite,
+    createdAt: collection.createdAt,
+    updatedAt: collection.updatedAt,
+  };
+}
+
 type ItemTypeRef = { id: string; name: string; icon: string; color: string };
 type TypeCount = { name: string; icon: string; color: string; count: number };
 
