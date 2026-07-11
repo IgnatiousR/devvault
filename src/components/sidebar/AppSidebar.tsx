@@ -163,7 +163,7 @@ function ItemTypesMenu({ itemTypes }: { itemTypes: ItemTypeCount[] }) {
 function UserFooter() {
   return (
     <SidebarFooter className="p-3 space-y-4 mt-auto group-data-[collapsible=icon]:px-2">
-      <div className="px-3 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
+      {/*<div className="px-3 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
         <Link
           href="/documentation"
           className="flex items-center gap-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground transition-colors rounded-md group-data-[collapsible=icon]:justify-center"
@@ -175,7 +175,7 @@ function UserFooter() {
             Documentation
           </span>
         </Link>
-      </div>
+      </div>*/}
       <div className="border-t border-border pt-4">
         <UserMenu showUserInfo={true} />
       </div>

@@ -119,7 +119,7 @@ export function CreateItemDialog({ open, onOpenChange }: CreateItemDialogProps) 
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 overflow-y-auto flex-1 min-h-0 pr-1">
+        <div className="space-y-4 overflow-y-auto flex-1 min-h-0 scrollbar-none">
           <TypeSelector value={selectedType} onChange={setSelectedType} />
           <FormFields
             selectedType={selectedType}
