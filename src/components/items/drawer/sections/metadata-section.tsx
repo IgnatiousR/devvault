@@ -1,13 +1,20 @@
 import { Input } from "@/components/ui/input";
 import { formatDate } from "@/lib/item-helpers";
+import { CollectionSelector } from "@/components/ui/collection-selector";
 import type { ItemDetail } from "@/types/dashboard";
 import type { EditData } from "../types";
+
+interface Collection {
+  id: string;
+  name: string;
+}
 
 interface MetadataSectionProps {
   item: ItemDetail;
   isEditing: boolean;
   editData: EditData;
   setEditData: (data: EditData) => void;
+  collections: Collection[];
 }
 
 export function MetadataSection({
@@ -15,6 +22,7 @@ export function MetadataSection({
   isEditing,
   editData,
   setEditData,
+  collections,
 }: MetadataSectionProps) {
   return (
     <>
@@ -50,17 +58,24 @@ export function MetadataSection({
         )}
       </div>
 
-      {/* Collections (read-only) */}
-      {item.collections.length > 0 && (
-        <div className="space-y-2">
-          <div className="flex items-center gap-1.5">
-            <span className="material-symbols-outlined text-sm text-muted-foreground">
-              folder
-            </span>
-            <h3 className="text-sm font-medium text-foreground">
-              Collections
-            </h3>
-          </div>
+      {/* Collections */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-1.5">
+          <span className="material-symbols-outlined text-sm text-muted-foreground">
+            folder
+          </span>
+          <h3 className="text-sm font-medium text-foreground">
+            Collections
+          </h3>
+        </div>
+        {isEditing ? (
+          <CollectionSelector
+            collections={collections}
+            selectedIds={editData.collections}
+            onChange={(ids) => setEditData({ ...editData, collections: ids })}
+            placeholder="Add to collections..."
+          />
+        ) : item.collections.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {item.collections.map((collection) => (
               <span
@@ -71,8 +86,12 @@ export function MetadataSection({
               </span>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <p className="text-sm text-muted-foreground/50 italic">
+            No collections
+          </p>
+        )}
+      </div>
 
       {/* Details (read-only) */}
       <div className="space-y-2">

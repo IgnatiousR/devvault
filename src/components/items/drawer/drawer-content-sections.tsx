@@ -4,11 +4,17 @@ import { DescriptionSection } from "./sections/description-section";
 import { ContentSection } from "./sections/content-section";
 import { MetadataSection } from "./sections/metadata-section";
 
+interface Collection {
+  id: string;
+  name: string;
+}
+
 interface DrawerContentSectionsProps {
   item: ItemDetail;
   isEditing: boolean;
   editData: EditData;
   setEditData: (data: EditData) => void;
+  collections: Collection[];
 }
 
 export function DrawerContentSections({
@@ -16,6 +22,7 @@ export function DrawerContentSections({
   isEditing,
   editData,
   setEditData,
+  collections,
 }: DrawerContentSectionsProps) {
   return (
     <div className="p-6 space-y-6">
@@ -36,6 +43,7 @@ export function DrawerContentSections({
         isEditing={isEditing}
         editData={editData}
         setEditData={setEditData}
+        collections={collections}
       />
     </div>
   );

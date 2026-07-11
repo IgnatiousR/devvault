@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
@@ -17,6 +17,7 @@ import { createItemAction } from "@/actions/items"
 import { ITEM_TYPE_OPTIONS, FILE_TYPES } from "@/lib/item-types"
 import { TypeSelector } from "./type-selector"
 import { FormFields } from "./form-fields"
+import { CollectionSelector } from "@/components/ui/collection-selector"
 
 function getDefaultType(pathname: string): string {
   const match = pathname.match(/^\/items\/([^/]+)/)
@@ -27,6 +28,11 @@ function getDefaultType(pathname: string): string {
     }
   }
   return "snippet"
+}
+
+interface Collection {
+  id: string
+  name: string
 }
 
 interface CreateItemDialogProps {
@@ -44,12 +50,23 @@ export function CreateItemDialog({ open, onOpenChange }: CreateItemDialogProps) 
   const [language, setLanguage] = useState("")
   const [url, setUrl] = useState("")
   const [tags, setTags] = useState("")
+  const [selectedCollectionIds, setSelectedCollectionIds] = useState<string[]>([])
+  const [collections, setCollections] = useState<Collection[]>([])
   const [isCreating, setIsCreating] = useState(false)
   const [uploadedFile, setUploadedFile] = useState<{
     fileUrl: string
     fileName: string
     fileSize: number
   } | null>(null)
+
+  useEffect(() => {
+    if (open) {
+      fetch("/api/collections")
+        .then((res) => res.json())
+        .then((data) => setCollections(data))
+        .catch(() => setCollections([]))
+    }
+  }, [open])
 
   const showContent = ["snippet", "prompt", "command", "note"].includes(selectedType)
   const showLanguage = ["snippet", "command"].includes(selectedType)
@@ -64,6 +81,7 @@ export function CreateItemDialog({ open, onOpenChange }: CreateItemDialogProps) 
     setLanguage("")
     setUrl("")
     setTags("")
+    setSelectedCollectionIds([])
     setUploadedFile(null)
   }
 
@@ -88,6 +106,7 @@ export function CreateItemDialog({ open, onOpenChange }: CreateItemDialogProps) 
       fileSize: uploadedFile?.fileSize || null,
       tags: tagsArray,
       itemTypeId: itemType?.id || "snippet",
+      collectionIds: selectedCollectionIds,
     })
 
     setIsCreating(false)
@@ -139,6 +158,18 @@ export function CreateItemDialog({ open, onOpenChange }: CreateItemDialogProps) 
             onFileUpload={setUploadedFile}
             onFileClear={() => setUploadedFile(null)}
           />
+
+          <div>
+            <label className="text-sm font-medium text-foreground mb-2 block">
+              Collections
+            </label>
+            <CollectionSelector
+              collections={collections}
+              selectedIds={selectedCollectionIds}
+              onChange={setSelectedCollectionIds}
+              placeholder="Add to collections..."
+            />
+          </div>
         </div>
 
         <DialogFooter>

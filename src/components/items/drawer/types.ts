@@ -7,6 +7,7 @@ export interface EditData {
   language: string;
   url: string;
   tags: string;
+  collections: string[];
 }
 
 export interface ItemDrawerProps {

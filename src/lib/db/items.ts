@@ -372,6 +372,7 @@ export interface CreateItemData {
   fileSize?: number | null;
   tags: string[];
   itemTypeId: string;
+  collectionIds?: string[];
 }
 
 export async function createItem(
@@ -395,6 +396,8 @@ export async function createItem(
   const tags = await Promise.all(tagOperations);
   const tagIds = tags.map((tag) => tag.id);
 
+  const collectionIds = data.collectionIds ?? [];
+
   const item = await prisma.item.create({
     data: {
       title: data.title,
@@ -409,6 +412,11 @@ export async function createItem(
       itemTypeId: data.itemTypeId,
       tags: {
         connect: tagIds.map((id) => ({ id })),
+      },
+      collections: {
+        create: collectionIds.map((collectionId) => ({
+          collectionId,
+        })),
       },
     },
     include: {

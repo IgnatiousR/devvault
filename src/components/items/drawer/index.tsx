@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { toast } from "sonner";
 import { updateItemAction, deleteItemAction } from "@/actions/items";
+import { updateItemCollectionsAction } from "@/actions/collections";
 import { getItemColorClasses } from "@/lib/item-helpers";
 import {
   EDITABLE_TYPES,
@@ -17,6 +18,11 @@ import { DrawerActionBar } from "./drawer-action-bar";
 import { DrawerContentSections } from "./drawer-content-sections";
 import { DrawerDeleteDialog } from "./drawer-delete-dialog";
 import type { ItemDrawerProps, EditData } from "./types";
+
+interface Collection {
+  id: string;
+  name: string;
+}
 
 export function ItemDrawer({
   isOpen,
@@ -31,6 +37,7 @@ export function ItemDrawer({
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [collections, setCollections] = useState<Collection[]>([]);
   const [editData, setEditData] = useState<EditData>(() => ({
     title: item?.title || "",
     description: item?.description || "",
@@ -38,6 +45,7 @@ export function ItemDrawer({
     language: item?.language || "",
     url: item?.url || "",
     tags: item?.tags.join(", ") || "",
+    collections: item?.collections.map((c) => c.id) || [],
   }));
 
   useEffect(() => {
@@ -49,9 +57,19 @@ export function ItemDrawer({
         language: item.language || "",
         url: item.url || "",
         tags: item.tags.join(", "),
+        collections: item.collections.map((c) => c.id),
       });
     }
   }, [item, isEditing]);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetch("/api/collections")
+        .then((res) => res.json())
+        .then((data) => setCollections(data))
+        .catch(() => setCollections([]));
+    }
+  }, [isOpen]);
 
   const handleCancel = () => {
     if (item) {
@@ -62,6 +80,7 @@ export function ItemDrawer({
         language: item.language || "",
         url: item.url || "",
         tags: item.tags.join(", "),
+        collections: item.collections.map((c) => c.id),
       });
     }
     setIsEditing(false);
@@ -76,31 +95,37 @@ export function ItemDrawer({
       .map((t) => t.trim())
       .filter((t) => t.length > 0);
 
-    const result = await updateItemAction({
-      itemId: item.id,
-      title: editData.title,
-      description: editData.description || null,
-      content: EDITABLE_TYPES.includes(item.itemType.name)
-        ? editData.content || null
-        : undefined,
-      language: LANGUAGE_TYPES.includes(item.itemType.name)
-        ? editData.language || null
-        : undefined,
-      url: URL_TYPES.includes(item.itemType.name)
-        ? editData.url || null
-        : undefined,
-      tags: tagsArray,
-    });
+    const [itemResult, collectionsResult] = await Promise.all([
+      updateItemAction({
+        itemId: item.id,
+        title: editData.title,
+        description: editData.description || null,
+        content: EDITABLE_TYPES.includes(item.itemType.name)
+          ? editData.content || null
+          : undefined,
+        language: LANGUAGE_TYPES.includes(item.itemType.name)
+          ? editData.language || null
+          : undefined,
+        url: URL_TYPES.includes(item.itemType.name)
+          ? editData.url || null
+          : undefined,
+        tags: tagsArray,
+      }),
+      updateItemCollectionsAction({
+        itemId: item.id,
+        collectionIds: editData.collections,
+      }),
+    ]);
 
     setIsSaving(false);
 
-    if (result.success) {
+    if (itemResult.success && collectionsResult.success) {
       toast.success("Item updated successfully");
       setIsEditing(false);
       router.refresh();
       onClose();
     } else {
-      toast.error(result.error || "Failed to update item");
+      toast.error(itemResult.error || collectionsResult.error || "Failed to update item");
     }
   };
 
@@ -123,7 +148,12 @@ export function ItemDrawer({
 
   return (
     <>
-      <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <Sheet open={isOpen} onOpenChange={(open) => {
+        if (!open) {
+          setIsEditing(false);
+          onClose();
+        }
+      }}>
         <SheetContent
           side="right"
           className="w-full sm:w-[600px] data-[side=right]:sm:max-w-[600px] p-0 gap-0"
@@ -166,6 +196,7 @@ export function ItemDrawer({
                   isEditing={isEditing}
                   editData={editData}
                   setEditData={setEditData}
+                  collections={collections}
                 />
               </>
             )}

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { createCollection, type CreatedCollection } from "@/lib/db/collections";
+import { createCollection, setItemCollections, type CreatedCollection } from "@/lib/db/collections";
 
 const createCollectionSchema = z.object({
   name: z.string().trim().min(1, "Name is required"),
@@ -58,4 +58,48 @@ export async function createCollectionAction(
   revalidatePath("/dashboard");
 
   return { success: true, data: result };
+}
+
+const updateItemCollectionsSchema = z.object({
+  itemId: z.string().min(1),
+  collectionIds: z.array(z.string()),
+});
+
+type UpdateItemCollectionsInput = z.infer<typeof updateItemCollectionsSchema>;
+
+interface UpdateItemCollectionsResult {
+  success: boolean;
+  error?: string;
+}
+
+export async function updateItemCollectionsAction(
+  input: UpdateItemCollectionsInput
+): Promise<UpdateItemCollectionsResult> {
+  const validation = updateItemCollectionsSchema.safeParse(input);
+
+  if (!validation.success) {
+    return { success: false, error: "Invalid input" };
+  }
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const result = await setItemCollections(
+    validation.data.itemId,
+    session.user.id,
+    validation.data.collectionIds
+  );
+
+  if (!result) {
+    return { success: false, error: "Item not found" };
+  }
+
+  revalidatePath("/dashboard");
+
+  return { success: true };
 }

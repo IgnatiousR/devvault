@@ -126,6 +126,7 @@ const createItemSchema = z.object({
   fileSize: z.number().nullable().optional(),
   tags: z.array(z.string().trim().min(1)),
   itemTypeId: z.string().min(1, "Item type is required"),
+  collectionIds: z.array(z.string()).optional(),
 });
 
 type CreateItemInput = z.infer<typeof createItemSchema>;
@@ -174,6 +175,7 @@ export async function createItemAction(
     fileSize: validation.data.fileSize ?? null,
     tags: validation.data.tags,
     itemTypeId: validation.data.itemTypeId,
+    collectionIds: validation.data.collectionIds ?? [],
   });
 
   if (!result) {
