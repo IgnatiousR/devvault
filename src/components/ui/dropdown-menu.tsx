@@ -94,7 +94,7 @@ function DropdownMenuContent({ children, align = "end", className }: DropdownMen
     <div
       ref={ref}
       className={cn(
-        "absolute z-50 min-w-[160px] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md",
+        "absolute z-50 min-w-40 overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md",
         align === "end" ? "right-0" : "left-0",
         "mt-1 top-full",
         className
@@ -157,6 +157,8 @@ export {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  // fallow-ignore-next-line unused-export
   DropdownMenuSeparator,
+  // fallow-ignore-next-line unused-export
   DropdownMenuLabel,
 };

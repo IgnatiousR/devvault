@@ -14,6 +14,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { useAuthForm } from "@/hooks/use-auth-form";
 import { AuthFormField } from "./auth-form-field";
 import { AuthFormDivider } from "./auth-form-divider";
+import { UnverifiedEmailBanner } from "./unverified-email-banner";
 
 interface SignInFormProps {
   callbackURL?: string;
@@ -91,27 +92,11 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
       )}
 
       {unverifiedEmail && (
-        <div
-          role="alert"
-          className="rounded-md bg-yellow-500/10 border border-yellow-500/20 p-4 text-sm"
-        >
-          <p className="font-medium text-yellow-600 mb-2">
-            Please verify your email address
-          </p>
-          <p className="text-muted-foreground mb-3">
-            We sent a verification link to{" "}
-            <span className="font-medium text-foreground">{unverifiedEmail}</span>.
-            Please check your inbox and click the link to verify your account.
-          </p>
-          <Button
-            variant="ghost"
-            onClick={() => resendVerificationEmail(unverifiedEmail)}
-            disabled={resending}
-            className="text-sm font-medium text-yellow-600 hover:underline disabled:opacity-50"
-          >
-            {resending ? "Sending..." : "Resend verification email"}
-          </Button>
-        </div>
+        <UnverifiedEmailBanner
+          email={unverifiedEmail}
+          onResend={() => resendVerificationEmail(unverifiedEmail)}
+          resending={resending}
+        />
       )}
 
       <form onSubmit={handleEmailSignIn} className="space-y-4">

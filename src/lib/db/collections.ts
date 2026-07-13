@@ -232,65 +232,6 @@ export async function setItemCollections(
   return true;
 }
 
-export async function addItemToCollections(
-  itemId: string,
-  userId: string,
-  collectionIds: string[]
-): Promise<boolean> {
-  const item = await prisma.item.findFirst({
-    where: { id: itemId, userId },
-  });
-
-  if (!item) return false;
-
-  if (collectionIds.length === 0) return true;
-
-  const existing = await prisma.itemCollection.findMany({
-    where: {
-      itemId,
-      collectionId: { in: collectionIds },
-    },
-    select: { collectionId: true },
-  });
-
-  const existingSet = new Set(existing.map((e) => e.collectionId));
-  const newIds = collectionIds.filter((id) => !existingSet.has(id));
-
-  if (newIds.length > 0) {
-    await prisma.itemCollection.createMany({
-      data: newIds.map((collectionId) => ({
-        itemId,
-        collectionId,
-      })),
-    });
-  }
-
-  return true;
-}
-
-export async function removeItemFromCollections(
-  itemId: string,
-  userId: string,
-  collectionIds: string[]
-): Promise<boolean> {
-  const item = await prisma.item.findFirst({
-    where: { id: itemId, userId },
-  });
-
-  if (!item) return false;
-
-  if (collectionIds.length === 0) return true;
-
-  await prisma.itemCollection.deleteMany({
-    where: {
-      itemId,
-      collectionId: { in: collectionIds },
-    },
-  });
-
-  return true;
-}
-
 export async function getCollectionById(
   collectionId: string,
   userId: string
@@ -381,24 +322,6 @@ export async function getItemsByCollectionId(
     fileName: rel.item.fileName,
     fileSize: rel.item.fileSize,
   }));
-}
-
-export async function getItemCollectionIds(
-  itemId: string,
-  userId: string
-): Promise<string[] | null> {
-  const item = await prisma.item.findFirst({
-    where: { id: itemId, userId },
-  });
-
-  if (!item) return null;
-
-  const relations = await prisma.itemCollection.findMany({
-    where: { itemId },
-    select: { collectionId: true },
-  });
-
-  return relations.map((r) => r.collectionId);
 }
 
 export async function updateCollection(
