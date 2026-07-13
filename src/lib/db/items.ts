@@ -375,6 +375,46 @@ export interface CreateItemData {
   collectionIds?: string[];
 }
 
+export interface SearchItem {
+  id: string;
+  title: string;
+  description: string | null;
+  content: string | null;
+  itemType: {
+    name: string;
+    icon: string;
+    color: string;
+  };
+  collectionName: string | null;
+}
+
+export async function getAllSearchItems(userId: string): Promise<SearchItem[]> {
+  const items = await prisma.item.findMany({
+    where: { userId },
+    include: {
+      itemType: true,
+      collections: {
+        include: { collection: true },
+        take: 1,
+      },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+
+  return items.map((item) => ({
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    content: item.content,
+    itemType: {
+      name: item.itemType.name,
+      icon: item.itemType.icon,
+      color: item.itemType.color,
+    },
+    collectionName: item.collections[0]?.collection.name ?? null,
+  }));
+}
+
 export async function createItem(
   userId: string,
   data: CreateItemData

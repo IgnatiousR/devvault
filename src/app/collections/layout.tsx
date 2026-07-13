@@ -7,7 +7,7 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { getItemsByTypeCount } from "@/lib/db/items";
 import { getSidebarCollections } from "@/lib/db/collections";
 
-export default async function ItemsLayout({
+export default async function CollectionsLayout({
   children,
 }: {
   children: React.ReactNode;

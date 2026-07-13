@@ -173,6 +173,30 @@ export interface CollectionSelectItem {
   name: string;
 }
 
+export interface SearchCollection {
+  id: string;
+  name: string;
+  itemCount: number;
+}
+
+export async function getAllSearchCollections(userId: string): Promise<SearchCollection[]> {
+  const collections = await prisma.collection.findMany({
+    where: { userId },
+    include: {
+      _count: {
+        select: { items: true },
+      },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+
+  return collections.map((collection) => ({
+    id: collection.id,
+    name: collection.name,
+    itemCount: collection._count.items,
+  }));
+}
+
 export async function getUserCollections(userId: string): Promise<CollectionSelectItem[]> {
   return prisma.collection.findMany({
     where: { userId },
@@ -267,6 +291,98 @@ export async function removeItemFromCollections(
   return true;
 }
 
+export async function getCollectionById(
+  collectionId: string,
+  userId: string
+): Promise<CollectionWithStats | null> {
+  const collection = await prisma.collection.findFirst({
+    where: { id: collectionId, userId },
+    include: {
+      items: {
+        include: {
+          item: {
+            include: {
+              itemType: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!collection) return null;
+
+  const items = collection.items.map((ic) => ic.item);
+  const typeCount = countTypesByItem(items);
+
+  const seen = new Set<string>();
+  const typeIcons: { icon: string; color: string }[] = [];
+  for (const t of typeCount.values()) {
+    if (!seen.has(t.icon)) {
+      seen.add(t.icon);
+      typeIcons.push({ icon: t.icon, color: t.color });
+    }
+  }
+
+  return {
+    id: collection.id,
+    name: collection.name,
+    description: collection.description,
+    isFavorite: collection.isFavorite,
+    resourceCount: items.length,
+    mostUsedType: findMostUsedType(typeCount),
+    typeIcons,
+  };
+}
+
+export async function getItemsByCollectionId(
+  collectionId: string,
+  userId: string
+) {
+  const collection = await prisma.collection.findFirst({
+    where: { id: collectionId, userId },
+  });
+
+  if (!collection) return null;
+
+  const relations = await prisma.itemCollection.findMany({
+    where: { collectionId },
+    include: {
+      item: {
+        include: {
+          itemType: true,
+          tags: true,
+          collections: {
+            include: { collection: true },
+            take: 1,
+          },
+        },
+      },
+    },
+  });
+
+  return relations.map((rel) => ({
+    id: rel.item.id,
+    title: rel.item.title,
+    description: rel.item.description,
+    content: rel.item.content,
+    url: rel.item.url,
+    isPinned: rel.item.isPinned,
+    isFavorite: rel.item.isFavorite,
+    itemType: {
+      name: rel.item.itemType.name,
+      icon: rel.item.itemType.icon,
+      color: rel.item.itemType.color,
+    },
+    tags: rel.item.tags.map((t) => t.name),
+    updatedAt: rel.item.updatedAt,
+    collectionName: rel.item.collections[0]?.collection.name ?? null,
+    fileUrl: rel.item.fileUrl,
+    fileName: rel.item.fileName,
+    fileSize: rel.item.fileSize,
+  }));
+}
+
 export async function getItemCollectionIds(
   itemId: string,
   userId: string
@@ -283,4 +399,65 @@ export async function getItemCollectionIds(
   });
 
   return relations.map((r) => r.collectionId);
+}
+
+export async function updateCollection(
+  collectionId: string,
+  userId: string,
+  data: { name?: string; description?: string | null }
+): Promise<{ id: string; name: string; description: string | null } | null> {
+  const collection = await prisma.collection.findFirst({
+    where: { id: collectionId, userId },
+  });
+
+  if (!collection) return null;
+
+  const updated = await prisma.collection.update({
+    where: { id: collectionId },
+    data: {
+      ...(data.name !== undefined && { name: data.name }),
+      ...(data.description !== undefined && { description: data.description }),
+    },
+  });
+
+  return {
+    id: updated.id,
+    name: updated.name,
+    description: updated.description,
+  };
+}
+
+export async function deleteCollection(
+  collectionId: string,
+  userId: string
+): Promise<boolean> {
+  const collection = await prisma.collection.findFirst({
+    where: { id: collectionId, userId },
+  });
+
+  if (!collection) return false;
+
+  await prisma.collection.delete({
+    where: { id: collectionId },
+  });
+
+  return true;
+}
+
+export async function toggleCollectionFavorite(
+  collectionId: string,
+  userId: string
+): Promise<boolean | null> {
+  const collection = await prisma.collection.findFirst({
+    where: { id: collectionId, userId },
+  });
+
+  if (!collection) return null;
+
+  const updated = await prisma.collection.update({
+    where: { id: collectionId },
+    data: { isFavorite: !collection.isFavorite },
+  });
+
+  return updated.isFavorite;
 }

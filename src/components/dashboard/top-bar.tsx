@@ -6,8 +6,10 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { CreateItemDialog } from "@/components/dashboard/create-dialog";
 import { CreateCollectionDialog } from "@/components/dashboard/create-collection-dialog";
+import { useSearch } from "@/components/dashboard/search-context";
 
 export function TopBar() {
+  const { openSearch } = useSearch();
   const [shortcut] = useState(() => {
     if (typeof navigator !== "undefined") {
       return navigator.userAgent.includes("Mac") ? "⌘K" : "Ctrl+K";
@@ -21,8 +23,8 @@ export function TopBar() {
     <header className="sticky top-0 h-16 shrink-0 border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 z-40 flex items-center justify-between px-4 md:px-8 transition-all ease-linear duration-200">
       <div className="flex items-center gap-2 flex-1 max-w-md">
         <SidebarTrigger />
-        <InputGroup className="ml-8 h-9 bg-muted/50 rounded-md">
-          <InputGroupInput placeholder={`Search... (${shortcut})`} className="text-sm" />
+        <InputGroup className="ml-8 h-9 bg-muted/50 rounded-md cursor-pointer" onClick={openSearch}>
+          <InputGroupInput placeholder={`Search... (${shortcut})`} className="text-sm cursor-pointer" readOnly tabIndex={-1} />
           <InputGroupAddon align="inline-start">
             <span className="material-symbols-outlined text-muted-foreground text-sm">search</span>
           </InputGroupAddon>

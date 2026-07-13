@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { TopBar } from "@/components/dashboard/top-bar";
+import { SearchWrapper } from "@/components/dashboard/search-wrapper";
 import { AppSidebar } from "@/components/sidebar/AppSidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { getItemsByTypeCount } from "@/lib/db/items";
@@ -34,7 +34,7 @@ export default async function DashboardLayout({
     <SidebarProvider>
       <AppSidebar itemTypes={itemTypesByCount} collections={serializedCollections} />
       <SidebarInset>
-        <TopBar />
+        <SearchWrapper />
         <main className="min-h-screen">
           <div className="max-w-(--spacing-container-max) mx-auto px-8 py-10">
             {children}
