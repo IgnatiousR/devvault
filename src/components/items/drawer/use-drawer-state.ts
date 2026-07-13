@@ -62,20 +62,6 @@ export function useDrawerState(
   }));
 
   useEffect(() => {
-    if (item && !isEditing) {
-      setEditData({
-        title: item.title,
-        description: item.description || "",
-        content: item.content || "",
-        language: item.language || "",
-        url: item.url || "",
-        tags: item.tags.join(", "),
-        collections: item.collections.map((c) => c.id),
-      });
-    }
-  }, [item, isEditing]);
-
-  useEffect(() => {
     if (item) {
       fetch("/api/collections")
         .then((res) => res.json())

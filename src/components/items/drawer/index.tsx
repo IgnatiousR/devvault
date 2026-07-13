@@ -43,10 +43,10 @@ export function ItemDrawer({
       }}>
         <SheetContent
           side="right"
-          className="w-full sm:w-[600px] data-[side=right]:sm:max-w-[600px] p-0 gap-0"
+          className="w-full sm:w-150 data-[side=right]:sm:max-w-150 p-0 gap-0"
           showCloseButton={!isEditing}
         >
-          <div className="flex-1 overflow-y-auto">
+          <div key={item?.id || "no-item"} className="flex-1 overflow-y-auto">
             {isLoading && <DrawerSkeleton />}
 
             {error && (
