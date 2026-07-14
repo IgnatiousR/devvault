@@ -27,15 +27,16 @@ export async function GET() {
     return NextResponse.json({ error: "No user found" }, { status: 404 });
   }
 
-  const [collections, pinnedItems, recentItems, itemCounts, itemTypesByCount] =
+  const [collectionsResult, pinnedItems, recentItems, itemCounts, itemTypesByCount] =
     await Promise.all([
-      getCollectionsWithStats(user.id),
+      getCollectionsWithStats(user.id, { limit: 6 }),
       getPinnedItems(user.id),
       getRecentItems(user.id, 10),
       getItemCounts(user.id),
       getItemsByTypeCount(user.id),
     ]);
 
+  const collections = collectionsResult.collections;
   const favoriteCollections = collections.filter((c) => c.isFavorite).length;
 
   return NextResponse.json({

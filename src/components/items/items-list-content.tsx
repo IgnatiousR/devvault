@@ -6,6 +6,7 @@ import { ImageCard } from "@/components/items/image-card";
 import { FileRow } from "@/components/items/file-row";
 import { ItemDrawer } from "@/components/items/drawer";
 import { Button } from "@/components/ui/button";
+import { Pagination } from "@/components/ui/pagination";
 import { useItemDetail } from "@/hooks/use-item-detail";
 import type { DashboardItem } from "@/types/dashboard";
 
@@ -41,11 +42,13 @@ function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode
 interface ItemsListContentProps {
   typeName: string;
   items: DashboardItem[];
+  currentPage: number;
+  totalPages: number;
 }
 
 const FIXED_LAYOUT_TYPES = ["image", "file"];
 
-export function ItemsListContent({ typeName, items }: ItemsListContentProps) {
+export function ItemsListContent({ typeName, items, currentPage, totalPages }: ItemsListContentProps) {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const { data: selectedItem, isLoading: isDrawerLoading, error: drawerError, open: openDrawer, close: closeDrawer, isOpen: isDrawerOpen } = useItemDetail();
   const showViewToggle = !FIXED_LAYOUT_TYPES.includes(typeName.toLowerCase());
@@ -88,6 +91,11 @@ export function ItemsListContent({ typeName, items }: ItemsListContentProps) {
           ))}
         </div>
       )}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        baseUrl={`/items/${typeName}`}
+      />
       <ItemDrawer
         isOpen={isDrawerOpen}
         onClose={closeDrawer}

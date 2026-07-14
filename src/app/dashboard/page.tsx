@@ -33,15 +33,16 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  const [collections, pinnedItems, recentItems, itemCounts, itemTypesByCount] =
+  const [collectionsResult, pinnedItems, recentItems, itemCounts, itemTypesByCount] =
     await Promise.all([
-      getCollectionsWithStats(user.id),
+      getCollectionsWithStats(user.id, { limit: 6 }),
       getPinnedItems(user.id),
       getRecentItems(user.id, 10),
       getItemCounts(user.id),
       getItemsByTypeCount(user.id),
     ]);
 
+  const collections = collectionsResult.collections;
   const favoriteCollections = collections.filter((c) => c.isFavorite).length;
 
   const dashboardData = {

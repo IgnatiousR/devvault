@@ -6,19 +6,12 @@ Completed
 
 ## Goals
 <!-- Goals & requirements -->
-- Open with Cmd+K (Mac) / Ctrl+K (Windows)
-- Fuzzy search across all items and collections
-- Grouped results: Items section, Collections section
-- Keyboard navigation (arrow keys, Enter to select)
-- Show item type icon and collection item count
-- Navigate to item drawer or collection page on select
-- TopBar search input opens palette on click
-- Show ⌘K hint in search input placeholder
-- Use shadcn `cmdk` component (Command)
-- Client-side fuzzy search (no server round-trips)
-- Pre-fetch searchable data on app load
-- Search data: items (id, title, type, content preview), collections (id, name, itemCount)
-- Reuse existing data fetching functions
+- Add pagination to /items/[type] and /collections/[id] pages
+- Pagination controls at bottom with page numbers and prev/next links
+- Disable (grey out) prev/next when not available
+- Use constants: ITEMS_PER_PAGE = 21, COLLECTIONS_PER_PAGE = 21
+- Dashboard limits: DASHBOARD_COLLECTIONS_LIMIT = 6, DASHBOARD_RECENT_ITEMS_LIMIT = 10
+- Do not fetch all resources at once. Only fetch the amount that a page requires
 
 ## References
 - @context/features/auth-phase-1-spec.md
@@ -41,6 +34,7 @@ Completed
 - @context/features/file-display-spec.md
 - @context/features/collection-create-spec.md
 - @context/features/global-search-spec.md
+- @context/features/pagination-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -128,3 +122,5 @@ Completed
 - **Phase 30 Completed**: Collection create implemented — added `CreateCollectionData` and `CreatedCollection` interfaces and `createCollection` DB function to `src/lib/db/collections.ts`. Created `src/actions/collections.ts` with `createCollectionAction` server action using Zod validation (name required, description optional). Created `src/components/dashboard/create-collection-dialog.tsx` with Name input, Description textarea, loading state, and toast notifications. Wired "New Collection" button in `top-bar.tsx` to open dialog. Dashboard and sidebar refresh automatically via `router.refresh()`. Build passes.
 - **Phase 31 Started**: Global search / command palette — Cmd+K/Ctrl+K shortcut, shadcn cmdk component, fuzzy search across items and collections, grouped results, keyboard navigation, TopBar integration. Spec: global-search-spec.md.
 - **Phase 31 Completed**: Global search / command palette implemented — installed `cmdk`, created `/api/search` endpoint returning all items + collections for the authenticated user, added `getAllSearchItems` (items.ts) and `getAllSearchCollections` (collections.ts) DB functions, created `CommandPalette` component with grouped Items/Collections results, fuzzy filtering, keyboard navigation, and type icons + item counts. Created `SearchWrapper` to wire TopBar search input click + Cmd+K shortcut across all authenticated layouts (dashboard, items, collections, profile). Search input shows ⌘K/Ctrl+K hint. Navigation: items → `/items/[type]`, collections → `/collections/[id]`. Build passes. Spec: global-search-spec.md.
+- **Phase 32 Started**: Pagination — adding pagination to /items/[type] and /collections/[id] pages with numbered page links, prev/next controls, and page-specific data fetching. Spec: pagination-spec.md.
+- **Phase 32 Completed**: Pagination implemented — created `src/lib/constants.ts` with `ITEMS_PER_PAGE = 21`, `COLLECTIONS_PER_PAGE = 21`, and dashboard limits. Created reusable `Pagination` component (`src/components/ui/pagination.tsx`) with numbered page links, prev/next buttons, and ellipsis for large page counts. Updated `getItemsByType` (items.ts) and `getItemsByCollectionId` (collections.ts) with `skip`/`take` pagination and parallel `count()` queries. Updated `/items/[type]` page to read `searchParams.page`, pass pagination options to DB query, and pass `currentPage`/`totalPages` to `ItemsListContent`. Updated `/collections/[id]` page with same pattern. Updated `ItemsListContent` and `CollectionDetailContent` to render `<Pagination>` at bottom. TypeScript check passed. Build compiles successfully. Spec: pagination-spec.md.

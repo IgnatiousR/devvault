@@ -7,6 +7,7 @@ import { useItemDetail } from "@/hooks/use-item-detail";
 import { EditCollectionDialog } from "@/components/collections/edit-collection-dialog";
 import { DeleteCollectionDialog } from "@/components/collections/delete-collection-dialog";
 import { toggleCollectionFavoriteAction } from "@/actions/collections";
+import { Pagination } from "@/components/ui/pagination";
 import { toast } from "sonner";
 import type { DashboardItem, CollectionWithStats } from "@/types/dashboard";
 import { CollectionHeader } from "./collection-header";
@@ -15,11 +16,13 @@ import { CollectionItemsGrid } from "./collection-items-grid";
 interface CollectionDetailContentProps {
   collection: CollectionWithStats;
   items: DashboardItem[];
+  currentPage: number;
+  totalPages: number;
 }
 
 const FIXED_LAYOUT_TYPES = ["image", "file"];
 
-export function CollectionDetailContent({ collection: initialCollection, items }: CollectionDetailContentProps) {
+export function CollectionDetailContent({ collection: initialCollection, items, currentPage, totalPages }: CollectionDetailContentProps) {
   const router = useRouter();
   const [collection, setCollection] = useState(initialCollection);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -58,6 +61,11 @@ export function CollectionDetailContent({ collection: initialCollection, items }
         showViewToggle={showViewToggle}
         onViewModeChange={setViewMode}
         onItemClick={openDrawer}
+      />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        baseUrl={`/collections/${collection.id}`}
       />
       <ItemDrawer
         isOpen={isDrawerOpen}

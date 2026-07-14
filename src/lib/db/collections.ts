@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { COLLECTIONS_PER_PAGE } from "@/lib/constants";
 
 export interface CreateCollectionData {
   name: string;
@@ -80,25 +81,35 @@ export interface CollectionWithStats {
 }
 
 export async function getCollectionsWithStats(
-  userId: string
-): Promise<CollectionWithStats[]> {
-  const collections = await prisma.collection.findMany({
-    where: { userId },
-    include: {
-      items: {
-        include: {
-          item: {
-            include: {
-              itemType: true,
+  userId: string,
+  options?: { page?: number; limit?: number }
+): Promise<{ collections: CollectionWithStats[]; totalCount: number }> {
+  const page = options?.page ?? 1;
+  const limit = options?.limit ?? COLLECTIONS_PER_PAGE;
+  const skip = (page - 1) * limit;
+
+  const [rawCollections, totalCount] = await Promise.all([
+    prisma.collection.findMany({
+      where: { userId },
+      include: {
+        items: {
+          include: {
+            item: {
+              include: {
+                itemType: true,
+              },
             },
           },
         },
       },
-    },
-    orderBy: { updatedAt: "desc" },
-  });
+      orderBy: { updatedAt: "desc" },
+      skip,
+      take: limit,
+    }),
+    prisma.collection.count({ where: { userId } }),
+  ]);
 
-  return collections.map((collection) => {
+  const collections = rawCollections.map((collection) => {
     const items = collection.items.map((ic) => ic.item);
     const typeCount = countTypesByItem(items);
 
@@ -121,6 +132,8 @@ export async function getCollectionsWithStats(
       typeIcons,
     };
   });
+
+  return { collections, totalCount };
 }
 
 export interface SidebarCollection {
@@ -278,31 +291,42 @@ export async function getCollectionById(
 
 export async function getItemsByCollectionId(
   collectionId: string,
-  userId: string
-) {
+  userId: string,
+  options?: { page?: number; limit?: number }
+): Promise<{ items: { id: string; title: string; description: string | null; content: string | null; url: string | null; isPinned: boolean; isFavorite: boolean; itemType: { name: string; icon: string; color: string }; tags: string[]; updatedAt: Date; collectionName: string | null; fileUrl: string | null; fileName: string | null; fileSize: number | null }[]; totalCount: number } | null> {
   const collection = await prisma.collection.findFirst({
     where: { id: collectionId, userId },
   });
 
   if (!collection) return null;
 
-  const relations = await prisma.itemCollection.findMany({
-    where: { collectionId },
-    include: {
-      item: {
-        include: {
-          itemType: true,
-          tags: true,
-          collections: {
-            include: { collection: true },
-            take: 1,
+  const page = options?.page ?? 1;
+  const limit = options?.limit ?? COLLECTIONS_PER_PAGE;
+  const skip = (page - 1) * limit;
+
+  const [relations, totalCount] = await Promise.all([
+    prisma.itemCollection.findMany({
+      where: { collectionId },
+      include: {
+        item: {
+          include: {
+            itemType: true,
+            tags: true,
+            collections: {
+              include: { collection: true },
+              take: 1,
+            },
           },
         },
       },
-    },
-  });
+      orderBy: { addedAt: "desc" },
+      skip,
+      take: limit,
+    }),
+    prisma.itemCollection.count({ where: { collectionId } }),
+  ]);
 
-  return relations.map((rel) => ({
+  const items = relations.map((rel) => ({
     id: rel.item.id,
     title: rel.item.title,
     description: rel.item.description,
@@ -322,6 +346,8 @@ export async function getItemsByCollectionId(
     fileName: rel.item.fileName,
     fileSize: rel.item.fileSize,
   }));
+
+  return { items, totalCount };
 }
 
 export async function updateCollection(

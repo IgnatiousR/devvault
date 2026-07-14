@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { filebaseClient, FILEBASE_BUCKET } from "@/lib/filebase";
+import { ITEMS_PER_PAGE } from "@/lib/constants";
 
 export interface UpdateItemData {
   title: string;
@@ -151,24 +152,44 @@ export interface ItemTypeCount {
   count: number;
 }
 
-export async function getItemsByType(userId: string, typeName: string): Promise<DashboardItem[]> {
-  const items = await prisma.item.findMany({
-    where: {
-      userId,
-      itemType: { name: { equals: typeName, mode: "insensitive" } },
-    },
-    include: {
-      itemType: true,
-      tags: true,
-      collections: {
-        include: { collection: true },
-        take: 1,
-      },
-    },
-    orderBy: { updatedAt: "desc" },
-  });
+export interface PaginatedResult<T> {
+  items: T[];
+  totalCount: number;
+}
 
-  return items.map((item) => ({
+export async function getItemsByType(
+  userId: string,
+  typeName: string,
+  options?: { page?: number; limit?: number }
+): Promise<PaginatedResult<DashboardItem>> {
+  const page = options?.page ?? 1;
+  const limit = options?.limit ?? ITEMS_PER_PAGE;
+  const skip = (page - 1) * limit;
+
+  const where = {
+    userId,
+    itemType: { name: { equals: typeName, mode: "insensitive" as const } },
+  };
+
+  const [rawItems, totalCount] = await Promise.all([
+    prisma.item.findMany({
+      where,
+      include: {
+        itemType: true,
+        tags: true,
+        collections: {
+          include: { collection: true },
+          take: 1,
+        },
+      },
+      orderBy: { updatedAt: "desc" },
+      skip,
+      take: limit,
+    }),
+    prisma.item.count({ where }),
+  ]);
+
+  const items = rawItems.map((item) => ({
     id: item.id,
     title: item.title,
     description: item.description,
@@ -188,6 +209,8 @@ export async function getItemsByType(userId: string, typeName: string): Promise<
     fileName: item.fileName,
     fileSize: item.fileSize,
   }));
+
+  return { items, totalCount };
 }
 
 const ITEM_TYPE_ORDER = ['snippet', 'prompt', 'command', 'note', 'file', 'image', 'link'];

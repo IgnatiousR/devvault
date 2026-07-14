@@ -1,13 +1,16 @@
 "use client";
 
 import { CollectionCard } from "@/components/collections/collection-card";
+import { Pagination } from "@/components/ui/pagination";
 import type { CollectionWithStats } from "@/types/dashboard";
 
 interface CollectionsListContentProps {
   collections: CollectionWithStats[];
+  currentPage: number;
+  totalPages: number;
 }
 
-export function CollectionsListContent({ collections }: CollectionsListContentProps) {
+export function CollectionsListContent({ collections, currentPage, totalPages }: CollectionsListContentProps) {
   return (
     <div>
       <div className="mb-8">
@@ -27,6 +30,11 @@ export function CollectionsListContent({ collections }: CollectionsListContentPr
           ))}
         </div>
       )}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        baseUrl="/collections"
+      />
     </div>
   );
 }
