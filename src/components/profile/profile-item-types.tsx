@@ -17,7 +17,7 @@ export function ProfileItemTypes({ itemTypes }: ProfileItemTypesProps) {
 
   return (
     <section className="bg-card border border-border rounded-xl p-6 shadow-sm">
-      <h2 className="text-2xl font-semibold text-foreground mb-4">Items by Type</h2>
+      <h2 className="text-lg font-semibold text-foreground mb-4">Items by Type</h2>
       <div className="space-y-3">
         {itemTypes.map((itemType) => (
           <div
@@ -34,9 +34,9 @@ export function ProfileItemTypes({ itemTypes }: ProfileItemTypesProps) {
                   {itemType.icon}
                 </span>
               </div>
-              <span className="font-medium text-foreground">{itemType.name}</span>
+              <span className="text-sm font-medium text-foreground">{itemType.name}</span>
             </div>
-            <span className="text-muted-foreground font-medium">{itemType.count}</span>
+            <span className="text-sm text-muted-foreground font-medium">{itemType.count}</span>
           </div>
         ))}
       </div>

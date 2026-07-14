@@ -6,6 +6,7 @@ import { AppSidebar } from "@/components/sidebar/AppSidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { getItemsByTypeCount } from "@/lib/db/items";
 import { getSidebarCollections } from "@/lib/db/collections";
+import { EditorPreferencesProvider } from "@/contexts/editor-preferences-context";
 
 export default async function ItemsLayout({
   children,
@@ -32,7 +33,7 @@ export default async function ItemsLayout({
         <SearchWrapper />
         <main className="min-h-screen">
           <div className="max-w-(--spacing-container-max) mx-auto px-8 py-10">
-            {children}
+            <EditorPreferencesProvider>{children}</EditorPreferencesProvider>
           </div>
         </main>
       </SidebarInset>

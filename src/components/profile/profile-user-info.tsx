@@ -17,15 +17,15 @@ export function ProfileUserInfo({ user, initials, creationDate }: ProfileUserInf
   return (
     <section className="bg-card border border-border rounded-xl p-6 shadow-sm">
       <div className="flex items-center gap-6">
-        <Avatar className="h-20 w-20">
+        <Avatar className="h-16 w-16">
           <AvatarImage src={user.image || undefined} alt={user.name || user.email} />
-          <AvatarFallback className="text-2xl font-semibold bg-muted">
+          <AvatarFallback className="text-lg font-semibold bg-muted">
             {initials}
           </AvatarFallback>
         </Avatar>
         
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-foreground mb-1">
+          <h1 className="text-lg font-bold text-foreground mb-1">
             {user.name || "No name set"}
           </h1>
           <p className="text-muted-foreground flex items-center gap-2 mb-2">

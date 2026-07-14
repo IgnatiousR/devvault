@@ -4,13 +4,13 @@ import { SettingsContent } from "@/components/settings/settings-content";
 export default function SettingsPage() {
   return (
     <>
-      <div className="mb-8">
+      <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-foreground mb-2">
+            <h1 className="text-lg font-semibold text-foreground mb-1">
               Settings
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               Manage your account settings and preferences.
             </p>
           </div>

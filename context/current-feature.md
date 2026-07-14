@@ -12,6 +12,16 @@ Completed
 - Use constants: ITEMS_PER_PAGE = 21, COLLECTIONS_PER_PAGE = 21
 - Dashboard limits: DASHBOARD_COLLECTIONS_LIMIT = 6, DASHBOARD_RECENT_ITEMS_LIMIT = 10
 - Do not fetch all resources at once. Only fetch the amount that a page requires
+- Add editor preferences section to settings page with auto-save to database
+- Font size dropdown, tab size dropdown, word wrap toggle (default: on), minimap toggle (default: off)
+- Theme dropdown: vs-dark, monokai, github-dark (default: vs-dark)
+- Store in JSON column `editorPreferences` on User model
+- Create and run a migration for the database (Never db push)
+- Create server action to update preferences
+- Apply settings to Monaco editor component
+- Auto-save on change (no save button)
+- Show success toast on save
+- Create EditorPreferencesContext for client components
 
 ## References
 - @context/features/auth-phase-1-spec.md
@@ -35,6 +45,7 @@ Completed
 - @context/features/collection-create-spec.md
 - @context/features/global-search-spec.md
 - @context/features/pagination-spec.md
+- @context/features/editor-settings-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -124,3 +135,5 @@ Completed
 - **Phase 31 Completed**: Global search / command palette implemented — installed `cmdk`, created `/api/search` endpoint returning all items + collections for the authenticated user, added `getAllSearchItems` (items.ts) and `getAllSearchCollections` (collections.ts) DB functions, created `CommandPalette` component with grouped Items/Collections results, fuzzy filtering, keyboard navigation, and type icons + item counts. Created `SearchWrapper` to wire TopBar search input click + Cmd+K shortcut across all authenticated layouts (dashboard, items, collections, profile). Search input shows ⌘K/Ctrl+K hint. Navigation: items → `/items/[type]`, collections → `/collections/[id]`. Build passes. Spec: global-search-spec.md.
 - **Phase 32 Started**: Pagination — adding pagination to /items/[type] and /collections/[id] pages with numbered page links, prev/next controls, and page-specific data fetching. Spec: pagination-spec.md.
 - **Phase 32 Completed**: Pagination implemented — created `src/lib/constants.ts` with `ITEMS_PER_PAGE = 21`, `COLLECTIONS_PER_PAGE = 21`, and dashboard limits. Created reusable `Pagination` component (`src/components/ui/pagination.tsx`) with numbered page links, prev/next buttons, and ellipsis for large page counts. Updated `getItemsByType` (items.ts) and `getItemsByCollectionId` (collections.ts) with `skip`/`take` pagination and parallel `count()` queries. Updated `/items/[type]` page to read `searchParams.page`, pass pagination options to DB query, and pass `currentPage`/`totalPages` to `ItemsListContent`. Updated `/collections/[id]` page with same pattern. Updated `ItemsListContent` and `CollectionDetailContent` to render `<Pagination>` at bottom. TypeScript check passed. Build compiles successfully. Spec: pagination-spec.md.
+- **Phase 33 Started**: Editor preferences settings — add editor preferences section to settings page with auto-save, font size, tab size, word wrap, minimap, theme settings, stored in JSON column on User model, applied to Monaco editor. Spec: editor-settings-spec.md.
+- **Phase 33 Completed**: Editor preferences settings implemented — added `editorPreferences` JSON column to User model with migration, created `EditorPreferences` types with defaults, created DB query functions (`getUserPreferences`, `updateUserPreferences`), created `updateEditorPreferencesAction` server action with Zod validation, created `EditorPreferencesContext` with auto-save (300ms debounce) and toast notifications, added Editor Preferences section to settings page with font size dropdown, tab size dropdown, theme dropdown (vs-dark/monokai/github-dark), word wrap toggle, and minimap toggle, updated CodeEditor to consume context and apply preferences (fontSize, tabSize, wordWrap, minimap, theme), registered monokai and github-dark themes via defineTheme, wrapped all authenticated layouts (dashboard, items, collections, settings, profile) with EditorPreferencesProvider. TypeScript check passed. Build passes. Spec: editor-settings-spec.md.

@@ -1,8 +1,9 @@
 "use client"
 
 import { useRef, useState } from "react"
-import Editor, { type OnMount } from "@monaco-editor/react"
+import Editor, { type OnMount, type BeforeMount } from "@monaco-editor/react"
 import { toast } from "sonner"
+import { useEditorPreferences } from "@/contexts/editor-preferences-context"
 
 interface CodeEditorProps {
   value: string
@@ -10,6 +11,42 @@ interface CodeEditorProps {
   language?: string
   readOnly?: boolean
   placeholder?: string
+}
+
+const defineMonokaiTheme: BeforeMount = (monaco) => {
+  monaco.editor.defineTheme("monokai", {
+    base: "vs-dark",
+    inherit: true,
+    rules: [],
+    colors: {
+      "editor.background": "#272822",
+      "editor.foreground": "#f8f8f2",
+      "editor.lineHighlightBackground": "#3e3d32",
+      "editor.selectionBackground": "#49483e",
+      "editorCursor.foreground": "#f8f8f0",
+      "editorWhitespace.foreground": "#3b3a32",
+      "editorIndentGuide.background": "#404040",
+      "editorIndentGuide.activeBackground": "#707070",
+    },
+  })
+}
+
+const defineGithubDarkTheme: BeforeMount = (monaco) => {
+  monaco.editor.defineTheme("github-dark", {
+    base: "vs-dark",
+    inherit: true,
+    rules: [],
+    colors: {
+      "editor.background": "#0d1117",
+      "editor.foreground": "#c9d1d9",
+      "editor.lineHighlightBackground": "#161b22",
+      "editor.selectionBackground": "#264f78",
+      "editorCursor.foreground": "#c9d1d9",
+      "editorWhitespace.foreground": "#484f58",
+      "editorIndentGuide.background": "#21262d",
+      "editorIndentGuide.activeBackground": "#484f58",
+    },
+  })
 }
 
 export function CodeEditor({
@@ -21,6 +58,12 @@ export function CodeEditor({
 }: CodeEditorProps) {
   const editorRef = useRef<Parameters<OnMount>[0] | null>(null)
   const [isCopied, setIsCopied] = useState(false)
+  const { preferences } = useEditorPreferences()
+
+  const handleBeforeMount: BeforeMount = (monaco) => {
+    defineMonokaiTheme(monaco)
+    defineGithubDarkTheme(monaco)
+  }
 
   const handleEditorMount: OnMount = (editor) => {
     editorRef.current = editor
@@ -80,13 +123,16 @@ export function CodeEditor({
           language={language}
           value={value}
           onChange={(v) => onChange?.(v || "")}
+          beforeMount={handleBeforeMount}
           onMount={handleEditorMount}
-          theme="vs-dark"
+          theme={preferences.theme}
           options={{
             readOnly,
-            minimap: { enabled: false },
+            minimap: { enabled: preferences.minimap },
             scrollBeyondLastLine: false,
-            fontSize: 13,
+            fontSize: preferences.fontSize,
+            tabSize: preferences.tabSize,
+            wordWrap: preferences.wordWrap ? "on" : "off",
             fontFamily: "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace",
             lineNumbers: "on",
             glyphMargin: false,
