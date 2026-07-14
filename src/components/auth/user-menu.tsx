@@ -88,6 +88,15 @@ export function UserMenu({ showUserInfo = false }: { showUserInfo?: boolean }) {
               <span className="material-symbols-outlined text-sm">person</span>
               Profile
             </Link>
+            <Link
+              href="/settings"
+              role="menuitem"
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              <span className="material-symbols-outlined text-sm">settings</span>
+              Settings
+            </Link>
             <button
               role="menuitem"
               onClick={handleSignOut}
