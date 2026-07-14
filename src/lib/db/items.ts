@@ -438,6 +438,60 @@ export async function getAllSearchItems(userId: string): Promise<SearchItem[]> {
   }));
 }
 
+export async function getFavoriteItems(userId: string): Promise<DashboardItem[]> {
+  const items = await prisma.item.findMany({
+    where: { userId, isFavorite: true },
+    include: {
+      itemType: true,
+      tags: true,
+      collections: {
+        include: { collection: true },
+        take: 1,
+      },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+
+  return items.map((item) => ({
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    content: item.content,
+    url: item.url,
+    isPinned: item.isPinned,
+    isFavorite: item.isFavorite,
+    itemType: {
+      name: item.itemType.name,
+      icon: item.itemType.icon,
+      color: item.itemType.color,
+    },
+    tags: item.tags.map((t) => t.name),
+    updatedAt: item.updatedAt,
+    collectionName: item.collections[0]?.collection.name ?? null,
+    fileUrl: item.fileUrl,
+    fileName: item.fileName,
+    fileSize: item.fileSize,
+  }));
+}
+
+export async function toggleItemFavorite(
+  itemId: string,
+  userId: string
+): Promise<boolean | null> {
+  const item = await prisma.item.findFirst({
+    where: { id: itemId, userId },
+  });
+
+  if (!item) return null;
+
+  const updated = await prisma.item.update({
+    where: { id: itemId },
+    data: { isFavorite: !item.isFavorite },
+  });
+
+  return updated.isFavorite;
+}
+
 export async function createItem(
   userId: string,
   data: CreateItemData

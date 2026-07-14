@@ -410,3 +410,50 @@ export async function toggleCollectionFavorite(
 
   return updated.isFavorite;
 }
+
+export interface FavoriteCollection {
+  id: string;
+  name: string;
+  description: string | null;
+  resourceCount: number;
+  mostUsedType: {
+    name: string;
+    icon: string;
+    color: string;
+  } | null;
+  updatedAt: Date;
+}
+
+export async function getFavoriteCollections(
+  userId: string
+): Promise<FavoriteCollection[]> {
+  const collections = await prisma.collection.findMany({
+    where: { userId, isFavorite: true },
+    include: {
+      items: {
+        include: {
+          item: {
+            include: {
+              itemType: true,
+            },
+          },
+        },
+      },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+
+  return collections.map((collection) => {
+    const items = collection.items.map((ic) => ic.item);
+    const typeCount = countTypesByItem(items);
+
+    return {
+      id: collection.id,
+      name: collection.name,
+      description: collection.description,
+      resourceCount: items.length,
+      mostUsedType: findMostUsedType(typeCount),
+      updatedAt: collection.updatedAt,
+    };
+  });
+}

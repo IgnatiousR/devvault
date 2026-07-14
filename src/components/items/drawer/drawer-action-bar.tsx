@@ -10,6 +10,7 @@ interface DrawerActionBarProps {
   onCancel: () => void;
   onSave: () => void;
   onDelete: () => void;
+  onToggleFavorite: () => void;
 }
 
 export function DrawerActionBar({
@@ -21,6 +22,7 @@ export function DrawerActionBar({
   onCancel,
   onSave,
   onDelete,
+  onToggleFavorite,
 }: DrawerActionBarProps) {
   return (
     <div className="px-6 pb-4 flex items-center gap-1">
@@ -59,6 +61,7 @@ export function DrawerActionBar({
             variant="ghost"
             size="sm"
             className={`gap-1.5 ${item.isFavorite ? "text-yellow-500" : "text-muted-foreground"}`}
+            onClick={onToggleFavorite}
           >
             <span
               className="material-symbols-outlined text-lg"

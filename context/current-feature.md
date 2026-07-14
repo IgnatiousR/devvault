@@ -22,6 +22,17 @@ Completed
 - Auto-save on change (no save button)
 - Show success toast on save
 - Create EditorPreferencesContext for client components
+- Add star icon button to TopBar linking to /favorites
+- Create /favorites route with protection
+- Fetch all user favorited items and collections
+- Compact list view (VS Code/terminal style, not cards)
+- Each row: type icon, title, type badge, date added
+- Separate sections for items and collections with counts
+- Click item opens ItemDrawer, click collection navigates to /collections/[id]
+- Empty state when no favorites
+- Sort by most recently favorited (updatedAt)
+- Monospace or semi-monospace font, minimal padding, high density
+- Subtle hover states, no cards or heavy borders, clean lines only
 
 ## References
 - @context/features/auth-phase-1-spec.md
@@ -46,6 +57,7 @@ Completed
 - @context/features/global-search-spec.md
 - @context/features/pagination-spec.md
 - @context/features/editor-settings-spec.md
+- @context/features/favorites-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -137,3 +149,5 @@ Completed
 - **Phase 32 Completed**: Pagination implemented — created `src/lib/constants.ts` with `ITEMS_PER_PAGE = 21`, `COLLECTIONS_PER_PAGE = 21`, and dashboard limits. Created reusable `Pagination` component (`src/components/ui/pagination.tsx`) with numbered page links, prev/next buttons, and ellipsis for large page counts. Updated `getItemsByType` (items.ts) and `getItemsByCollectionId` (collections.ts) with `skip`/`take` pagination and parallel `count()` queries. Updated `/items/[type]` page to read `searchParams.page`, pass pagination options to DB query, and pass `currentPage`/`totalPages` to `ItemsListContent`. Updated `/collections/[id]` page with same pattern. Updated `ItemsListContent` and `CollectionDetailContent` to render `<Pagination>` at bottom. TypeScript check passed. Build compiles successfully. Spec: pagination-spec.md.
 - **Phase 33 Started**: Editor preferences settings — add editor preferences section to settings page with auto-save, font size, tab size, word wrap, minimap, theme settings, stored in JSON column on User model, applied to Monaco editor. Spec: editor-settings-spec.md.
 - **Phase 33 Completed**: Editor preferences settings implemented — added `editorPreferences` JSON column to User model with migration, created `EditorPreferences` types with defaults, created DB query functions (`getUserPreferences`, `updateUserPreferences`), created `updateEditorPreferencesAction` server action with Zod validation, created `EditorPreferencesContext` with auto-save (300ms debounce) and toast notifications, added Editor Preferences section to settings page with font size dropdown, tab size dropdown, theme dropdown (vs-dark/monokai/github-dark), word wrap toggle, and minimap toggle, updated CodeEditor to consume context and apply preferences (fontSize, tabSize, wordWrap, minimap, theme), registered monokai and github-dark themes via defineTheme, wrapped all authenticated layouts (dashboard, items, collections, settings, profile) with EditorPreferencesProvider. TypeScript check passed. Build passes. Spec: editor-settings-spec.md.
+- **Phase 34 Started**: Favorites page — /favorites route with compact dev-focused list view, star icon in TopBar, item/collection sections with counts, ItemDrawer integration, empty state. Spec: favorites-spec.md.
+- **Phase 34 Completed**: Favorites page implemented — added `getFavoriteItems` and `toggleItemFavorite` DB functions to `src/lib/db/items.ts`, added `getFavoriteCollections` DB function to `src/lib/db/collections.ts`, added `toggleItemFavoriteAction` server action to `src/actions/items.ts`, wired Favorite button in `DrawerActionBar` with `onToggleFavorite` prop, updated `useDrawerState` hook with `handleToggleFavorite` function, added star icon link to TopBar linking to `/favorites`, created `/favorites` page (server component) with data fetching, created `FavoritesContent` client component with compact list view (monospace font, high density, subtle hover states), separate Items and Collections sections with counts, ItemDrawer integration, and empty state, updated `proxy.ts` matcher to protect `/favorites`. TypeScript check passed. Build passes. Spec: favorites-spec.md.

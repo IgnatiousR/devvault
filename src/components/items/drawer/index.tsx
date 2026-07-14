@@ -31,6 +31,8 @@ export function ItemDrawer({
     handleCancel,
     handleSave,
     handleDelete,
+    handleToggleFavorite,
+    itemWithFavorite,
   } = useDrawerState(item, onClose);
 
   return (
@@ -58,7 +60,7 @@ export function ItemDrawer({
             {!isLoading && !error && item && colors && (
               <>
                 <DrawerHeader
-                  item={item}
+                  item={itemWithFavorite ?? item}
                   colors={colors}
                   isEditing={isEditing}
                   editData={editData}
@@ -66,7 +68,7 @@ export function ItemDrawer({
                 />
 
                 <DrawerActionBar
-                  item={item}
+                  item={itemWithFavorite ?? item}
                   isEditing={isEditing}
                   isSaving={isSaving}
                   editTitle={editData.title}
@@ -74,6 +76,7 @@ export function ItemDrawer({
                   onCancel={handleCancel}
                   onSave={handleSave}
                   onDelete={() => setIsDeleteDialogOpen(true)}
+                  onToggleFavorite={handleToggleFavorite}
                 />
 
                 <div className="border-t border-border" />

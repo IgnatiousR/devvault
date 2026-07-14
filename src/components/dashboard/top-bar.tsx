@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
@@ -65,6 +66,14 @@ export function TopBar() {
           New Item
         </Button>
         <div className="h-4 w-px bg-border mx-1"></div>
+        <Link
+          href="/favorites"
+          className="inline-flex items-center justify-center h-9 w-9 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+        >
+          <span className="material-symbols-outlined text-lg">
+            star
+          </span>
+        </Link>
         <Button variant="ghost" size="icon" className="relative">
           <span className="material-symbols-outlined text-lg">
             notifications

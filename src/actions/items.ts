@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { updateItem, deleteItem, createItem, type UpdateItemData, type ItemDetail } from "@/lib/db/items";
+import { updateItem, deleteItem, createItem, toggleItemFavorite, type UpdateItemData, type ItemDetail } from "@/lib/db/items";
 
 const updateItemSchema = z.object({
   itemId: z.string().min(1),
@@ -183,4 +183,45 @@ export async function createItemAction(
   }
 
   return { success: true, data: result };
+}
+
+const toggleFavoriteSchema = z.object({
+  itemId: z.string().min(1),
+});
+
+type ToggleFavoriteInput = z.infer<typeof toggleFavoriteSchema>;
+
+interface ToggleFavoriteResult {
+  success: boolean;
+  isFavorite?: boolean;
+  error?: string;
+}
+
+export async function toggleItemFavoriteAction(
+  input: ToggleFavoriteInput
+): Promise<ToggleFavoriteResult> {
+  const validation = toggleFavoriteSchema.safeParse(input);
+
+  if (!validation.success) {
+    return { success: false, error: "Invalid item ID" };
+  }
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const result = await toggleItemFavorite(
+    validation.data.itemId,
+    session.user.id
+  );
+
+  if (result === null) {
+    return { success: false, error: "Item not found" };
+  }
+
+  return { success: true, isFavorite: result };
 }

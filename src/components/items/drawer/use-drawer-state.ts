@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { updateItemAction, deleteItemAction } from "@/actions/items";
+import { updateItemAction, deleteItemAction, toggleItemFavoriteAction } from "@/actions/items";
 import { updateItemCollectionsAction } from "@/actions/collections";
 import {
   EDITABLE_TYPES,
@@ -51,6 +51,7 @@ export function useDrawerState(
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [collections, setCollections] = useState<Collection[]>([]);
+  const [isFavorite, setIsFavorite] = useState(item?.isFavorite ?? false);
   const [editData, setEditData] = useState<EditData>(() => ({
     title: item?.title || "",
     description: item?.description || "",
@@ -63,6 +64,7 @@ export function useDrawerState(
 
   useEffect(() => {
     if (item) {
+      setIsFavorite(item.isFavorite);
       fetch("/api/collections")
         .then((res) => res.json())
         .then((data) => setCollections(data))
@@ -129,6 +131,22 @@ export function useDrawerState(
     }
   };
 
+  const handleToggleFavorite = async () => {
+    if (!item) return;
+
+    const result = await toggleItemFavoriteAction({ itemId: item.id });
+
+    if (result.success) {
+      setIsFavorite(result.isFavorite ?? false);
+      toast.success(result.isFavorite ? "Added to favorites" : "Removed from favorites");
+      router.refresh();
+    } else {
+      toast.error(result.error || "Failed to update favorite");
+    }
+  };
+
+  const itemWithFavorite = item ? { ...item, isFavorite } : null;
+
   return {
     editData,
     setEditData,
@@ -142,5 +160,7 @@ export function useDrawerState(
     handleCancel,
     handleSave,
     handleDelete,
+    handleToggleFavorite,
+    itemWithFavorite,
   };
 }
