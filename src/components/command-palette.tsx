@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Command } from "cmdk";
 import { cn } from "@/lib/utils";
+import { getColorTextClass } from "@/lib/color-utils";
 import type { SearchItem } from "@/lib/db/items";
 import type { SearchCollection } from "@/lib/db/collections";
 
@@ -66,7 +67,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               className="flex h-11 w-full rounded-none bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground"
             />
           </div>
-          <Command.List className="max-h-[400px] overflow-y-auto p-2">
+          <Command.List className="max-h-100 overflow-y-auto p-2">
             {isLoading && (
               <Command.Empty className="py-6 text-center text-sm text-muted-foreground">
                 Loading...
@@ -90,7 +91,7 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
                         <span
                           className={cn(
                             "material-symbols-outlined text-sm",
-                            item.itemType.color
+                            getColorTextClass(item.itemType.color)
                           )}
                         >
                           {item.itemType.icon}
