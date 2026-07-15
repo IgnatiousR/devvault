@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevVault — Stop Losing Your Developer Knowledge</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a10;
+    --surface: #12121c;
+    --surface-2: #181824;
+    --border: rgba(255,255,255,0.08);
+    --border-strong: rgba(255,255,255,0.16);
+    --text: #f4f4f7;
+    --muted: #9ca3af;
+
+    --c-snippet: #3b82f6;
+    --c-prompt: #f59e0b;
+    --c-command: #06b6d4;
+    --c-note: #22c55e;
+    --c-file: #64748b;
+    --c-image: #ec4899;
+    --c-url: #6366f1;
+  }
+
+  * { font-family: 'Plus Jakarta Sans', sans-serif; }
+  .font-display { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; }
+  .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+  html, body { background: var(--bg); color: var(--text); }
+  body { overflow-x: hidden; }
+
+  /* Background patterns */
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .dot-bg {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  /* Film grain */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    pointer-events: none; z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Gradient hero text */
+  .gradient-text {
+    background: linear-gradient(120deg, #ffffff 0%, #ffffff 40%, #8b9cff 65%, #c084fc 90%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glow blobs */
+  .glow {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(80px);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  @keyframes drift {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(30px, -30px) scale(1.1); }
+  }
+  .drift { animation: drift 12s ease-in-out infinite; }
+  .drift-slow { animation: drift 18s ease-in-out infinite reverse; }
+
+  /* Pulsing arrow */
+  @keyframes pulse-arrow {
+    0%, 100% { transform: scale(0.96); filter: drop-shadow(0 0 8px rgba(99,102,241,0.4)); }
+    50% { transform: scale(1.04); filter: drop-shadow(0 0 24px rgba(99,102,241,0.9)); }
+  }
+  .arrow-pulse { animation: pulse-arrow 2.2s ease-in-out infinite; }
+
+  @keyframes flow {
+    0% { stroke-dashoffset: 200; }
+    100% { stroke-dashoffset: 0; }
+  }
+  .flow-line { stroke-dasharray: 8 8; animation: flow 2s linear infinite; }
+
+  /* Reveal on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  /* Feature card */
+  .feature-card {
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), border-color 0.35s, background 0.35s;
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.04), transparent 40%);
+    opacity: 0; transition: opacity 0.4s;
+    pointer-events: none;
+  }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+  }
+  .feature-icon-box {
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  .feature-card:hover .feature-icon-box { transform: rotate(-6deg) scale(1.08); }
+
+  /* Chaos container */
+  .chaos-container {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(400px circle at 20% 20%, rgba(239,68,68,0.08), transparent 50%),
+      radial-gradient(400px circle at 80% 80%, rgba(245,158,11,0.06), transparent 50%),
+      linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.2));
+    border: 1px solid var(--border);
+    border-radius: 24px;
+  }
+  .chaos-icon {
+    position: absolute;
+    width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 14px;
+    background: rgba(20,20,30,0.7);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    will-change: transform;
+    transition: opacity 0.3s;
+  }
+  .chaos-icon svg { width: 28px; height: 28px; display: block; }
+
+  /* Dashboard preview */
+  .dash-card {
+    transition: all 0.3s;
+  }
+  .dash-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.04);
+  }
+
+  /* Nav scrolled */
+  nav.scrolled {
+    background: rgba(10,10,16,0.78);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--border);
+  }
+  nav { transition: background 0.4s, border-color 0.4s; }
+
+  /* Pricing toggle */
+  .toggle-track {
+    width: 56px; height: 30px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 999px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .toggle-thumb {
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: white;
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .toggle-track.on { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+  .toggle-track.on .toggle-thumb { transform: translateX(26px); }
+
+  /* Code editor */
+  .code-line { display: flex; }
+  .line-num {
+    width: 32px; text-align: right;
+    color: #4b5563;
+    margin-right: 16px;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .tag-pill {
+    transition: all 0.2s;
+  }
+  @keyframes tag-pop {
+    0% { transform: scale(0.7); opacity: 0; }
+    60% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .tag-pill { animation: tag-pop 0.5s cubic-bezier(0.16,1,0.3,1) backwards; }
+
+  /* CTA spotlight */
+  .cta-spotlight {
+    background:
+      radial-gradient(circle at 50% 0%, rgba(99,102,241,0.25), transparent 50%),
+      linear-gradient(180deg, var(--surface), var(--bg));
+  }
+
+  /* Mobile arrow rotation */
+  @media (max-width: 1023px) {
+    .arrow-horizontal { display: none; }
+  }
+  @media (min-width: 1024px) {
+    .arrow-vertical { display: none; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: #2a2a3a; border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3a3a4a; }
+
+  /* Selection */
+  ::selection { background: rgba(99,102,241,0.4); color: white; }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body class="relative">
+
+  <!-- Background decoration -->
+  <div class="fixed inset-0 grid-bg opacity-60 pointer-events-none z-0"></div>
+  <div class="glow drift" style="top:-100px; left:-100px; width:500px; height:500px; background:#3b82f6;"></div>
+  <div class="glow drift-slow" style="top:600px; right:-200px; width:600px; height:600px; background:#6366f1;"></div>
+
+  <!-- NAVIGATION -->
+  <nav id="navbar" class="fixed top-0 inset-x-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2.5 group">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center relative overflow-hidden">
+          <svg viewBox="0 0 24 24" class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/>
+            <path d="M3 7l9 4 9-4M12 11v10"/>
+          </svg>
+        </div>
+        <span class="font-display font-bold text-lg tracking-tight">DevVault</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-1">
+        <a href="#features" class="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors">Features</a>
+        <a href="#pricing" class="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors">Pricing</a>
+        <a href="#ai" class="px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors">AI</a>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a href="#" class="hidden sm:inline-flex px-4 py-2 text-sm text-gray-300 hover:text-white transition-colors">Sign In</a>
+        <a href="#cta" class="px-4 py-2 text-sm font-semibold bg-white text-black rounded-lg hover:bg-gray-200 transition-colors">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="relative z-10">
+
+    <!-- HERO -->
+    <section class="relative pt-32 pb-24 lg:pt-40 lg:pb-32 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+
+        <!-- Hero text -->
+        <div class="text-center max-w-4xl mx-auto mb-16 reveal">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur text-xs font-medium text-gray-300 mb-7">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            The developer knowledge hub
+          </div>
+
+          <h1 class="font-display font-bold text-5xl sm:text-6xl lg:text-7xl leading-[1.05] tracking-tight mb-6">
+            Stop Losing Your<br>
+            <span class="gradient-text">Developer Knowledge</span>
+          </h1>
+
+          <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed mb-9">
+            Snippets scattered across Notion. Prompts buried in Slack. Commands lost in browser tabs.
+            DevVault unifies everything you've ever learned — searchable in milliseconds.
+          </p>
+
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a href="#cta" class="group inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl hover:shadow-[0_8px_30px_rgba(99,102,241,0.4)] transition-all">
+              Start Free — It's Fast
+              <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#features" class="inline-flex items-center gap-2 px-6 py-3 border border-white/15 hover:border-white/30 text-white font-semibold rounded-xl transition-colors backdrop-blur">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              See How It Works
+            </a>
+          </div>
+        </div>
+
+        <!-- Chaos → Order Visual -->
+        <div class="grid lg:grid-cols-[1fr_auto_1fr] gap-6 lg:gap-4 items-stretch reveal">
+
+          <!-- CHAOS CONTAINER -->
+          <div class="chaos-container aspect-square lg:aspect-auto lg:min-h-[440px] p-1">
+            <div class="absolute top-4 left-4 z-10">
+              <div class="text-xs uppercase tracking-wider text-red-400/80 font-semibold mb-1">Before</div>
+              <div class="text-sm text-gray-300 font-medium">Your knowledge today...</div>
+            </div>
+
+            <div class="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/20">
+              <svg class="w-3 h-3 text-red-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+              <span class="text-xs text-red-300 font-medium">Chaotic</span>
+            </div>
+
+            <div id="chaosField" class="absolute inset-0"></div>
+          </div>
+
+          <!-- ARROW -->
+          <div class="flex items-center justify-center min-h-[80px] lg:min-h-[440px]">
+            <!-- Horizontal (desktop) -->
+            <div class="arrow-horizontal arrow-pulse">
+              <svg width="120" height="60" viewBox="0 0 120 60" fill="none">
+                <defs>
+                  <linearGradient id="arrowGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#ef4444" stop-opacity="0.3"/>
+                    <stop offset="50%" stop-color="#a855f7"/>
+                    <stop offset="100%" stop-color="#6366f1"/>
+                  </linearGradient>
+                </defs>
+                <path d="M5 30 L100 30" stroke="url(#arrowGrad)" stroke-width="3" stroke-linecap="round" class="flow-line"/>
+                <path d="M90 18 L110 30 L90 42" stroke="#6366f1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </div>
+            <!-- Vertical (mobile) -->
+            <div class="arrow-vertical arrow-pulse">
+              <svg width="60" height="120" viewBox="0 0 60 120" fill="none">
+                <defs>
+                  <linearGradient id="arrowGradV" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#ef4444" stop-opacity="0.3"/>
+                    <stop offset="50%" stop-color="#a855f7"/>
+                    <stop offset="100%" stop-color="#6366f1"/>
+                  </linearGradient>
+                </defs>
+                <path d="M30 5 L30 100" stroke="url(#arrowGradV)" stroke-width="3" stroke-linecap="round" class="flow-line"/>
+                <path d="M18 90 L30 110 L42 90" stroke="#6366f1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- DASHBOARD PREVIEW -->
+          <div class="relative rounded-3xl border border-white/10 bg-gradient-to-br from-[#13131f] to-[#0d0d16] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.7)] min-h-[440px]">
+            <div class="absolute top-4 left-4 z-10">
+              <div class="text-xs uppercase tracking-wider text-emerald-400/80 font-semibold mb-1">After</div>
+              <div class="text-sm text-gray-300 font-medium">...with DevVault</div>
+            </div>
+
+            <div class="absolute top-4 right-4 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+              <svg class="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              <span class="text-xs text-emerald-300 font-medium">Organized</span>
+            </div>
+
+            <!-- Dashboard mockup -->
+            <div class="absolute inset-0 pt-16 flex">
+              <!-- Sidebar -->
+              <div class="w-12 border-r border-white/5 flex flex-col items-center py-3 gap-3 bg-black/20">
+                <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/></svg>
+                </div>
+                <div class="w-full h-px bg-white/5 my-1"></div>
+                <button class="w-7 h-7 rounded-md bg-white/10 flex items-center justify-center" title="Home">
+                  <svg class="w-4 h-4 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                </button>
+                <button class="w-7 h-7 rounded-md hover:bg-white/5 flex items-center justify-center" title="Search">
+                  <svg class="w-4 h-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                </button>
+                <button class="w-7 h-7 rounded-md hover:bg-white/5 flex items-center justify-center" title="Snippets">
+                  <svg class="w-4 h-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                </button>
+                <button class="w-7 h-7 rounded-md hover:bg-white/5 flex items-center justify-center" title="Files">
+                  <svg class="w-4 h-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+                </button>
+                <button class="w-7 h-7 rounded-md hover:bg-white/5 flex items-center justify-center" title="Settings">
+                  <svg class="w-4 h-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                </button>
+              </div>
+
+              <!-- Main content -->
+              <div class="flex-1 p-3 overflow-hidden">
+                <!-- Search bar -->
+                <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-md bg-white/5 border border-white/5 mb-3">
+                  <svg class="w-3 h-3 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                  <div class="text-[10px] text-gray-500 font-mono">Search 247 items...</div>
+                  <div class="ml-auto text-[9px] text-gray-600 font-mono px-1 py-0.5 border border-white/10 rounded">⌘K</div>
+                </div>
+
+                <div class="text-[10px] text-gray-500 font-medium uppercase tracking-wider mb-2 px-1">Recent Items</div>
+
+                <!-- Cards grid -->
+                <div class="grid grid-cols-2 gap-2">
+                  <!-- Snippet -->
+                  <div class="dash-card rounded-md bg-white/[0.02] border border-white/5 overflow-hidden">
+                    <div class="h-0.5" style="background: var(--c-snippet);"></div>
+                    <div class="p-2">
+                      <div class="flex items-center gap-1 mb-1">
+                        <div class="w-1.5 h-1.5 rounded-full" style="background: var(--c-snippet);"></div>
+                        <span class="text-[8px] text-blue-400 font-semibold uppercase">Snippet</span>
+                      </div>
+                      <div class="text-[10px] text-white font-medium font-mono">useAuth.ts</div>
+                      <div class="text-[8px] text-gray-500 mt-0.5">React hook</div>
+                    </div>
+                  </div>
+
+                  <!-- Prompt -->
+                  <div class="dash-card rounded-md bg-white/[0.02] border border-white/5 overflow-hidden">
+                    <div class="h-0.5" style="background: var(--c-prompt);"></div>
+                    <div class="p-2">
+                      <div class="flex items-center gap-1 mb-1">
+                        <div class="w-1.5 h-1.5 rounded-full" style="background: var(--c-prompt);"></div>
+                        <span class="text-[8px] text-amber-400 font-semibold uppercase">Prompt</span>
+                      </div>
+                      <div class="text-[10px] text-white font-medium">Code Review</div>
+                      <div class="text-[8px] text-gray-500 mt-0.5">GPT-4, 3 vars</div>
+                    </div>
+                  </div>
+
+                  <!-- Command -->
+                  <div class="dash-card rounded-md bg-white/[0.02] border border-white/5 overflow-hidden">
+                    <div class="h-0.5" style="background: var(--c-command);"></div>
+                    <div class="p-2">
+                      <div class="flex items-center gap-1 mb-1">
+                        <div class="w-1.5 h-1.5 rounded-full" style="background: var(--c-command);"></div>
+                        <span class="text-[8px] text-cyan-400 font-semibold uppercase">Command</span>
+                      </div>
+                      <div class="text-[10px] text-white font-medium font-mono">docker ps -a</div>
+                      <div class="text-[8px] text-gray-500 mt-0.5">Linux</div>
+                    </div>
+                  </div>
+
+                  <!-- Note -->
+                  <div class="dash-card rounded-md bg-white/[0.02] border border-white/5 overflow-hidden">
+                    <div class="h-0.5" style="background: var(--c-note);"></div>
+                    <div class="p-2">
+                      <div class="flex items-center gap-1 mb-1">
+                        <div class="w-1.5 h-1.5 rounded-full" style="background: var(--c-note);"></div>
+                        <span class="text-[8px] text-green-400 font-semibold uppercase">Note</span>
+                      </div>
+                      <div class="text-[10px] text-white font-medium">API Design</div>
+                      <div class="text-[8px] text-gray-500 mt-0.5">REST patterns</div>
+                    </div>
+                  </div>
+
+                  <!-- Image -->
+                  <div class="dash-card rounded-md bg-white/[0.02] border border-white/5 overflow-hidden">
+                    <div class="h-0.5" style="background: var(--c-image);"></div>
+                    <div class="p-2">
+                      <div class="flex items-center gap-1 mb-1">
+                        <div class="w-1.5 h-1.5 rounded-full" style="background: var(--c-image);"></div>
+                        <span class="text-[8px] text-pink-400 font-semibold uppercase">Image</span>
+                      </div>
+                      <div class="text-[10px] text-white font-medium">Architecture</div>
+                      <div class="text-[8px] text-gray-500 mt-0.5">PNG · 1.2MB</div>
+                    </div>
+                  </div>
+
+                  <!-- URL -->
+                  <div class="dash-card rounded-md bg-white/[0.02] border border-white/5 overflow-hidden">
+                    <div class="h-0.5" style="background: var(--c-url);"></div>
+                    <div class="p-2">
+                      <div class="flex items-center gap-1 mb-1">
+                        <div class="w-1.5 h-1.5 rounded-full" style="background: var(--c-url);"></div>
+                        <span class="text-[8px] text-indigo-400 font-semibold uppercase">URL</span>
+                      </div>
+                      <div class="text-[10px] text-white font-medium">Stripe Docs</div>
+                      <div class="text-[8px] text-gray-500 mt-0.5">stripe.com</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust signals -->
+        <div class="mt-16 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-gray-500 text-sm reveal">
+          <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> No credit card required</span>
+          <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Free forever plan</span>
+          <span class="flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Export anytime</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="relative py-24 lg:py-32">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="max-w-2xl mb-14 reveal">
+          <div class="text-xs uppercase tracking-wider text-indigo-400 font-semibold mb-3">Everything in one place</div>
+          <h2 class="font-display font-bold text-4xl lg:text-5xl tracking-tight mb-4">
+            Built for every kind of <span class="gradient-text">developer knowledge</span>
+          </h2>
+          <p class="text-gray-400 text-lg">
+            Seven item types. One searchable home. Stop juggling six tools — keep it all in DevVault.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Snippets -->
+          <article class="feature-card reveal rounded-2xl border border-white/10 bg-white/[0.02] p-7">
+            <div class="feature-icon-box w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.3);">
+              <svg class="w-6 h-6" style="color: var(--c-snippet);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <h3 class="font-display font-semibold text-xl mb-2">Code Snippets</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Save reusable code with syntax highlighting for 40+ languages. Tag, organize, and find them in milliseconds.</p>
+          </article>
+
+          <!-- AI Prompts -->
+          <article class="feature-card reveal rounded-2xl border border-white/10 bg-white/[0.02] p-7">
+            <div class="feature-icon-box w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3);">
+              <svg class="w-6 h-6" style="color: var(--c-prompt);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>
+            </div>
+            <h3 class="font-display font-semibold text-xl mb-2">AI Prompts</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Curate prompts that actually work. Track variables, models, and outcomes. Build your personal prompt library.</p>
+          </article>
+
+          <!-- Instant Search -->
+          <article class="feature-card reveal rounded-2xl border border-white/10 bg-white/[0.02] p-7">
+            <div class="feature-icon-box w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background: rgba(6,182,212,0.12); border: 1px solid rgba(6,182,212,0.3);">
+              <svg class="w-6 h-6" style="color: var(--c-command);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            </div>
+            <h3 class="font-display font-semibold text-xl mb-2">Instant Search</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Sub-50ms fuzzy search across everything. Cmd+K from anywhere. Find that snippet you saved 8 months ago.</p>
+          </article>
+
+          <!-- Commands -->
+          <article class="feature-card reveal rounded-2xl border border-white/10 bg-white/[0.02] p-7">
+            <div class="feature-icon-box w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3);">
+              <svg class="w-6 h-6" style="color: var(--c-note);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            </div>
+            <h3 class="font-display font-semibold text-xl mb-2">Commands</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Store terminal commands with context. Never Google "how to undo git push" again. One-click copy.</p>
+          </article>
+
+          <!-- Files & Docs -->
+          <article class="feature-card reveal rounded-2xl border border-white/10 bg-white/[0.02] p-7">
+            <div class="feature-icon-box w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background: rgba(100,116,139,0.18); border: 1px solid rgba(100,116,139,0.4);">
+              <svg class="w-6 h-6" style="color: var(--c-file);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <h3 class="font-display font-semibold text-xl mb-2">Files & Docs</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Drop PDFs, markdown files, design assets. Preview inline. Link related items together into collections.</p>
+          </article>
+
+          <!-- Collections -->
+          <article class="feature-card reveal rounded-2xl border border-white/10 bg-white/[0.02] p-7">
+            <div class="feature-icon-box w-12 h-12 rounded-xl flex items-center justify-center mb-5" style="background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3);">
+              <svg class="w-6 h-6" style="color: var(--c-url);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <h3 class="font-display font-semibold text-xl mb-2">Collections</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Group snippets, prompts, and links into project collections. Share with your team. Perfect for onboarding.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI SECTION -->
+    <section id="ai" class="relative py-24 lg:py-32">
+      <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+
+          <!-- Left: copy -->
+          <div class="reveal">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/5 text-xs font-semibold text-amber-400 mb-6">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>
+              PRO FEATURE
+            </div>
+
+            <h2 class="font-display font-bold text-4xl lg:text-5xl tracking-tight mb-5">
+              AI that understands<br>
+              <span class="gradient-text">your code</span>
+            </h2>
+
+            <p class="text-gray-400 text-lg mb-8 leading-relaxed">
+              Stop manually tagging things. DevVault's AI reads your snippets, prompts, and notes — then organizes them automatically. Just paste, and we'll handle the rest.
+            </p>
+
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-start gap-3">
+                <div class="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                  <div class="font-semibold text-white">Auto-generated tags</div>
+                  <div class="text-sm text-gray-400">AI assigns relevant tags based on content, language, and context.</div>
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                  <div class="font-semibold text-white">Smart descriptions</div>
+                  <div class="text-sm text-gray-400">Get a one-line summary of what each item does, in plain English.</div>
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                  <div class="font-semibold text-white">Related items</div>
+                  <div class="text-sm text-gray-400">Discover connections between snippets you'd never find manually.</div>
+                </div>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div>
+                  <div class="font-semibold text-white">Natural language search</div>
+                  <div class="text-sm text-gray-400">Ask "that thing for debouncing" — get the right snippet instantly.</div>
+                </div>
+              </li>
+            </ul>
+
+            <a href="#pricing" class="inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300 font-semibold text-sm group">
+              See Pro pricing
+              <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+
+          <!-- Right: code editor mockup -->
+          <div class="reveal">
+            <div class="rounded-2xl border border-white/10 bg-[#0d0d16] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.7)]">
+              <!-- Editor header -->
+              <div class="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-black/30">
+                <div class="flex gap-1.5">
+                  <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                  <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                  <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                </div>
+                <div class="ml-3 px-2.5 py-1 rounded-t-md bg-[#0d0d16] border-t border-x border-white/10 -mb-3 mt-1">
+                  <span class="text-xs text-gray-300 font-mono flex items-center gap-1.5">
+                    <svg class="w-3 h-3 text-blue-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>
+                    useAuth.ts
+                  </span>
+                </div>
+              </div>
+
+              <!-- Code -->
+              <div class="p-4 font-mono text-[13px] leading-relaxed">
+                <div class="code-line"><span class="line-num">1</span><span><span style="color:#c084fc">import</span> <span style="color:#e2e8f0">{ useState, useEffect }</span> <span style="color:#c084fc">from</span> <span style="color:#86efac">'react'</span></span></div>
+                <div class="code-line"><span class="line-num">2</span><span></span></div>
+                <div class="code-line"><span class="line-num">3</span><span><span style="color:#c084fc">export function</span> <span style="color:#60a5fa">useAuth</span><span style="color:#e2e8f0">() {</span></span></div>
+                <div class="code-line"><span class="line-num">4</span><span>&nbsp;&nbsp;<span style="color:#c084fc">const</span> <span style="color:#e2e8f0">[user, setUser] = </span><span style="color:#60a5fa">useState</span><span style="color:#e2e8f0">(</span><span style="color:#fbbf24">null</span><span style="color:#e2e8f0">)</span></span></div>
+                <div class="code-line"><span class="line-num">5</span><span>&nbsp;&nbsp;<span style="color:#c084fc">const</span> <span style="color:#e2e8f0">token = localStorage.</span><span style="color:#60a5fa">getItem</span><span style="color:#e2e8f0">(</span><span style="color:#86efac">'token'</span><span style="color:#e2e8f0">)</span></span></div>
+                <div class="code-line"><span class="line-num">6</span><span></span></div>
+                <div class="code-line"><span class="line-num">7</span><span>&nbsp;&nbsp;<span style="color:#60a5fa">useEffect</span><span style="color:#e2e8f0">(() => {</span></span></div>
+                <div class="code-line"><span class="line-num">8</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c084fc">if</span> <span style="color:#e2e8f0">(token) {</span></span></div>
+                <div class="code-line"><span class="line-num">9</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#60a5fa">fetchUser</span><span style="color:#e2e8f0">(token).</span><span style="color:#60a5fa">then</span><span style="color:#e2e8f0">(setUser)</span></span></div>
+                <div class="code-line"><span class="line-num">10</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e2e8f0">}</span></span></div>
+                <div class="code-line"><span class="line-num">11</span><span>&nbsp;&nbsp;<span style="color:#e2e8f0">}, [])</span></span></div>
+                <div class="code-line"><span class="line-num">12</span><span></span></div>
+                <div class="code-line"><span class="line-num">13</span><span>&nbsp;&nbsp;<span style="color:#c084fc">return</span> <span style="color:#e2e8f0">{ user, </span><span style="color:#60a5fa">logout</span> <span style="color:#e2e8f0">}</span></span></div>
+                <div class="code-line"><span class="line-num">14</span><span style="color:#e2e8f0">}</span></div>
+              </div>
+
+              <!-- AI Generated Tags panel -->
+              <div class="border-t border-white/5 bg-gradient-to-r from-amber-500/[0.03] to-transparent p-4">
+                <div class="flex items-center gap-2 mb-3">
+                  <div class="w-6 h-6 rounded-md bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg>
+                  </div>
+                  <div>
+                    <div class="text-xs font-semibold text-amber-400">AI Generated Tags</div>
+                    <div class="text-[10px] text-gray-500">Generated in 0.4s</div>
+                  </div>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="tag-pill px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-medium" style="animation-delay: 0s">react-hook</span>
+                  <span class="tag-pill px-2.5 py-1 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-medium" style="animation-delay: 0.1s">authentication</span>
+                  <span class="tag-pill px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-medium" style="animation-delay: 0.2s">typescript</span>
+                  <span class="tag-pill px-2.5 py-1 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-medium" style="animation-delay: 0.3s">jwt</span>
+                  <span class="tag-pill px-2.5 py-1 rounded-md bg-pink-500/10 border border-pink-500/20 text-pink-300 text-xs font-medium" style="animation-delay: 0.4s">session</span>
+                  <span class="tag-pill px-2.5 py-1 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium" style="animation-delay: 0.5s">localStorage</span>
+                </div>
+                <div class="mt-3 pt-3 border-t border-white/5">
+                  <div class="text-[10px] text-gray-500 mb-1">AI Description</div>
+                  <div class="text-xs text-gray-300">Custom React hook for managing user authentication state with token-based session persistence.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing" class="relative py-24 lg:py-32">
+      <div class="max-w-5xl mx-auto px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12 reveal">
+          <div class="text-xs uppercase tracking-wider text-indigo-400 font-semibold mb-3">Pricing</div>
+          <h2 class="font-display font-bold text-4xl lg:text-5xl tracking-tight mb-4">
+            Start free. <span class="gradient-text">Upgrade when you're hooked.</span>
+          </h2>
+          <p class="text-gray-400 text-lg">
+            No surprises. Cancel anytime. Yearly billing saves you 25%.
+          </p>
+        </div>
+
+        <!-- Toggle -->
+        <div class="flex items-center justify-center gap-4 mb-10 reveal">
+          <span id="monthlyLabel" class="text-sm font-medium text-white transition-colors">Monthly</span>
+          <div id="billingToggle" class="toggle-track" role="switch" aria-checked="false" tabindex="0">
+            <div class="toggle-thumb"></div>
+          </div>
+          <span id="yearlyLabel" class="text-sm font-medium text-gray-500 transition-colors flex items-center gap-2">
+            Yearly
+            <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 text-[10px] font-semibold">SAVE 25%</span>
+          </span>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
+
+          <!-- Free -->
+          <div class="reveal rounded-2xl border border-white/10 bg-white/[0.02] p-7 flex flex-col">
+            <div class="flex items-center justify-between mb-1">
+              <h3 class="font-display font-semibold text-xl">Free</h3>
+              <span class="text-xs text-gray-500 font-mono">For trying out</span>
+            </div>
+            <p class="text-sm text-gray-400 mb-5">Everything you need to feel the magic.</p>
+
+            <div class="flex items-baseline gap-1 mb-1">
+              <span class="font-display font-bold text-5xl tracking-tight">$0</span>
+              <span class="text-gray-500 text-sm">/forever</span>
+            </div>
+            <div class="text-xs text-gray-500 mb-7">No credit card required</div>
+
+            <a href="#cta" class="block w-full py-3 text-center border border-white/15 hover:border-white/30 text-white font-semibold rounded-xl transition-colors mb-7">Get Started</a>
+
+            <ul class="space-y-3 text-sm">
+              <li class="flex items-center gap-3 text-gray-300"><svg class="w-4 h-4 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 50 items</li>
+              <li class="flex items-center gap-3 text-gray-300"><svg class="w-4 h-4 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> 3 collections</li>
+              <li class="flex items-center gap-3 text-gray-300"><svg class="w-4 h-4 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> All item types</li>
+              <li class="flex items-center gap-3 text-gray-300"><svg class="w-4 h-4 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Instant search</li>
+              <li class="flex items-center gap-3 text-gray-500"><svg class="w-4 h-4 text-gray-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> AI features</li>
+              <li class="flex items-center gap-3 text-gray-500"><svg class="w-4 h-4 text-gray-600 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Cloud sync</li>
+            </ul>
+          </div>
+
+          <!-- Pro -->
+          <div class="reveal relative rounded-2xl border border-indigo-500/40 bg-gradient-to-b from-indigo-500/[0.08] to-transparent p-7 flex flex-col shadow-[0_30px_60px_-15px_rgba(99,102,241,0.3)]">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-xs font-semibold shadow-lg">
+              Most Popular
+            </div>
+
+            <div class="flex items-center justify-between mb-1">
+              <h3 class="font-display font-semibold text-xl">Pro</h3>
+              <span class="text-xs text-indigo-300 font-mono">For power users</span>
+            </div>
+            <p class="text-sm text-gray-400 mb-5">Unlock the full power of DevVault.</p>
+
+            <div class="flex items-baseline gap-1 mb-1">
+              <span id="proPrice" class="font-display font-bold text-5xl tracking-tight">$8</span>
+              <span id="proPeriod" class="text-gray-500 text-sm">/month</span>
+            </div>
+            <div id="proSubtext" class="text-xs text-gray-500 mb-7">Billed monthly · Cancel anytime</div>
+
+            <a href="#cta" class="block w-full py-3 text-center bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white font-semibold rounded-xl transition-all mb-7 shadow-lg">Get Pro</a>
+
+            <ul class="space-y-3 text-sm">
+              <li class="flex items-center gap-3 text-gray-200"><svg class="w-4 h-4 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span class="font-semibold">Unlimited</span> items</li>
+              <li class="flex items-center gap-3 text-gray-200"><svg class="w-4 h-4 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Unlimited collections</li>
+              <li class="flex items-center gap-3 text-gray-200"><svg class="w-4 h-4 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> All item types</li>
+              <li class="flex items-center gap-3 text-gray-200"><svg class="w-4 h-4 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Instant search</li>
+              <li class="flex items-center gap-3 text-gray-200"><svg class="w-4 h-4 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span class="font-semibold text-amber-400">AI features</span> — auto-tags, descriptions, search</li>
+              <li class="flex items-center gap-3 text-gray-200"><svg class="w-4 h-4 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Cloud sync across devices</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section id="cta" class="relative py-24 lg:py-32 cta-spotlight">
+      <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center reveal">
+        <h2 class="font-display font-bold text-4xl sm:text-5xl lg:text-6xl tracking-tight mb-6">
+          Ready to Organize<br>
+          <span class="gradient-text">Your Knowledge?</span>
+        </h2>
+        <p class="text-lg text-gray-400 max-w-xl mx-auto mb-9">
+          Join 12,000+ developers who stopped losing their best code, prompts, and commands. Free to start — no card required.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a href="#" class="group inline-flex items-center gap-2 px-7 py-3.5 bg-white text-black font-semibold rounded-xl hover:bg-gray-200 transition-all">
+            Get Started Free
+            <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#" class="inline-flex items-center gap-2 px-7 py-3.5 border border-white/15 hover:border-white/30 text-white font-semibold rounded-xl transition-colors">
+            Book a Demo
+          </a>
+        </div>
+        <div class="mt-8 text-xs text-gray-500 font-mono">
+          ⌘ + K to search · Works on web, macOS, Windows, Linux
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="relative z-10 border-t border-white/5 py-14">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="grid lg:grid-cols-[1.5fr_1fr_1fr_1fr] gap-10 mb-10">
+        <div>
+          <a href="#" class="flex items-center gap-2.5 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+              <svg viewBox="0 0 24 24" class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"/><path d="M3 7l9 4 9-4M12 11v10"/></svg>
+            </div>
+            <span class="font-display font-bold text-lg">DevVault</span>
+          </a>
+          <p class="text-sm text-gray-400 max-w-xs leading-relaxed mb-4">
+            The developer knowledge hub. Stop losing your best code, prompts, and commands across a dozen tools.
+          </p>
+          <div class="flex gap-2">
+            <a href="#" class="w-8 h-8 rounded-lg border border-white/10 hover:border-white/30 flex items-center justify-center text-gray-400 hover:text-white transition-colors" aria-label="GitHub">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            </a>
+            <a href="#" class="w-8 h-8 rounded-lg border border-white/10 hover:border-white/30 flex items-center justify-center text-gray-400 hover:text-white transition-colors" aria-label="Twitter">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" class="w-8 h-8 rounded-lg border border-white/10 hover:border-white/30 flex items-center justify-center text-gray-400 hover:text-white transition-colors" aria-label="Discord">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-sm font-semibold text-white mb-4">Product</div>
+          <ul class="space-y-2.5 text-sm">
+            <li><a href="#features" class="text-gray-400 hover:text-white transition-colors">Features</a></li>
+            <li><a href="#pricing" class="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+            <li><a href="#ai" class="text-gray-400 hover:text-white transition-colors">AI Features</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Changelog</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Roadmap</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="text-sm font-semibold text-white mb-4">Resources</div>
+          <ul class="space-y-2.5 text-sm">
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Documentation</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">API Reference</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Community</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Templates</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="text-sm font-semibold text-white mb-4">Company</div>
+          <ul class="space-y-2.5 text-sm">
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">About</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Security</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="text-sm text-gray-500">© <span id="year"></span> DevVault, Inc. All rights reserved.</div>
+        <div class="text-xs text-gray-600 font-mono">Built by developers, for developers.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ============ YEAR ============
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ============ NAV SCROLL ============
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 24) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    });
+
+    // ============ SCROLL REVEAL ============
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ============ FEATURE CARD CURSOR ============
+    document.querySelectorAll('.feature-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+        card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+      });
+    });
+
+    // ============ PRICING TOGGLE ============
+    const toggle = document.getElementById('billingToggle');
+    const monthlyLabel = document.getElementById('monthlyLabel');
+    const yearlyLabel = document.getElementById('yearlyLabel');
+    const proPrice = document.getElementById('proPrice');
+    const proPeriod = document.getElementById('proPeriod');
+    const proSubtext = document.getElementById('proSubtext');
+
+    let yearly = false;
+    function updateBilling() {
+      if (yearly) {
+        toggle.classList.add('on');
+        toggle.setAttribute('aria-checked', 'true');
+        monthlyLabel.classList.remove('text-white');
+        monthlyLabel.classList.add('text-gray-500');
+        yearlyLabel.classList.remove('text-gray-500');
+        yearlyLabel.classList.add('text-white');
+        proPrice.textContent = '$72';
+        proPeriod.textContent = '/year';
+        proSubtext.textContent = 'Billed yearly · $6/mo effective · Save 25%';
+      } else {
+        toggle.classList.remove('on');
+        toggle.setAttribute('aria-checked', 'false');
+        monthlyLabel.classList.add('text-white');
+        monthlyLabel.classList.remove('text-gray-500');
+        yearlyLabel.classList.add('text-gray-500');
+        yearlyLabel.classList.remove('text-white');
+        proPrice.textContent = '$8';
+        proPeriod.textContent = '/month';
+        proSubtext.textContent = 'Billed monthly · Cancel anytime';
+      }
+    }
+    toggle.addEventListener('click', () => { yearly = !yearly; updateBilling(); });
+    toggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); yearly = !yearly; updateBilling(); }
+    });
+
+    // ============ CHAOS ICONS PHYSICS ============
+    const SVG_ICONS = [
+      // Notion
+      { color: '#ffffff', bg: 'rgba(255,255,255,0.95)', svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.981-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.167V6.354c0-.606-.233-.933-.748-.887l-15.177.887c-.56.047-.747.327-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952L12.21 19l.001.001c.372.14.467.513.373.933-.28.606-1.027.84-1.635.56L4.55 19.235c-.093-.327-.093-.7.187-.84l.84-.373V9.32l-1.12-.047c-.467-.046-.84-.42-.747-1.026l3.36-1.681 4.577 7.139V7.932l1.214-.093z"/></svg>' },
+      // GitHub
+      { color: '#ffffff', bg: 'rgba(255,255,255,1)', svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>' },
+      // Slack
+      { color: '#ffffff', bg: 'rgba(255,255,255,0.95)', svg: '<svg viewBox="0 0 24 24"><path fill="#36C5F0" d="M5.042 15.165a2.528 2.528 0 0 1-2.525 2.525 2.528 2.528 0 0 1 0-5.05h2.525v2.525zM6.313 15.165a2.528 2.528 0 0 1 5.05 0v6.313a2.528 2.528 0 0 1-5.05 0v-6.313zM8.838 5.042a2.528 2.528 0 0 1-2.525 2.525 2.528 2.528 0 0 1 0-5.05h2.525v2.525zM8.838 6.313a2.528 2.528 0 0 1 0 5.05H2.525a2.528 2.528 0 0 1 0-5.05h6.313zM18.962 8.838a2.528 2.528 0 0 1 2.525-2.525 2.528 2.528 0 0 1 0 5.05h-2.525V8.838zM17.688 8.838a2.528 2.528 0 0 1-5.05 0V2.525a2.528 2.528 0 0 1 5.05 0v6.313zM15.163 18.962a2.528 2.528 0 0 1 2.525-2.525 2.528 2.528 0 0 1 0 5.05h-2.525v-2.525zM15.163 17.688a2.528 2.528 0 0 1 0-5.05h6.313a2.528 2.528 0 0 1 0 5.05h-6.313z"/></svg>' },
+      // VS Code
+      { color: '#0078d4', bg: 'rgba(0,120,212,0.15)', svg: '<svg viewBox="0 0 24 24" fill="#0078d4"><path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L3.899 12 .326 15.26a1 1 0 0 0 .001 1.479L1.65 17.94a.999.999 0 0 0 1.276.057l4.12-3.128 9.46 8.63a1.492 1.492 0 0 0 1.704.29l4.943-2.377A1.5 1.5 0 0 0 24 20.06V3.939a1.5 1.5 0 0 0-.85-1.352zm-5.4 16.244l-7.247-6.831L17.75 5.17v13.66z"/></svg>' },
+      // Browser tabs
+      { color: '#e2e8f0', bg: 'rgba(255,255,255,0.06)', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8h20"/><circle cx="5" cy="6" r="0.5" fill="currentColor"/><circle cx="7" cy="6" r="0.5" fill="currentColor"/><path d="M9 6h11" stroke-dasharray="2 2"/></svg>' },
+      // Terminal
+      { color: '#22c55e', bg: 'rgba(34,197,94,0.1)', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>' },
+      // Text file
+      { color: '#94a3b8', bg: 'rgba(148,163,184,0.1)', svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="14" y2="17"/></svg>' },
+      // Bookmark
+      { color: '#f59e0b', bg: 'rgba(245,158,11,0.12)', svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>' },
+    ];
+
+    const field = document.getElementById('chaosField');
+    const icons = [];
+    let mouse = { x: -9999, y: -9999, active: false };
+
+    function initChaos() {
+      const rect = field.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+      const size = 56;
+
+      SVG_ICONS.forEach((data, i) => {
+        const el = document.createElement('div');
+        el.className = 'chaos-icon';
+        el.style.background = data.bg;
+        el.innerHTML = data.svg;
+        field.appendChild(el);
+
+        const icon = {
+          el,
+          x: Math.random() * Math.max(1, w - size),
+          y: Math.random() * Math.max(1, h - size),
+          vx: (Math.random() - 0.5) * 1.4,
+          vy: (Math.random() - 0.5) * 1.4,
+          rot: (Math.random() - 0.5) * 30,
+          rotV: (Math.random() - 0.5) * 1.2,
+          scale: 1,
+          size,
+        };
+        icons.push(icon);
+      });
+
+      field.addEventListener('mousemove', (e) => {
+        const r = field.getBoundingClientRect();
+        mouse.x = e.clientX - r.left;
+        mouse.y = e.clientY - r.top;
+        mouse.active = true;
+      });
+      field.addEventListener('mouseleave', () => {
+        mouse.active = false;
+        mouse.x = -9999;
+        mouse.y = -9999;
+      });
+      field.addEventListener('touchmove', (e) => {
+        const r = field.getBoundingClientRect();
+        mouse.x = e.touches[0].clientX - r.left;
+        mouse.y = e.touches[0].clientY - r.top;
+        mouse.active = true;
+      }, { passive: true });
+
+      requestAnimationFrame(animate);
+    }
+
+    let lastTime = performance.now();
+    function animate(now) {
+      const dt = Math.min(2, (now - lastTime) / 16);
+      lastTime = now;
+      const rect = field.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      icons.forEach((ic) => {
+        // Mouse repulsion
+        if (mouse.active) {
+          const cx = ic.x + ic.size / 2;
+          const cy = ic.y + ic.size / 2;
+          const dx = cx - mouse.x;
+          const dy = cy - mouse.y;
+          const distSq = dx * dx + dy * dy;
+          const repelR = 110;
+          if (distSq < repelR * repelR && distSq > 1) {
+            const dist = Math.sqrt(distSq);
+            const force = (1 - dist / repelR) * 1.2;
+            ic.vx += (dx / dist) * force;
+            ic.vy += (dy / dist) * force;
+          }
+        }
+
+        // Move
+        ic.x += ic.vx * dt;
+        ic.y += ic.vy * dt;
+
+        // Bounce
+        if (ic.x < 0) { ic.x = 0; ic.vx = Math.abs(ic.vx) * 0.85; }
+        if (ic.x > w - ic.size) { ic.x = w - ic.size; ic.vx = -Math.abs(ic.vx) * 0.85; }
+        if (ic.y < 0) { ic.y = 0; ic.vy = Math.abs(ic.vy) * 0.85; }
+        if (ic.y > h - ic.size) { ic.y = h - ic.size; ic.vy = -Math.abs(ic.vy) * 0.85; }
+
+        // Damping
+        ic.vx *= 0.985;
+        ic.vy *= 0.985;
+
+        // Keep alive — add tiny random drift if too slow
+        const speed = Math.hypot(ic.vx, ic.vy);
+        if (speed < 0.4) {
+          ic.vx += (Math.random() - 0.5) * 0.25;
+          ic.vy += (Math.random() - 0.5) * 0.25;
+        }
+        // Cap max speed
+        const maxV = 4;
+        if (speed > maxV) {
+          ic.vx = (ic.vx / speed) * maxV;
+          ic.vy = (ic.vy / speed) * maxV;
+        }
+
+        // Rotation
+        ic.rot += ic.rotV * dt;
+
+        // Scale pulse
+        ic.scale = 1 + Math.sin(now / 800 + ic.x * 0.01) * 0.04;
+
+        ic.el.style.transform = `translate(${ic.x}px, ${ic.y}px) rotate(${ic.rot}deg) scale(${ic.scale})`;
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    // Initialize after layout settles
+    if (document.readyState === 'complete') {
+      initChaos();
+    } else {
+      window.addEventListener('load', initChaos);
+    }
+
+    // Re-init on resize (debounced)
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        // Just clamp positions
+        const rect = field.getBoundingClientRect();
+        icons.forEach(ic => {
+          ic.x = Math.min(ic.x, Math.max(0, rect.width - ic.size));
+          ic.y = Math.min(ic.y, Math.max(0, rect.height - ic.size));
+        });
+      }, 200);
+    });
+  </script>
+</body>
+</html>
