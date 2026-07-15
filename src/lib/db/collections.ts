@@ -326,26 +326,28 @@ export async function getItemsByCollectionId(
     prisma.itemCollection.count({ where: { collectionId } }),
   ]);
 
-  const items = relations.map((rel) => ({
-    id: rel.item.id,
-    title: rel.item.title,
-    description: rel.item.description,
-    content: rel.item.content,
-    url: rel.item.url,
-    isPinned: rel.item.isPinned,
-    isFavorite: rel.item.isFavorite,
-    itemType: {
-      name: rel.item.itemType.name,
-      icon: rel.item.itemType.icon,
-      color: rel.item.itemType.color,
-    },
-    tags: rel.item.tags.map((t) => t.name),
-    updatedAt: rel.item.updatedAt,
-    collectionName: rel.item.collections[0]?.collection.name ?? null,
-    fileUrl: rel.item.fileUrl,
-    fileName: rel.item.fileName,
-    fileSize: rel.item.fileSize,
-  }));
+  const items = relations
+    .map((rel) => ({
+      id: rel.item.id,
+      title: rel.item.title,
+      description: rel.item.description,
+      content: rel.item.content,
+      url: rel.item.url,
+      isPinned: rel.item.isPinned,
+      isFavorite: rel.item.isFavorite,
+      itemType: {
+        name: rel.item.itemType.name,
+        icon: rel.item.itemType.icon,
+        color: rel.item.itemType.color,
+      },
+      tags: rel.item.tags.map((t) => t.name),
+      updatedAt: rel.item.updatedAt,
+      collectionName: rel.item.collections[0]?.collection.name ?? null,
+      fileUrl: rel.item.fileUrl,
+      fileName: rel.item.fileName,
+      fileSize: rel.item.fileSize,
+    }))
+    .sort((a, b) => (a.isPinned === b.isPinned ? 0 : a.isPinned ? -1 : 1));
 
   return { items, totalCount };
 }

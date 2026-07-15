@@ -66,6 +66,13 @@ export function ItemCard({ item, onItemClick }: { item: DashboardItem; onItemCli
       onClick={() => onItemClick?.(item.id)}
     >
       <div className={`absolute inset-y-4 left-0 w-1 ${getColorBgClass(item.itemType.color)} rounded-r-full`}></div>
+      {item.isPinned && (
+        <div className="absolute top-3 right-3">
+          <span className="material-symbols-outlined text-blue-500 text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+            push_pin
+          </span>
+        </div>
+      )}
       <div className="p-6 pl-8">
         <div className="flex items-center justify-between mb-5">
           <div className={`w-8 h-8 rounded border border-border ${colors.bg} flex items-center justify-center`}>
@@ -111,6 +118,13 @@ export function ListItem({ item, onItemClick }: { item: DashboardItem; onItemCli
       onClick={() => onItemClick?.(item.id)}
     >
       <div className={`absolute inset-y-4 left-0 w-1 ${getColorBgClass(item.itemType.color)} rounded-r-full`}></div>
+      {item.isPinned && (
+        <div className="absolute top-3 right-3">
+          <span className="material-symbols-outlined text-blue-500 text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+            push_pin
+          </span>
+        </div>
+      )}
       <div className={`w-10 h-10 rounded border border-border ${colors.bg} flex items-center justify-center shrink-0`}>
         <span className={`material-symbols-outlined ${colors.text} text-[18px]`}>
           {icon}

@@ -182,7 +182,7 @@ export async function getItemsByType(
           take: 1,
         },
       },
-      orderBy: { updatedAt: "desc" },
+      orderBy: [{ isPinned: "desc" }, { updatedAt: "desc" }],
       skip,
       take: limit,
     }),
@@ -490,6 +490,24 @@ export async function toggleItemFavorite(
   });
 
   return updated.isFavorite;
+}
+
+export async function toggleItemPin(
+  itemId: string,
+  userId: string
+): Promise<boolean | null> {
+  const item = await prisma.item.findFirst({
+    where: { id: itemId, userId },
+  });
+
+  if (!item) return null;
+
+  const updated = await prisma.item.update({
+    where: { id: itemId },
+    data: { isPinned: !item.isPinned },
+  });
+
+  return updated.isPinned;
 }
 
 export async function createItem(

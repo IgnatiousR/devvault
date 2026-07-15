@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { updateItemAction, deleteItemAction, toggleItemFavoriteAction } from "@/actions/items";
+import { updateItemAction, deleteItemAction, toggleItemFavoriteAction, toggleItemPinAction } from "@/actions/items";
 import { updateItemCollectionsAction } from "@/actions/collections";
 import {
   EDITABLE_TYPES,
@@ -52,6 +52,7 @@ export function useDrawerState(
   const [isDeleting, setIsDeleting] = useState(false);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [isFavorite, setIsFavorite] = useState(item?.isFavorite ?? false);
+  const [isPinned, setIsPinned] = useState(item?.isPinned ?? false);
   const [editData, setEditData] = useState<EditData>(() => ({
     title: item?.title || "",
     description: item?.description || "",
@@ -65,6 +66,7 @@ export function useDrawerState(
   useEffect(() => {
     if (item) {
       setIsFavorite(item.isFavorite);
+      setIsPinned(item.isPinned);
       fetch("/api/collections")
         .then((res) => res.json())
         .then((data) => setCollections(data))
@@ -145,7 +147,22 @@ export function useDrawerState(
     }
   };
 
+  const handleTogglePin = async () => {
+    if (!item) return;
+
+    const result = await toggleItemPinAction({ itemId: item.id });
+
+    if (result.success) {
+      setIsPinned(result.isPinned ?? false);
+      toast.success(result.isPinned ? "Item pinned" : "Item unpinned");
+      router.refresh();
+    } else {
+      toast.error(result.error || "Failed to update pin");
+    }
+  };
+
   const itemWithFavorite = item ? { ...item, isFavorite } : null;
+  const itemWithPin = item ? { ...item, isPinned } : null;
 
   return {
     editData,
@@ -161,6 +178,8 @@ export function useDrawerState(
     handleSave,
     handleDelete,
     handleToggleFavorite,
+    handleTogglePin,
     itemWithFavorite,
+    itemWithPin,
   };
 }

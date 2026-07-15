@@ -11,6 +11,7 @@ interface DrawerActionBarProps {
   onSave: () => void;
   onDelete: () => void;
   onToggleFavorite: () => void;
+  onTogglePin: () => void;
 }
 
 export function DrawerActionBar({
@@ -23,6 +24,7 @@ export function DrawerActionBar({
   onSave,
   onDelete,
   onToggleFavorite,
+  onTogglePin,
 }: DrawerActionBarProps) {
   return (
     <div className="px-6 pb-4 flex items-center gap-1">
@@ -78,9 +80,17 @@ export function DrawerActionBar({
           <Button
             variant="ghost"
             size="sm"
-            className="gap-1.5 text-muted-foreground"
+            className={`gap-1.5 ${item.isPinned ? "text-blue-500" : "text-muted-foreground"}`}
+            onClick={onTogglePin}
           >
-            <span className="material-symbols-outlined text-lg">
+            <span
+              className="material-symbols-outlined text-lg"
+              style={
+                item.isPinned
+                  ? { fontVariationSettings: "'FILL' 1" }
+                  : undefined
+              }
+            >
               push_pin
             </span>
             <span className="text-xs">Pin</span>

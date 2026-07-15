@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { updateItem, deleteItem, createItem, toggleItemFavorite, type UpdateItemData, type ItemDetail } from "@/lib/db/items";
+import { updateItem, deleteItem, createItem, toggleItemFavorite, toggleItemPin, type UpdateItemData, type ItemDetail } from "@/lib/db/items";
 
 const updateItemSchema = z.object({
   itemId: z.string().min(1),
@@ -224,4 +224,45 @@ export async function toggleItemFavoriteAction(
   }
 
   return { success: true, isFavorite: result };
+}
+
+const togglePinSchema = z.object({
+  itemId: z.string().min(1),
+});
+
+type TogglePinInput = z.infer<typeof togglePinSchema>;
+
+interface TogglePinResult {
+  success: boolean;
+  isPinned?: boolean;
+  error?: string;
+}
+
+export async function toggleItemPinAction(
+  input: TogglePinInput
+): Promise<TogglePinResult> {
+  const validation = togglePinSchema.safeParse(input);
+
+  if (!validation.success) {
+    return { success: false, error: "Invalid item ID" };
+  }
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  const result = await toggleItemPin(
+    validation.data.itemId,
+    session.user.id
+  );
+
+  if (result === null) {
+    return { success: false, error: "Item not found" };
+  }
+
+  return { success: true, isPinned: result };
 }

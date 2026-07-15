@@ -33,6 +33,12 @@ Completed
 - Sort by most recently favorited (updatedAt)
 - Monospace or semi-monospace font, minimal padding, high density
 - Subtle hover states, no cards or heavy borders, clean lines only
+- Make Pin button in ItemDrawer functional with toggleItemPin server action
+- Pinned items sort to top of listings and on dashboard in pinned items section
+- Optimistic UI updates for instant feedback
+- Toast notification on success/error
+- Items only (not collections)
+- Pin icon on ItemCard remains static indicator
 
 ## References
 - @context/features/auth-phase-1-spec.md
@@ -58,6 +64,7 @@ Completed
 - @context/features/pagination-spec.md
 - @context/features/editor-settings-spec.md
 - @context/features/favorites-spec.md
+- @context/features/pinned-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -151,3 +158,5 @@ Completed
 - **Phase 33 Completed**: Editor preferences settings implemented — added `editorPreferences` JSON column to User model with migration, created `EditorPreferences` types with defaults, created DB query functions (`getUserPreferences`, `updateUserPreferences`), created `updateEditorPreferencesAction` server action with Zod validation, created `EditorPreferencesContext` with auto-save (300ms debounce) and toast notifications, added Editor Preferences section to settings page with font size dropdown, tab size dropdown, theme dropdown (vs-dark/monokai/github-dark), word wrap toggle, and minimap toggle, updated CodeEditor to consume context and apply preferences (fontSize, tabSize, wordWrap, minimap, theme), registered monokai and github-dark themes via defineTheme, wrapped all authenticated layouts (dashboard, items, collections, settings, profile) with EditorPreferencesProvider. TypeScript check passed. Build passes. Spec: editor-settings-spec.md.
 - **Phase 34 Started**: Favorites page — /favorites route with compact dev-focused list view, star icon in TopBar, item/collection sections with counts, ItemDrawer integration, empty state. Spec: favorites-spec.md.
 - **Phase 34 Completed**: Favorites page implemented — added `getFavoriteItems` and `toggleItemFavorite` DB functions to `src/lib/db/items.ts`, added `getFavoriteCollections` DB function to `src/lib/db/collections.ts`, added `toggleItemFavoriteAction` server action to `src/actions/items.ts`, wired Favorite button in `DrawerActionBar` with `onToggleFavorite` prop, updated `useDrawerState` hook with `handleToggleFavorite` function, added star icon link to TopBar linking to `/favorites`, created `/favorites` page (server component) with data fetching, created `FavoritesContent` client component with compact list view (monospace font, high density, subtle hover states), separate Items and Collections sections with counts, ItemDrawer integration, and empty state, updated `proxy.ts` matcher to protect `/favorites`. TypeScript check passed. Build passes. Spec: favorites-spec.md.
+- **Phase 35 Started**: Pinned items — make Pin button in ItemDrawer functional, add toggleItemPin server action, pinned items sort to top of listings and appear on dashboard pinned section. Spec: pinned-spec.md.
+- **Phase 35 Completed**: Pinned items implemented — added `toggleItemPin` DB function to `src/lib/db/items.ts` (mirrors `toggleItemFavorite`), added `toggleItemPinAction` server action to `src/actions/items.ts` with Zod validation. Updated `useDrawerState` hook with `isPinned` state, `handleTogglePin` handler, and `itemWithPin` merged object. Wired Pin button in `DrawerActionBar` with `onClick`, blue color and filled icon when pinned. Updated `ItemDrawer` to pass pin props through. Added static pin indicator badge (filled blue push_pin icon) on `ItemCard` and `ListItem`. Updated `getItemsByType` orderBy to `[{ isPinned: "desc" }, { updatedAt: "desc" }]` for pinned-first sorting. Updated `getItemsByCollectionId` to sort pinned items first in results. TypeScript check passed. Build passes. Spec: pinned-spec.md.

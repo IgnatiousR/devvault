@@ -32,7 +32,9 @@ export function ItemDrawer({
     handleSave,
     handleDelete,
     handleToggleFavorite,
+    handleTogglePin,
     itemWithFavorite,
+    itemWithPin,
   } = useDrawerState(item, onClose);
 
   return (
@@ -68,7 +70,7 @@ export function ItemDrawer({
                 />
 
                 <DrawerActionBar
-                  item={itemWithFavorite ?? item}
+                  item={itemWithPin ?? itemWithFavorite ?? item}
                   isEditing={isEditing}
                   isSaving={isSaving}
                   editTitle={editData.title}
@@ -77,6 +79,7 @@ export function ItemDrawer({
                   onSave={handleSave}
                   onDelete={() => setIsDeleteDialogOpen(true)}
                   onToggleFavorite={handleToggleFavorite}
+                  onTogglePin={handleTogglePin}
                 />
 
                 <div className="border-t border-border" />
