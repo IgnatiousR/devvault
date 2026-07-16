@@ -5,11 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { updateItemAction, deleteItemAction, toggleItemFavoriteAction, toggleItemPinAction } from "@/actions/items";
 import { updateItemCollectionsAction } from "@/actions/collections";
-import {
-  EDITABLE_TYPES,
-  LANGUAGE_TYPES,
-  URL_TYPES,
-} from "@/lib/item-types";
+import { parseTags, shouldIncludeContent, hasLanguage, isUrlType } from "@/lib/item-helpers";
 import type { ItemDetail } from "@/types/dashboard";
 import type { EditData } from "./types";
 
@@ -19,25 +15,20 @@ interface Collection {
 }
 
 function buildItemEditPayload(item: ItemDetail, editData: EditData) {
-  const tagsArray = editData.tags
-    .split(",")
-    .map((t) => t.trim())
-    .filter((t) => t.length > 0);
-
   return {
     itemId: item.id,
     title: editData.title,
     description: editData.description || null,
-    content: EDITABLE_TYPES.includes(item.itemType.name)
+    content: shouldIncludeContent(item.itemType.name)
       ? editData.content || null
       : undefined,
-    language: LANGUAGE_TYPES.includes(item.itemType.name)
+    language: hasLanguage(item.itemType.name)
       ? editData.language || null
       : undefined,
-    url: URL_TYPES.includes(item.itemType.name)
+    url: isUrlType(item.itemType.name)
       ? editData.url || null
       : undefined,
-    tags: tagsArray,
+    tags: parseTags(editData.tags),
   };
 }
 

@@ -4,6 +4,10 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { MainContent } from "@/components/main/main-content";
 import {
+  DASHBOARD_COLLECTIONS_LIMIT,
+  DASHBOARD_RECENT_ITEMS_LIMIT,
+} from "@/lib/constants";
+import {
   getPinnedItems,
   getRecentItems,
   getItemCounts,
@@ -35,9 +39,9 @@ export default async function DashboardPage() {
 
   const [collectionsResult, pinnedItems, recentItems, itemCounts, itemTypesByCount] =
     await Promise.all([
-      getCollectionsWithStats(user.id, { limit: 6 }),
+      getCollectionsWithStats(user.id, { limit: DASHBOARD_COLLECTIONS_LIMIT }),
       getPinnedItems(user.id),
-      getRecentItems(user.id, 10),
+      getRecentItems(user.id, DASHBOARD_RECENT_ITEMS_LIMIT),
       getItemCounts(user.id),
       getItemsByTypeCount(user.id),
     ]);

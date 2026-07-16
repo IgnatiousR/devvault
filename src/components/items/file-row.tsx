@@ -2,6 +2,11 @@ import { Download } from "lucide-react";
 import type { DashboardItem } from "@/types/dashboard";
 import { formatFileSize, formatRelativeTime } from "@/lib/format-utils";
 
+interface FileRowProps {
+  item: DashboardItem;
+  onItemClick?: (itemId: string) => void;
+}
+
 function getFileIcon(fileName: string | null | undefined): string {
   if (!fileName) return "description";
   const ext = fileName.split(".").pop()?.toLowerCase();
@@ -20,7 +25,7 @@ function getFileIcon(fileName: string | null | undefined): string {
   return iconMap[ext || ""] || "description";
 }
 
-export function FileRow({ item, onItemClick }: { item: DashboardItem; onItemClick?: (itemId: string) => void }) {
+export function FileRow({ item, onItemClick }: FileRowProps) {
   const relativeTime = formatRelativeTime(item.updatedAt);
   const icon = getFileIcon(item.fileName);
 

@@ -7,7 +7,11 @@ import Link from "next/link";
 import { UserAvatar } from "./user-avatar";
 import { toast } from "sonner";
 
-export function UserMenu({ showUserInfo = false }: { showUserInfo?: boolean }) {
+interface UserMenuProps {
+  showUserInfo?: boolean;
+}
+
+export function UserMenu({ showUserInfo = false }: UserMenuProps) {
   const { data: session } = useSession();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);

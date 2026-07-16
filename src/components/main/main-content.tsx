@@ -94,6 +94,10 @@ function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode
   );
 }
 
+interface MainContentProps {
+  initialData: DashboardData;
+}
+
 interface ItemsSectionProps {
   title: string;
   items: DashboardItem[];
@@ -122,7 +126,7 @@ function ItemsSection({ title, items, onItemClick }: ItemsSectionProps) {
   );
 }
 
-export function MainContent({ initialData }: { initialData: DashboardData }) {
+export function MainContent({ initialData }: MainContentProps) {
   const data = initialData;
   const { data: selectedItem, isLoading: isDrawerLoading, error: drawerError, open: openDrawer, close: closeDrawer, isOpen: isDrawerOpen } = useItemDetail();
 

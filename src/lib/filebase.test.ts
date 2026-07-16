@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { formatFileSize, getFilebaseKey } from "./filebase";
+import { getFilebaseKey } from "./filebase";
+import { formatFileSize } from "./format-utils";
 
 describe("formatFileSize", () => {
   it("returns '0 B' for zero bytes", () => {

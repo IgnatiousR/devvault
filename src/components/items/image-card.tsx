@@ -1,7 +1,12 @@
 import type { DashboardItem } from "@/types/dashboard";
 import { formatRelativeTime } from "@/lib/format-utils";
 
-export function ImageCard({ item, onItemClick }: { item: DashboardItem; onItemClick?: (itemId: string) => void }) {
+interface ImageCardProps {
+  item: DashboardItem;
+  onItemClick?: (itemId: string) => void;
+}
+
+export function ImageCard({ item, onItemClick }: ImageCardProps) {
   const relativeTime = formatRelativeTime(item.updatedAt);
   const hasImage = item.fileUrl;
 

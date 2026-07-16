@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { createItemAction } from "@/actions/items";
 import { ITEM_TYPE_OPTIONS, FILE_TYPES } from "@/lib/item-types";
+import { parseTags, shouldIncludeContent, hasLanguage, isUrlType } from "@/lib/item-helpers";
 
 interface Collection {
   id: string;
@@ -27,26 +28,18 @@ function buildItemCreatePayload(
   uploadedFile: { fileUrl: string; fileName: string; fileSize: number } | null,
   selectedCollectionIds: string[]
 ) {
-  const tagsArray = tags
-    .split(",")
-    .map((t) => t.trim())
-    .filter((t) => t.length > 0);
-
   const itemType = ITEM_TYPE_OPTIONS.find((t) => t.id === selectedType);
-  const showContent = ["snippet", "prompt", "command", "note"].includes(selectedType);
-  const showLanguage = ["snippet", "command"].includes(selectedType);
-  const showUrl = selectedType === "link";
 
   return {
     title,
     description: description || null,
-    content: showContent ? content || null : null,
-    language: showLanguage ? language || null : null,
-    url: showUrl ? url || null : null,
+    content: shouldIncludeContent(selectedType) ? content || null : null,
+    language: hasLanguage(selectedType) ? language || null : null,
+    url: isUrlType(selectedType) ? url || null : null,
     fileUrl: uploadedFile?.fileUrl || null,
     fileName: uploadedFile?.fileName || null,
     fileSize: uploadedFile?.fileSize || null,
-    tags: tagsArray,
+    tags: parseTags(tags),
     itemTypeId: itemType?.id || "snippet",
     collectionIds: selectedCollectionIds,
   };
@@ -88,9 +81,9 @@ export function useCreateItem({ pathname, onOpenChange }: UseCreateItemOptions) 
       .catch(() => setCollections([]));
   }, []);
 
-  const showContent = ["snippet", "prompt", "command", "note"].includes(selectedType);
-  const showLanguage = ["snippet", "command"].includes(selectedType);
-  const showUrl = selectedType === "link";
+  const showContent = shouldIncludeContent(selectedType);
+  const showLanguage = hasLanguage(selectedType);
+  const showUrl = isUrlType(selectedType);
   const showFileUpload = FILE_TYPES.includes(selectedType);
 
   const resetForm = () => {

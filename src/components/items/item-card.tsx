@@ -4,17 +4,17 @@ import { useState } from "react";
 import type { DashboardItem } from "@/types/dashboard";
 import { formatRelativeTime } from "@/lib/format-utils";
 import { getColorBgClass } from "@/lib/color-utils";
+import { getItemColorClasses } from "@/lib/item-helpers";
 import { toast } from "sonner";
 
-function getItemColorClasses(typeName: string) {
-  const map: Record<string, { bg: string; text: string; hoverBorder: string; hoverText: string }> = {
-    "Snippet": { bg: "bg-[var(--color-brand-red)]/10", text: "text-[var(--color-brand-red)]", hoverBorder: "hover:border-[var(--color-brand-red)]/30", hoverText: "group-hover:text-[var(--color-brand-red)]" },
-    "Prompt": { bg: "bg-orange-500/10", text: "text-orange-500", hoverBorder: "hover:border-orange-500/30", hoverText: "group-hover:text-orange-400" },
-    "Command": { bg: "bg-amber-500/10", text: "text-amber-500", hoverBorder: "hover:border-amber-500/30", hoverText: "group-hover:text-amber-400" },
-    "Note": { bg: "bg-yellow-500/10", text: "text-yellow-500", hoverBorder: "hover:border-yellow-500/30", hoverText: "group-hover:text-yellow-400" },
-    "Link": { bg: "bg-emerald-500/10", text: "text-emerald-500", hoverBorder: "hover:border-emerald-500/30", hoverText: "group-hover:text-emerald-400" },
-  };
-  return map[typeName] || { bg: "bg-blue-500/10", text: "text-blue-500", hoverBorder: "hover:border-blue-500/30", hoverText: "group-hover:text-blue-400" };
+interface ItemCardProps {
+  item: DashboardItem;
+  onItemClick?: (itemId: string) => void;
+}
+
+interface ListItemProps {
+  item: DashboardItem;
+  onItemClick?: (itemId: string) => void;
 }
 
 const COPYABLE_TYPES = new Set(["snippet", "prompt", "command", "note", "link"]);
@@ -54,7 +54,7 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-export function ItemCard({ item, onItemClick }: { item: DashboardItem; onItemClick?: (itemId: string) => void }) {
+export function ItemCard({ item, onItemClick }: ItemCardProps) {
   const colors = getItemColorClasses(item.itemType.name);
   const icon = item.itemType.icon;
   const relativeTime = formatRelativeTime(item.updatedAt);
@@ -106,7 +106,7 @@ export function ItemCard({ item, onItemClick }: { item: DashboardItem; onItemCli
   );
 }
 
-export function ListItem({ item, onItemClick }: { item: DashboardItem; onItemClick?: (itemId: string) => void }) {
+export function ListItem({ item, onItemClick }: ListItemProps) {
   const colors = getItemColorClasses(item.itemType.name);
   const icon = item.itemType.icon;
   const relativeTime = formatRelativeTime(item.updatedAt);
