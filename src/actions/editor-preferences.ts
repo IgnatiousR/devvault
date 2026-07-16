@@ -1,13 +1,13 @@
 "use server";
 
 import { z } from "zod";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import {
   getUserPreferences,
   updateUserPreferences,
 } from "@/lib/db/editor-preferences";
 import type { EditorPreferences } from "@/types/editor-preferences";
+import { getSessionUserId } from "./shared";
+import { validateWithFieldErrors } from "@/lib/action-utils";
 
 const updatePreferencesSchema = z.object({
   fontSize: z.number().min(8).max(32),
@@ -29,31 +29,14 @@ interface UpdatePreferencesResult {
 export async function updateEditorPreferencesAction(
   input: UpdatePreferencesInput
 ): Promise<UpdatePreferencesResult> {
-  const validation = updatePreferencesSchema.safeParse(input);
+  const validation = validateWithFieldErrors(updatePreferencesSchema, input);
+  if (!validation.success) return validation;
 
-  if (!validation.success) {
-    const fieldErrors: Record<string, string> = {};
-    validation.error.issues.forEach((issue) => {
-      const field = issue.path[0] as string;
-      fieldErrors[field] = issue.message;
-    });
-    return {
-      success: false,
-      error: "Validation failed",
-      fieldErrors,
-    };
-  }
-
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    return { success: false, error: "Unauthorized" };
-  }
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) return auth;
 
   const result = await updateUserPreferences(
-    session.user.id,
+    auth.userId,
     validation.data
   );
 
@@ -64,13 +47,10 @@ export async function updateEditorPreferencesAction(
 }
 
 export async function getEditorPreferencesAction(): Promise<EditorPreferences> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) {
     throw new Error("Unauthorized");
   }
 
-  return getUserPreferences(session.user.id);
+  return getUserPreferences(auth.userId);
 }

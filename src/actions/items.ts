@@ -1,9 +1,13 @@
 "use server";
 
 import { z } from "zod";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { updateItem, deleteItem, createItem, toggleItemFavorite, toggleItemPin, type UpdateItemData, type ItemDetail } from "@/lib/db/items";
+import { getSessionUserId } from "./shared";
+import {
+  validateWithFieldErrors,
+  validateSimple,
+  notFound,
+} from "@/lib/action-utils";
 
 const updateItemSchema = z.object({
   itemId: z.string().min(1),
@@ -27,32 +31,15 @@ interface UpdateItemResult {
 export async function updateItemAction(
   input: UpdateItemInput
 ): Promise<UpdateItemResult> {
-  const validation = updateItemSchema.safeParse(input);
+  const validation = validateWithFieldErrors(updateItemSchema, input);
+  if (!validation.success) return validation;
 
-  if (!validation.success) {
-    const fieldErrors: Record<string, string> = {};
-    validation.error.issues.forEach((issue) => {
-      const field = issue.path[0] as string;
-      fieldErrors[field] = issue.message;
-    });
-    return {
-      success: false,
-      error: "Validation failed",
-      fieldErrors,
-    };
-  }
-
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    return { success: false, error: "Unauthorized" };
-  }
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) return auth;
 
   const { itemId, ...data } = validation.data;
 
-  const result = await updateItem(itemId, session.user.id, {
+  const result = await updateItem(itemId, auth.userId, {
     title: data.title,
     description: data.description ?? null,
     content: data.content ?? null,
@@ -61,9 +48,7 @@ export async function updateItemAction(
     tags: data.tags,
   });
 
-  if (!result) {
-    return { success: false, error: "Item not found" };
-  }
+  if (!result) return notFound("Item");
 
   return {
     success: true,
@@ -92,25 +77,15 @@ interface DeleteItemResult {
 export async function deleteItemAction(
   input: DeleteItemInput
 ): Promise<DeleteItemResult> {
-  const validation = deleteItemSchema.safeParse(input);
+  const validation = validateSimple(deleteItemSchema, input, "Invalid item ID");
+  if (!validation.success) return validation;
 
-  if (!validation.success) {
-    return { success: false, error: "Invalid item ID" };
-  }
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) return auth;
 
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const result = await deleteItem(validation.data.itemId, auth.userId);
 
-  if (!session?.user) {
-    return { success: false, error: "Unauthorized" };
-  }
-
-  const result = await deleteItem(validation.data.itemId, session.user.id);
-
-  if (!result) {
-    return { success: false, error: "Item not found" };
-  }
+  if (!result) return notFound("Item");
 
   return { success: true };
 }
@@ -141,30 +116,13 @@ interface CreateItemResult {
 export async function createItemAction(
   input: CreateItemInput
 ): Promise<CreateItemResult> {
-  const validation = createItemSchema.safeParse(input);
+  const validation = validateWithFieldErrors(createItemSchema, input);
+  if (!validation.success) return validation;
 
-  if (!validation.success) {
-    const fieldErrors: Record<string, string> = {};
-    validation.error.issues.forEach((issue) => {
-      const field = issue.path[0] as string;
-      fieldErrors[field] = issue.message;
-    });
-    return {
-      success: false,
-      error: "Validation failed",
-      fieldErrors,
-    };
-  }
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) return auth;
 
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    return { success: false, error: "Unauthorized" };
-  }
-
-  const result = await createItem(session.user.id, {
+  const result = await createItem(auth.userId, {
     title: validation.data.title,
     description: validation.data.description ?? null,
     content: validation.data.content ?? null,
@@ -178,9 +136,7 @@ export async function createItemAction(
     collectionIds: validation.data.collectionIds ?? [],
   });
 
-  if (!result) {
-    return { success: false, error: "Failed to create item" };
-  }
+  if (!result) return { success: false, error: "Failed to create item" };
 
   return { success: true, data: result };
 }
@@ -200,28 +156,18 @@ interface ToggleFavoriteResult {
 export async function toggleItemFavoriteAction(
   input: ToggleFavoriteInput
 ): Promise<ToggleFavoriteResult> {
-  const validation = toggleFavoriteSchema.safeParse(input);
+  const validation = validateSimple(toggleFavoriteSchema, input, "Invalid item ID");
+  if (!validation.success) return validation;
 
-  if (!validation.success) {
-    return { success: false, error: "Invalid item ID" };
-  }
-
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    return { success: false, error: "Unauthorized" };
-  }
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) return auth;
 
   const result = await toggleItemFavorite(
     validation.data.itemId,
-    session.user.id
+    auth.userId
   );
 
-  if (result === null) {
-    return { success: false, error: "Item not found" };
-  }
+  if (result === null) return notFound("Item");
 
   return { success: true, isFavorite: result };
 }
@@ -241,28 +187,18 @@ interface TogglePinResult {
 export async function toggleItemPinAction(
   input: TogglePinInput
 ): Promise<TogglePinResult> {
-  const validation = togglePinSchema.safeParse(input);
+  const validation = validateSimple(togglePinSchema, input, "Invalid item ID");
+  if (!validation.success) return validation;
 
-  if (!validation.success) {
-    return { success: false, error: "Invalid item ID" };
-  }
-
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    return { success: false, error: "Unauthorized" };
-  }
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) return auth;
 
   const result = await toggleItemPin(
     validation.data.itemId,
-    session.user.id
+    auth.userId
   );
 
-  if (result === null) {
-    return { success: false, error: "Item not found" };
-  }
+  if (result === null) return notFound("Item");
 
   return { success: true, isPinned: result };
 }

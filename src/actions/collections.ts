@@ -1,8 +1,6 @@
 "use server";
 
 import { z } from "zod";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import {
   createCollection,
@@ -12,6 +10,12 @@ import {
   toggleCollectionFavorite,
   type CreatedCollection,
 } from "@/lib/db/collections";
+import { getSessionUserId } from "./shared";
+import {
+  validateWithFieldErrors,
+  validateSimple,
+  notFound,
+} from "@/lib/action-utils";
 
 const createCollectionSchema = z.object({
   name: z.string().trim().min(1, "Name is required"),
@@ -30,37 +34,18 @@ interface CreateCollectionResult {
 export async function createCollectionAction(
   input: CreateCollectionInput
 ): Promise<CreateCollectionResult> {
-  const validation = createCollectionSchema.safeParse(input);
+  const validation = validateWithFieldErrors(createCollectionSchema, input);
+  if (!validation.success) return validation;
 
-  if (!validation.success) {
-    const fieldErrors: Record<string, string> = {};
-    validation.error.issues.forEach((issue) => {
-      const field = issue.path[0] as string;
-      fieldErrors[field] = issue.message;
-    });
-    return {
-      success: false,
-      error: "Validation failed",
-      fieldErrors,
-    };
-  }
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) return auth;
 
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    return { success: false, error: "Unauthorized" };
-  }
-
-  const result = await createCollection(session.user.id, {
+  const result = await createCollection(auth.userId, {
     name: validation.data.name,
     description: validation.data.description ?? null,
   });
 
-  if (!result) {
-    return { success: false, error: "Failed to create collection" };
-  }
+  if (!result) return { success: false, error: "Failed to create collection" };
 
   revalidatePath("/dashboard");
 
@@ -82,29 +67,19 @@ interface UpdateItemCollectionsResult {
 export async function updateItemCollectionsAction(
   input: UpdateItemCollectionsInput
 ): Promise<UpdateItemCollectionsResult> {
-  const validation = updateItemCollectionsSchema.safeParse(input);
+  const validation = validateSimple(updateItemCollectionsSchema, input);
+  if (!validation.success) return validation;
 
-  if (!validation.success) {
-    return { success: false, error: "Invalid input" };
-  }
-
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    return { success: false, error: "Unauthorized" };
-  }
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) return auth;
 
   const result = await setItemCollections(
     validation.data.itemId,
-    session.user.id,
+    auth.userId,
     validation.data.collectionIds
   );
 
-  if (!result) {
-    return { success: false, error: "Item not found" };
-  }
+  if (!result) return notFound("Item");
 
   revalidatePath("/dashboard");
 
@@ -127,32 +102,22 @@ interface UpdateCollectionResult {
 export async function updateCollectionAction(
   input: UpdateCollectionInput
 ): Promise<UpdateCollectionResult> {
-  const validation = updateCollectionSchema.safeParse(input);
+  const validation = validateSimple(updateCollectionSchema, input);
+  if (!validation.success) return validation;
 
-  if (!validation.success) {
-    return { success: false, error: "Invalid input" };
-  }
-
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    return { success: false, error: "Unauthorized" };
-  }
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) return auth;
 
   const result = await updateCollection(
     validation.data.id,
-    session.user.id,
+    auth.userId,
     {
       name: validation.data.name,
       description: validation.data.description,
     }
   );
 
-  if (!result) {
-    return { success: false, error: "Collection not found" };
-  }
+  if (!result) return notFound("Collection");
 
   revalidatePath("/dashboard");
   revalidatePath("/collections");
@@ -175,28 +140,15 @@ interface DeleteCollectionResult {
 export async function deleteCollectionAction(
   input: DeleteCollectionInput
 ): Promise<DeleteCollectionResult> {
-  const validation = deleteCollectionSchema.safeParse(input);
+  const validation = validateSimple(deleteCollectionSchema, input);
+  if (!validation.success) return validation;
 
-  if (!validation.success) {
-    return { success: false, error: "Invalid input" };
-  }
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) return auth;
 
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const result = await deleteCollection(validation.data.id, auth.userId);
 
-  if (!session?.user) {
-    return { success: false, error: "Unauthorized" };
-  }
-
-  const result = await deleteCollection(
-    validation.data.id,
-    session.user.id
-  );
-
-  if (!result) {
-    return { success: false, error: "Collection not found" };
-  }
+  if (!result) return notFound("Collection");
 
   revalidatePath("/dashboard");
   revalidatePath("/collections");
@@ -219,28 +171,18 @@ interface ToggleFavoriteResult {
 export async function toggleCollectionFavoriteAction(
   input: ToggleFavoriteInput
 ): Promise<ToggleFavoriteResult> {
-  const validation = toggleFavoriteSchema.safeParse(input);
+  const validation = validateSimple(toggleFavoriteSchema, input);
+  if (!validation.success) return validation;
 
-  if (!validation.success) {
-    return { success: false, error: "Invalid input" };
-  }
-
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    return { success: false, error: "Unauthorized" };
-  }
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) return auth;
 
   const result = await toggleCollectionFavorite(
     validation.data.id,
-    session.user.id
+    auth.userId
   );
 
-  if (result === null) {
-    return { success: false, error: "Collection not found" };
-  }
+  if (result === null) return notFound("Collection");
 
   revalidatePath("/dashboard");
   revalidatePath("/collections");
