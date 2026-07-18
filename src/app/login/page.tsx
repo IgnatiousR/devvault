@@ -1,11 +1,15 @@
 import { Suspense } from "react";
 import { SignInForm } from "@/components/auth/sign-in-form";
+import { Navbar } from "@/components/home/navbar";
 
 function SignInContent() {
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <SignInForm />
-    </div>
+    <>
+      <Navbar />
+      <div className="flex min-h-screen items-center justify-center p-4 pt-16">
+        <SignInForm />
+      </div>
+    </>
   );
 }
 

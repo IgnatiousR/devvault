@@ -19,12 +19,19 @@ function SidebarLogo() {
   return (
     <SidebarHeader className="h-16 px-6 group-data-[collapsible=icon]:px-2 border-b border-border flex items-center justify-center">
       <div className="flex items-center gap-2 w-full group-data-[collapsible=icon]:justify-center">
-        <div className="w-6 h-6 shrink-0 bg-brand-red rounded-md flex items-center justify-center">
-          <span
-            className="material-symbols-outlined text-white text-[14px] [font-variation-settings:'FILL_1']"
+        <div className="w-6 h-6 shrink-0 bg-gradient-to-br from-red-500 to-red-600 rounded-md flex items-center justify-center">
+          <svg
+            viewBox="0 0 24 24"
+            className="w-4 h-4 text-white"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
-            security
-          </span>
+            <path d="M3 7l9-4 9 4v10l-9 4-9-4V7z" />
+            <path d="M3 7l9 4 9-4M12 11v10" />
+          </svg>
         </div>
         <span className="font-semibold text-sm tracking-tight group-data-[collapsible=icon]:hidden">
           DevVault
