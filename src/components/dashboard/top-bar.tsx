@@ -68,17 +68,18 @@ export function TopBar() {
         <div className="h-4 w-px bg-border mx-1"></div>
         <Link
           href="/favorites"
+          aria-label="Favorites"
           className="inline-flex items-center justify-center h-9 w-9 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
         >
           <span className="material-symbols-outlined text-lg">
             star
           </span>
         </Link>
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon" className="relative" aria-label="Notifications">
           <span className="material-symbols-outlined text-lg">
             notifications
           </span>
-          <span className="absolute top-2 right-2.5 w-1.5 h-1.5 `bg-brand-red rounded-full"></span>
+          <span className="absolute top-2 right-2.5 w-1.5 h-1.5 bg-brand-red rounded-full"></span>
         </Button>
       </div>
     </header>

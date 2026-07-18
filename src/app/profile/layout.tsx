@@ -26,9 +26,11 @@ export default async function ProfileLayout({
     getSidebarCollections(session.user.id),
   ]);
 
+  const pathname = (await headers()).get("x-invoke-path") || "/profile";
+
   return (
     <SidebarProvider>
-      <AppSidebar itemTypes={itemTypesByCount} collections={collections} />
+      <AppSidebar itemTypes={itemTypesByCount} collections={collections} currentPath={pathname} />
       <SidebarInset>
         <SearchWrapper />
         <main className="min-h-screen">

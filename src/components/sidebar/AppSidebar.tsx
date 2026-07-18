@@ -41,7 +41,7 @@ function FavoritesSection({ collections }: { collections: SidebarCollection[] })
 
   return (
     <div className="mb-2">
-      <span className="px-2 text-[9px] font-medium text-muted-foreground/70 uppercase tracking-wider group-data-[collapsible=icon]:hidden">
+      <span className="px-2 text-[11px] font-medium text-muted-foreground/70 uppercase tracking-wider group-data-[collapsible=icon]:hidden">
         Favorites
       </span>
       <SidebarMenu>
@@ -69,7 +69,7 @@ function RecentCollectionsSection({ collections }: { collections: SidebarCollect
 
   return (
     <div>
-      <span className="px-2 text-[9px] font-medium text-muted-foreground/70 uppercase tracking-wider group-data-[collapsible=icon]:hidden">
+      <span className="px-2 text-[11px] font-medium text-muted-foreground/70 uppercase tracking-wider group-data-[collapsible=icon]:hidden">
         Recent
       </span>
       <SidebarMenu>
@@ -107,7 +107,7 @@ function RecentCollectionsSection({ collections }: { collections: SidebarCollect
 function CollectionsMenu({ collections }: { collections: SidebarCollection[] }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
+      <SidebarGroupLabel className="text-xs font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
         Collections
       </SidebarGroupLabel>
       <FavoritesSection collections={collections} />
@@ -132,7 +132,7 @@ function pluralize(name: string): string {
 function ItemTypesMenu({ itemTypes }: { itemTypes: ItemTypeCount[] }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
+      <SidebarGroupLabel className="text-xs font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
         Types
       </SidebarGroupLabel>
       <SidebarMenu>
@@ -163,19 +163,6 @@ function ItemTypesMenu({ itemTypes }: { itemTypes: ItemTypeCount[] }) {
 function UserFooter() {
   return (
     <SidebarFooter className="p-3 space-y-4 mt-auto group-data-[collapsible=icon]:px-2">
-      {/*<div className="px-3 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
-        <Link
-          href="/documentation"
-          className="flex items-center gap-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent/50 hover:text-accent-foreground transition-colors rounded-md group-data-[collapsible=icon]:justify-center"
-        >
-          <span className="material-symbols-outlined opacity-70 shrink-0">
-            description
-          </span>
-          <span className="group-data-[collapsible=icon]:hidden">
-            Documentation
-          </span>
-        </Link>
-      </div>*/}
       <div className="border-t border-border pt-4">
         <UserMenu showUserInfo={true} />
       </div>
@@ -186,9 +173,10 @@ function UserFooter() {
 interface AppSidebarProps {
   itemTypes: ItemTypeCount[];
   collections: SidebarCollection[];
+  currentPath?: string;
 }
 
-export function AppSidebar({ itemTypes, collections }: AppSidebarProps) {
+export function AppSidebar({ itemTypes, collections, currentPath }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon">
       <SidebarLogo />
@@ -200,6 +188,7 @@ export function AppSidebar({ itemTypes, collections }: AppSidebarProps) {
                 render={<Link href="/dashboard" />}
                 tooltip="Dashboard"
                 className="font-medium text-sm transition-all text-muted-foreground"
+                aria-current={currentPath === "/dashboard" ? "page" : undefined}
               >
                 <span className="material-symbols-outlined opacity-70 text-sm shrink-0">
                   dashboard

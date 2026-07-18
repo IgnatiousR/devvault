@@ -31,9 +31,11 @@ export default async function DashboardLayout({
     mostUsedType: c.mostUsedType,
   }));
 
+  const pathname = (await headers()).get("x-invoke-path") || "/dashboard";
+
   return (
     <SidebarProvider>
-      <AppSidebar itemTypes={itemTypesByCount} collections={serializedCollections} />
+      <AppSidebar itemTypes={itemTypesByCount} collections={serializedCollections} currentPath={pathname} />
       <SidebarInset>
         <SearchWrapper />
         <main className="min-h-screen">

@@ -25,12 +25,14 @@ export function CtaSection() {
               <ArrowRight className="size-4 group-hover:translate-x-0.5 transition-transform" />
             </Button>
           </Link>
-          <Button
-            variant="outline"
-            className="px-7 py-3.5 border-white/15 hover:border-white/30 text-white font-semibold rounded-xl"
-          >
-            Book a Demo
-          </Button>
+          <Link href="mailto:demo@devvault.io?subject=Book%20a%20Demo">
+            <Button
+              variant="outline"
+              className="px-7 py-3.5 border-white/15 hover:border-white/30 text-white font-semibold rounded-xl"
+            >
+              Book a Demo
+            </Button>
+          </Link>
         </div>
         <div className="mt-8 text-xs text-muted-foreground font-mono">
           ⌘ + K to search · Works on web, macOS, Windows, Linux

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ListIcon, XIcon } from "@phosphor-icons/react";
@@ -14,12 +14,31 @@ const navLinks = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const handleEscape = useCallback((e: KeyboardEvent) => {
+    if (e.key === "Escape" && mobileOpen) {
+      setMobileOpen(false);
+    }
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [handleEscape]);
+
+  useEffect(() => {
+    if (mobileOpen) {
+      closeButtonRef.current?.focus();
+    }
+  }, [mobileOpen]);
 
   return (
     <>
@@ -78,6 +97,7 @@ export function Navbar() {
               size="icon-sm"
               className="md:hidden"
               onClick={() => setMobileOpen(true)}
+              aria-label="Open navigation menu"
             >
               <ListIcon className="size-5" />
             </Button>
@@ -86,18 +106,20 @@ export function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="fixed inset-0 z-[60] md:hidden">
+        <div className="fixed inset-0 z-[60] md:hidden" role="dialog" aria-modal="true" aria-label="Navigation menu">
           <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="fixed inset-y-0 right-0 w-72 bg-popover border-l border-border shadow-lg p-4 flex flex-col gap-2 animate-in slide-in-from-right">
+          <div className="fixed inset-y-0 right-0 w-72 bg-popover border-l border-border shadow-lg p-4 flex flex-col gap-2 animate-in slide-in-from-right" ref={mobileMenuRef}>
             <div className="flex items-center justify-between mb-2">
               <span className="font-semibold text-sm">Navigation</span>
               <Button
+                ref={closeButtonRef}
                 variant="ghost"
                 size="icon-sm"
                 onClick={() => setMobileOpen(false)}
+                aria-label="Close navigation menu"
               >
                 <XIcon className="size-4" />
               </Button>

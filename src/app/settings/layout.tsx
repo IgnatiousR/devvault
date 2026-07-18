@@ -26,9 +26,11 @@ export default async function SettingsLayout({
     getSidebarCollections(session.user.id),
   ]);
 
+  const pathname = (await headers()).get("x-invoke-path") || "/settings";
+
   return (
     <SidebarProvider>
-      <AppSidebar itemTypes={itemTypesByCount} collections={collections} />
+      <AppSidebar itemTypes={itemTypesByCount} collections={collections} currentPath={pathname} />
       <SidebarInset>
         <SearchWrapper />
         <main className="min-h-screen">
