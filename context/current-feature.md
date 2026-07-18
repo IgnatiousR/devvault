@@ -6,57 +6,22 @@ Completed
 
 ## Goals
 <!-- Goals & requirements -->
-- Build public marketing homepage from context/prototypes/homepage.html mockup
-- Replace placeholder `src/app/page.tsx` with full landing page
-- 8 sections: Navbar, Hero, Chaos→Order Visual, Features Grid, AI Section, Pricing, CTA, Footer
-- Navbar: client component, fixed, scroll-aware blur, mobile hamburger via ShadCN Sheet
-- Hero: gradient text, dual CTAs (register + features anchor), trust signals
-- Chaos→Order: 3-column visual with tool icons and dashboard preview using DB item type colors
-- Features: 6-card responsive grid (snippets, prompts, search, commands, files, collections)
-- AI Section: two-column layout with code editor mockup and AI-generated tags panel
-- Pricing: client component with monthly/yearly toggle, Free + Pro cards
-- CTA: gradient spotlight, final conversion section
-- Footer: logo, socials, link columns, copyright
-- All buttons/links route to correct destinations (`/register`, `/login`, anchors)
-- Dark theme using existing globals.css variables
-- Server components by default, only navbar + pricing as client components
-- Responsive design (mobile + desktop)
-- No new packages needed
-- Add pagination to /items/[type] and /collections/[id] pages
-- Pagination controls at bottom with page numbers and prev/next links
-- Disable (grey out) prev/next when not available
-- Use constants: ITEMS_PER_PAGE = 21, COLLECTIONS_PER_PAGE = 21
-- Dashboard limits: DASHBOARD_COLLECTIONS_LIMIT = 6, DASHBOARD_RECENT_ITEMS_LIMIT = 10
-- Do not fetch all resources at once. Only fetch the amount that a page requires
-- Add editor preferences section to settings page with auto-save to database
-- Font size dropdown, tab size dropdown, word wrap toggle (default: on), minimap toggle (default: off)
-- Theme dropdown: vs-dark, monokai, github-dark (default: vs-dark)
-- Store in JSON column `editorPreferences` on User model
-- Create and run a migration for the database (Never db push)
-- Create server action to update preferences
-- Apply settings to Monaco editor component
-- Auto-save on change (no save button)
-- Show success toast on save
-- Create EditorPreferencesContext for client components
-- Add star icon button to TopBar linking to /favorites
-- Create /favorites route with protection
-- Fetch all user favorited items and collections
-- Compact list view (VS Code/terminal style, not cards)
-- Each row: type icon, title, type badge, date added
-- Separate sections for items and collections with counts
-- Click item opens ItemDrawer, click collection navigates to /collections/[id]
-- Empty state when no favorites
-- Sort by most recently favorited (updatedAt)
-- Monospace or semi-monospace font, minimal padding, high density
-- Subtle hover states, no cards or heavy borders, clean lines only
-- Make Pin button in ItemDrawer functional with toggleItemPin server action
-- Pinned items sort to top of listings and on dashboard in pinned items section
-- Optimistic UI updates for instant feedback
-- Toast notification on success/error
-- Items only (not collections)
-- Pin icon on ItemCard remains static indicator
+- Install `@better-auth/stripe` and `stripe` packages
+- Configure Better Auth Stripe server plugin with plan definitions (monthly $8, annual $72)
+- Configure Better Auth Stripe client plugin
+- Add `user.additionalFields` for `isPro` cache field
+- Run Better Auth schema generation and Prisma migration
+- Create centralized entitlement service (`src/lib/entitlements.ts`)
+- Create usage-limits module with free-tier enforcement (50 items, 3 collections)
+- Write unit tests for entitlements and usage-limits modules
+- Create Stripe client configuration helper (`src/lib/stripe-config.ts`)
+- Update environment variables for Stripe (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, price IDs)
+- Keep `user.isPro` as denormalized cache field updated by webhook hooks
+- Database-backed subscription records as authoritative source of truth
+- Lifecycle hooks: onSubscriptionComplete, onSubscriptionCancel, onSubscriptionDeleted
 
 ## References
+- @context/features/stripe-phase-1-spec.md
 - @context/features/auth-phase-1-spec.md
 - @context/features/auth-phase-2-spec.md
 - @context/features/auth-phase-3-spec.md
@@ -115,6 +80,12 @@ Completed
 - Filebase uses S3 API: endpoint `https://s3.filebase.io`, region `auto`, signature version `v4`
 - AWS SDK v3 compatible - use `@aws-sdk/client-s3` and `@aws-sdk/s3-request-presigner`
 - Environment variables: FILEBASE_ACCESS_KEY, FILEBASE_SECRET_KEY, FILEBASE_BUCKET, FILEBASE_ENDPOINT
+- Stripe integration uses `@better-auth/stripe` plugin (official)
+- Free tier limits: 50 items, 3 collections
+- Pro tier: unlimited items/collections, file uploads, AI, custom item types, export
+- Entitlement source of truth: database-backed subscription records
+- `user.isPro` is a denormalized cache field updated by webhook hooks
+- Webhook endpoint: `/api/auth/stripe/webhook` (handled by Better Auth plugin)
 
 ## History
 <!-- Keep this updated. Earliest to latest -->
@@ -179,3 +150,5 @@ Completed
 - **Phase 35 Completed**: Pinned items implemented — added `toggleItemPin` DB function to `src/lib/db/items.ts` (mirrors `toggleItemFavorite`), added `toggleItemPinAction` server action to `src/actions/items.ts` with Zod validation. Updated `useDrawerState` hook with `isPinned` state, `handleTogglePin` handler, and `itemWithPin` merged object. Wired Pin button in `DrawerActionBar` with `onClick`, blue color and filled icon when pinned. Updated `ItemDrawer` to pass pin props through. Added static pin indicator badge (filled blue push_pin icon) on `ItemCard` and `ListItem`. Updated `getItemsByType` orderBy to `[{ isPinned: "desc" }, { updatedAt: "desc" }]` for pinned-first sorting. Updated `getItemsByCollectionId` to sort pinned items first in results. TypeScript check passed. Build passes. Spec: pinned-spec.md.
 - **Phase 36 Started**: Homepage — public marketing/landing page based on homepage.html mockup. 8 sections (Navbar, Hero, Chaos→Order, Features, AI, Pricing, CTA, Footer), server components by default, client only for navbar + pricing toggle. Spec: homepage-spec.md.
 - **Phase 36 Completed**: Homepage implemented — created 8 section components in `src/components/home/`: `navbar.tsx` (client, scroll-aware, mobile menu), `hero.tsx` (gradient text, dual CTAs, trust signals), `chaos-order.tsx` (3-column visual with tool icons and dashboard preview), `features.tsx` (6-card responsive grid with Phosphor icons), `ai-section.tsx` (2-column with code mockup and AI tags), `pricing.tsx` (client, monthly/yearly toggle, Free + Pro cards), `cta-section.tsx` (gradient spotlight, conversion section), `footer.tsx` (4-column links, socials, copyright). Updated `src/app/page.tsx` to compose all sections with background decorations (grid pattern, animated glow blobs). Added homepage CSS utilities to `globals.css` (gradient-text, grid-bg, pulse/drift animations with prefers-reduced-motion). All buttons/links route to correct destinations. TypeScript check passed. Build passes (static prerender). Lint clean. Spec: homepage-spec.md.
+- **Phase 37 Started**: Stripe integration — Phase 1: Core infrastructure. Installing Better Auth Stripe plugin, configuring subscription plans (Pro: $8/mo, $72/yr), creating entitlement service and usage-limits module with unit tests. Spec: stripe-phase-1-spec.md.
+- **Phase 37 Completed**: Stripe Phase 1 implemented — installed `@better-auth/stripe` and `stripe` packages, created `src/lib/stripe-config.ts` with Stripe client initialization, created `src/lib/entitlements.ts` with `getUserEntitlements()`, `requirePro()`, `isProUser()` functions, created `src/lib/usage-limits.ts` with `getUsageStatus()`, `canCreateItem()`, `canCreateCollection()`, `assertWithinItemLimit()`, `assertWithinCollectionLimit()`, `requireProForFeature()` functions. Updated `src/lib/auth.ts` with Stripe server plugin (subscription plans, lifecycle hooks for onSubscriptionComplete/Cancel/Deleted), added `user.additionalFields` for `isPro` cache field. Updated `src/lib/auth-client.ts` with `stripeClient` plugin and `subscription` export. Updated environment variables (STRIPE_PRO_MONTHLY_PRICE_ID, STRIPE_PRO_ANNUAL_PRICE_ID, NEXT_PUBLIC_BETTER_AUTH_URL). Created comprehensive unit tests for entitlements and usage-limits (91 tests passing). All tests pass, TypeScript compiles, build succeeds.

@@ -1,6 +1,8 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
+import { stripe } from "@better-auth/stripe";
+import { stripeClient } from "./stripe-config";
 import { prisma } from "./prisma";
 import {
   sendEmail,
@@ -12,6 +14,15 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  user: {
+    additionalFields: {
+      isPro: {
+        type: "boolean",
+        defaultValue: false,
+        input: false,
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
@@ -45,5 +56,48 @@ export const auth = betterAuth({
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // 1 day
   },
-  plugins: [nextCookies()],
+  plugins: [
+    nextCookies(),
+    stripe({
+      stripeClient,
+      stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
+      createCustomerOnSignUp: true,
+      subscription: {
+        enabled: true,
+        plans: [
+          {
+            name: "pro",
+            priceId: process.env.STRIPE_PRO_MONTHLY_PRICE_ID!,
+            annualDiscountPriceId: process.env.STRIPE_PRO_ANNUAL_PRICE_ID!,
+            limits: {
+              items: Infinity,
+              collections: Infinity,
+              fileUploads: Infinity,
+            },
+          },
+        ],
+        onSubscriptionComplete: async ({ subscription }) => {
+          const { prisma: db } = await import("./prisma");
+          await db.user.update({
+            where: { id: subscription.referenceId },
+            data: { isPro: true },
+          });
+        },
+        onSubscriptionCancel: async ({ subscription }) => {
+          const { prisma: db } = await import("./prisma");
+          await db.user.update({
+            where: { id: subscription.referenceId },
+            data: { isPro: false },
+          });
+        },
+        onSubscriptionDeleted: async ({ subscription }) => {
+          const { prisma: db } = await import("./prisma");
+          await db.user.update({
+            where: { id: subscription.referenceId },
+            data: { isPro: false },
+          });
+        },
+      },
+    }),
+  ],
 });
