@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -14,6 +18,19 @@ import { UserMenu } from "@/components/auth/user-menu";
 import { getColorTextClass } from "@/lib/color-utils";
 import type { SidebarCollection } from "@/lib/db/collections";
 import type { ItemTypeCount } from "@/lib/db/items";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
+
+const PRO_GATED_TYPES = ["File", "Image"];
 
 function SidebarLogo() {
   return (
@@ -136,33 +153,103 @@ function pluralize(name: string): string {
   return map[name] || name;
 }
 
-function ItemTypesMenu({ itemTypes }: { itemTypes: ItemTypeCount[] }) {
+function ItemTypesMenu({
+  itemTypes,
+  isPro,
+}: {
+  itemTypes: ItemTypeCount[];
+  isPro: boolean;
+}) {
+  const router = useRouter();
+  const [proDialogOpen, setProDialogOpen] = useState(false);
+  const [selectedProType, setSelectedProType] = useState<string | null>(null);
+
+  const handleProClick = (typeName: string) => {
+    setSelectedProType(typeName);
+    setProDialogOpen(true);
+  };
+
+  const handleUpgrade = () => {
+    setProDialogOpen(false);
+    router.push("/settings/billing");
+  };
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="text-xs font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
         Types
       </SidebarGroupLabel>
       <SidebarMenu>
-        {itemTypes.map((itemType) => (
-          <SidebarMenuItem key={itemType.name}>
-            <SidebarMenuButton
-              render={<Link href={`/items/${itemType.name.toLowerCase()}`} />}
-              tooltip={`${pluralize(itemType.name)} (${itemType.count})`}
-              className="font-medium text-sm transition-all text-muted-foreground"
-            >
-              <span
-                className={`material-symbols-outlined opacity-70 text-sm shrink-0 ${getColorTextClass(itemType.color)}`}
+        {itemTypes.map((itemType) => {
+          const isProGated = PRO_GATED_TYPES.includes(itemType.name);
+
+          if (isProGated && !isPro) {
+            return (
+              <SidebarMenuItem key={itemType.name}>
+                <SidebarMenuButton
+                  onClick={() => handleProClick(itemType.name)}
+                  tooltip={`${pluralize(itemType.name)} (${itemType.count}) — Pro feature`}
+                  className="font-medium text-sm transition-all text-muted-foreground"
+                >
+                  <span
+                    className={`material-symbols-outlined opacity-70 text-sm shrink-0 ${getColorTextClass(itemType.color)}`}
+                  >
+                    {itemType.icon}
+                  </span>
+                  <span>{pluralize(itemType.name)}</span>
+                  <Badge variant="pro" className="ml-auto mr-1">
+                    Pro
+                  </Badge>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          }
+
+          return (
+            <SidebarMenuItem key={itemType.name}>
+              <SidebarMenuButton
+                render={<Link href={`/items/${itemType.name.toLowerCase()}`} />}
+                tooltip={`${pluralize(itemType.name)} (${itemType.count})`}
+                className="font-medium text-sm transition-all text-muted-foreground"
               >
-                {itemType.icon}
-              </span>
-              <span>{pluralize(itemType.name)}</span>
-              <span className="ml-auto text-xs text-muted-foreground">
-                {itemType.count}
-              </span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
+                <span
+                  className={`material-symbols-outlined opacity-70 text-sm shrink-0 ${getColorTextClass(itemType.color)}`}
+                >
+                  {itemType.icon}
+                </span>
+                <span>{pluralize(itemType.name)}</span>
+                <span className="ml-auto text-xs text-muted-foreground">
+                  {itemType.count}
+                </span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          );
+        })}
       </SidebarMenu>
+
+      <AlertDialog open={proDialogOpen} onOpenChange={setProDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Pro Feature</AlertDialogTitle>
+            <AlertDialogDescription>
+              {selectedProType &&
+                `${pluralize(selectedProType)} are a Pro feature. Upgrade to access file uploads and image storage.`}
+              <span className="block mt-2 text-foreground font-medium">
+                $8/month or $72/year (Save 25%)
+              </span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white"
+              onClick={handleUpgrade}
+            >
+              Upgrade to Pro
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </SidebarGroup>
   );
 }
@@ -181,9 +268,10 @@ interface AppSidebarProps {
   itemTypes: ItemTypeCount[];
   collections: SidebarCollection[];
   currentPath?: string;
+  isPro?: boolean;
 }
 
-export function AppSidebar({ itemTypes, collections, currentPath }: AppSidebarProps) {
+export function AppSidebar({ itemTypes, collections, currentPath, isPro = false }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon">
       <SidebarLogo />
@@ -206,7 +294,7 @@ export function AppSidebar({ itemTypes, collections, currentPath }: AppSidebarPr
           </SidebarMenu>
         </SidebarGroup>
         <div className="mx-4 h-px bg-border" />
-        <ItemTypesMenu itemTypes={itemTypes} />
+        <ItemTypesMenu itemTypes={itemTypes} isPro={isPro} />
         <div className="mx-4 h-px bg-border" />
         <CollectionsMenu collections={collections} />
       </SidebarContent>

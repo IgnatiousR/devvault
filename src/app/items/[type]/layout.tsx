@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { SearchWrapper } from "@/components/dashboard/search-wrapper";
 import { AppSidebar } from "@/components/sidebar/AppSidebar";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
@@ -21,6 +22,15 @@ export default async function ItemsLayout({
     redirect("/login");
   }
 
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { isPro: true },
+  });
+
+  if (!user) {
+    redirect("/login");
+  }
+
   const [itemTypesByCount, collections] = await Promise.all([
     getItemsByTypeCount(session.user.id),
     getSidebarCollections(session.user.id),
@@ -30,7 +40,7 @@ export default async function ItemsLayout({
 
   return (
     <SidebarProvider>
-      <AppSidebar itemTypes={itemTypesByCount} collections={collections} currentPath={pathname} />
+      <AppSidebar itemTypes={itemTypesByCount} collections={collections} currentPath={pathname} isPro={user.isPro} />
       <SidebarInset>
         <SearchWrapper />
         <main className="min-h-screen">
