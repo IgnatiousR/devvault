@@ -152,6 +152,23 @@ export function useDrawerState(
     }
   };
 
+  const handleCopy = async () => {
+    if (!item) return;
+
+    const textToCopy = item.content || item.url || item.fileUrl || "";
+    if (!textToCopy) {
+      toast.error("Nothing to copy");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      toast.success("Copied to clipboard");
+    } catch {
+      toast.error("Failed to copy");
+    }
+  };
+
   const itemWithFavorite = item ? { ...item, isFavorite } : null;
   const itemWithPin = item ? { ...item, isPinned } : null;
 
@@ -170,6 +187,7 @@ export function useDrawerState(
     handleDelete,
     handleToggleFavorite,
     handleTogglePin,
+    handleCopy,
     itemWithFavorite,
     itemWithPin,
   };

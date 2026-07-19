@@ -33,6 +33,7 @@ export function ItemDrawer({
     handleDelete,
     handleToggleFavorite,
     handleTogglePin,
+    handleCopy,
     itemWithFavorite,
     itemWithPin,
   } = useDrawerState(item, onClose);
@@ -80,6 +81,7 @@ export function ItemDrawer({
                   onDelete={() => setIsDeleteDialogOpen(true)}
                   onToggleFavorite={handleToggleFavorite}
                   onTogglePin={handleTogglePin}
+                  onCopy={handleCopy}
                 />
 
                 <div className="border-t border-border" />

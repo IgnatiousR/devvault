@@ -12,6 +12,7 @@ interface DrawerActionBarProps {
   onDelete: () => void;
   onToggleFavorite: () => void;
   onTogglePin: () => void;
+  onCopy: () => void;
 }
 
 export function DrawerActionBar({
@@ -25,6 +26,7 @@ export function DrawerActionBar({
   onDelete,
   onToggleFavorite,
   onTogglePin,
+  onCopy,
 }: DrawerActionBarProps) {
   return (
     <div className="px-6 pb-4 flex items-center gap-1">
@@ -99,6 +101,7 @@ export function DrawerActionBar({
             variant="ghost"
             size="sm"
             className="gap-1.5 text-muted-foreground"
+            onClick={onCopy}
           >
             <span className="material-symbols-outlined text-lg">
               content_copy
