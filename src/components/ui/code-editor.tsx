@@ -86,7 +86,7 @@ export function CodeEditor({
   const displayLanguage = language === "plaintext" ? "text" : language
 
   return (
-    <div className="rounded-lg border border-border overflow-hidden bg-[#1e1e1e]">
+    <div className="group/editor relative rounded-lg border border-border overflow-hidden bg-[#1e1e1e]">
       {/* Header */}
       <div className="flex items-center justify-between px-3 py-2 bg-[#252526] border-b border-border">
         {/* Language */}
@@ -117,7 +117,7 @@ export function CodeEditor({
       </div>
 
       {/* Editor */}
-      <div className="max-h-[600px] overflow-y-auto code-editor-scrollbar">
+      <div className="relative max-h-[600px] overflow-y-auto code-editor-scrollbar">
         <Editor
           height="300px"
           language={language}
@@ -150,6 +150,19 @@ export function CodeEditor({
             placeholder: placeholder || "",
           }}
         />
+
+        {/* Floating copy button - shown on hover when readOnly */}
+        {readOnly && (
+          <button
+            type="button"
+            onClick={handleCopy}
+            className="absolute bottom-3 right-3 p-2 rounded-md bg-[#2d2d2d] border border-[#555] text-[#858585] hover:text-[#cccccc] hover:bg-[#3c3c3c] opacity-0 group-hover/editor:opacity-100 transition-opacity z-10"
+          >
+            <span className="material-symbols-outlined text-base">
+              {isCopied ? "check" : "content_copy"}
+            </span>
+          </button>
+        )}
       </div>
     </div>
   )
