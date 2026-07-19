@@ -6,22 +6,18 @@ Completed
 
 ## Goals
 <!-- Goals & requirements -->
-- Install `@better-auth/stripe` and `stripe` packages
-- Configure Better Auth Stripe server plugin with plan definitions (monthly $8, annual $72)
-- Configure Better Auth Stripe client plugin
-- Add `user.additionalFields` for `isPro` cache field
-- Run Better Auth schema generation and Prisma migration
-- Create centralized entitlement service (`src/lib/entitlements.ts`)
-- Create usage-limits module with free-tier enforcement (50 items, 3 collections)
-- Write unit tests for entitlements and usage-limits modules
-- Create Stripe client configuration helper (`src/lib/stripe-config.ts`)
-- Update environment variables for Stripe (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, price IDs)
-- Keep `user.isPro` as denormalized cache field updated by webhook hooks
-- Database-backed subscription records as authoritative source of truth
-- Lifecycle hooks: onSubscriptionComplete, onSubscriptionCancel, onSubscriptionDeleted
+- Add server-side feature gates to item creation, collection creation, and file upload
+- Create billing server actions (checkout, portal)
+- Create checkout success/cancel pages
+- Add billing section to settings UI
+- Test webhook handling with Stripe CLI
+- Verify signature validation and idempotency
+- Add upgrade prompts when limits are reached
+- Handle edge cases (duplicate checkout, active subscription, canceled checkout)
 
 ## References
 - @context/features/stripe-phase-1-spec.md
+- @context/features/stripe-phase-2-spec.md
 - @context/features/auth-phase-1-spec.md
 - @context/features/auth-phase-2-spec.md
 - @context/features/auth-phase-3-spec.md
@@ -152,3 +148,4 @@ Completed
 - **Phase 36 Completed**: Homepage implemented — created 8 section components in `src/components/home/`: `navbar.tsx` (client, scroll-aware, mobile menu), `hero.tsx` (gradient text, dual CTAs, trust signals), `chaos-order.tsx` (3-column visual with tool icons and dashboard preview), `features.tsx` (6-card responsive grid with Phosphor icons), `ai-section.tsx` (2-column with code mockup and AI tags), `pricing.tsx` (client, monthly/yearly toggle, Free + Pro cards), `cta-section.tsx` (gradient spotlight, conversion section), `footer.tsx` (4-column links, socials, copyright). Updated `src/app/page.tsx` to compose all sections with background decorations (grid pattern, animated glow blobs). Added homepage CSS utilities to `globals.css` (gradient-text, grid-bg, pulse/drift animations with prefers-reduced-motion). All buttons/links route to correct destinations. TypeScript check passed. Build passes (static prerender). Lint clean. Spec: homepage-spec.md.
 - **Phase 37 Started**: Stripe integration — Phase 1: Core infrastructure. Installing Better Auth Stripe plugin, configuring subscription plans (Pro: $8/mo, $72/yr), creating entitlement service and usage-limits module with unit tests. Spec: stripe-phase-1-spec.md.
 - **Phase 37 Completed**: Stripe Phase 1 implemented — installed `@better-auth/stripe` and `stripe` packages, created `src/lib/stripe-config.ts` with Stripe client initialization, created `src/lib/entitlements.ts` with `getUserEntitlements()`, `requirePro()`, `isProUser()` functions, created `src/lib/usage-limits.ts` with `getUsageStatus()`, `canCreateItem()`, `canCreateCollection()`, `assertWithinItemLimit()`, `assertWithinCollectionLimit()`, `requireProForFeature()` functions. Updated `src/lib/auth.ts` with Stripe server plugin (subscription plans, lifecycle hooks for onSubscriptionComplete/Cancel/Deleted), added `user.additionalFields` for `isPro` cache field. Updated `src/lib/auth-client.ts` with `stripeClient` plugin and `subscription` export. Updated environment variables (STRIPE_PRO_MONTHLY_PRICE_ID, STRIPE_PRO_ANNUAL_PRICE_ID, NEXT_PUBLIC_BETTER_AUTH_URL). Created comprehensive unit tests for entitlements and usage-limits (91 tests passing). All tests pass, TypeScript compiles, build succeeds.
+- **Phase 38 Completed**: Stripe Phase 2 implemented — added server-side feature gates to item creation (`assertWithinItemLimit`), collection creation (`assertWithinCollectionLimit`), and file upload (`requireProForFeature`). Created billing server actions (`src/actions/billing.ts`) with `createCheckoutSession`, `openBillingPortal`, `getBillingStatus`. Created billing status API route (`/api/billing/status`). Created checkout success and cancel pages (`/settings/billing/success`, `/settings/billing/cancel`). Created `BillingSection` component with plan display, pricing cards, usage progress bars, and manage subscription button. Created `UpgradePrompt` component for feature-gated prompts. Updated settings page to include BillingSection. Updated tests with mocks for usage-limits. All 91 tests pass, TypeScript compiles, build succeeds.
