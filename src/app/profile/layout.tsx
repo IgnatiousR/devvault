@@ -42,7 +42,7 @@ export default async function ProfileLayout({
     <SidebarProvider>
       <AppSidebar itemTypes={itemTypesByCount} collections={collections} currentPath={pathname} isPro={user.isPro} />
       <SidebarInset>
-        <SearchWrapper />
+        <SearchWrapper isPro={user.isPro} />
         <main className="min-h-screen">
           <div className="max-w-(--spacing-container-max) mx-auto px-8 py-10">
             <EditorPreferencesProvider>{children}</EditorPreferencesProvider>
