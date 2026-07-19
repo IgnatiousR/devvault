@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -19,16 +18,6 @@ import { getColorTextClass } from "@/lib/color-utils";
 import type { SidebarCollection } from "@/lib/db/collections";
 import type { ItemTypeCount } from "@/lib/db/items";
 import { Badge } from "@/components/ui/badge";
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogAction,
-  AlertDialogCancel,
-} from "@/components/ui/alert-dialog";
 
 const PRO_GATED_TYPES = ["File", "Image"];
 
@@ -161,18 +150,6 @@ function ItemTypesMenu({
   isPro: boolean;
 }) {
   const router = useRouter();
-  const [proDialogOpen, setProDialogOpen] = useState(false);
-  const [selectedProType, setSelectedProType] = useState<string | null>(null);
-
-  const handleProClick = (typeName: string) => {
-    setSelectedProType(typeName);
-    setProDialogOpen(true);
-  };
-
-  const handleUpgrade = () => {
-    setProDialogOpen(false);
-    router.push("/settings/billing");
-  };
 
   return (
     <SidebarGroup>
@@ -187,7 +164,7 @@ function ItemTypesMenu({
             return (
               <SidebarMenuItem key={itemType.name}>
                 <SidebarMenuButton
-                  onClick={() => handleProClick(itemType.name)}
+                  onClick={() => router.push("/dashboard/upgrade")}
                   tooltip={`${pluralize(itemType.name)} (${itemType.count}) — Pro feature`}
                   className="font-medium text-sm transition-all text-muted-foreground"
                 >
@@ -226,30 +203,6 @@ function ItemTypesMenu({
           );
         })}
       </SidebarMenu>
-
-      <AlertDialog open={proDialogOpen} onOpenChange={setProDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Pro Feature</AlertDialogTitle>
-            <AlertDialogDescription>
-              {selectedProType &&
-                `${pluralize(selectedProType)} are a Pro feature. Upgrade to access file uploads and image storage.`}
-              <span className="block mt-2 text-foreground font-medium">
-                $8/month or $72/year (Save 25%)
-              </span>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white"
-              onClick={handleUpgrade}
-            >
-              Upgrade to Pro
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </SidebarGroup>
   );
 }

@@ -22,6 +22,8 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [isPro, setIsPro] = useState(false);
+  const [billingLoaded, setBillingLoaded] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -33,6 +35,20 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    fetch("/api/billing/status")
+      .then((res) => res.json())
+      .then((data) => {
+        setIsPro(data.isPro ?? false);
+        setBillingLoaded(true);
+      })
+      .catch(() => {
+        setIsPro(false);
+        setBillingLoaded(true);
+      });
+  }, [isLoggedIn]);
 
   const handleEscape = useCallback((e: KeyboardEvent) => {
     if (e.key === "Escape") {
@@ -114,7 +130,15 @@ export function Navbar() {
 
           <div className="flex items-center gap-2">
             {isLoggedIn ? (
-              <div className="relative" ref={userMenuRef}>
+              <>
+                {!isPro && billingLoaded && (
+                  <Link href="/dashboard/upgrade">
+                    <Button variant="ghost" className="text-sm text-muted-foreground hover:text-foreground">
+                      Upgrade
+                    </Button>
+                  </Link>
+                )}
+                <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   aria-label="User menu"
@@ -162,6 +186,7 @@ export function Navbar() {
                   </div>
                 )}
               </div>
+              </>
             ) : (
               <>
                 <Link
@@ -222,6 +247,15 @@ export function Navbar() {
             <div className="h-px bg-border my-2" />
             {isLoggedIn ? (
               <>
+                {!isPro && billingLoaded && (
+                  <Link
+                    href="/dashboard/upgrade"
+                    onClick={() => setMobileOpen(false)}
+                    className="px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                  >
+                    Upgrade
+                  </Link>
+                )}
                 <Link
                   href="/dashboard"
                   onClick={() => setMobileOpen(false)}

@@ -5,14 +5,18 @@ import { TopBar } from "@/components/dashboard/top-bar";
 import { CommandPalette } from "@/components/command-palette";
 import { SearchContext } from "@/components/dashboard/search-context";
 
-export function SearchWrapper() {
+interface SearchWrapperProps {
+  isPro: boolean;
+}
+
+export function SearchWrapper({ isPro }: SearchWrapperProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setIsSearchOpen((prev) => !prev);
+        setIsSearchOpen((prev: boolean) => !prev);
       }
     }
 
@@ -22,7 +26,7 @@ export function SearchWrapper() {
 
   return (
     <SearchContext.Provider value={{ openSearch: () => setIsSearchOpen(true) }}>
-      <TopBar />
+      <TopBar isPro={isPro} />
       <CommandPalette open={isSearchOpen} onOpenChange={setIsSearchOpen} />
     </SearchContext.Provider>
   );
