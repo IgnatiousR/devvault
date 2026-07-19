@@ -21,6 +21,7 @@ import {
   FONT_SIZES,
   TAB_SIZES,
 } from "@/types/editor-preferences"
+import { BillingSection } from "./billing-section"
 
 export function SettingsContent() {
   const { data: profile, isLoading, error, refetch } = useProfile()
@@ -51,6 +52,8 @@ export function SettingsContent() {
 
   return (
     <div className="space-y-6">
+      <BillingSection />
+
       <section className="bg-card border border-border rounded-xl p-6 shadow-sm">
         <h2 className="text-lg font-semibold text-foreground mb-4">
           Editor Preferences

@@ -16,6 +16,7 @@ import {
   validateSimple,
   notFound,
 } from "@/lib/action-utils";
+import { assertWithinCollectionLimit } from "@/lib/usage-limits";
 
 const createCollectionSchema = z.object({
   name: z.string().trim().min(1, "Name is required"),
@@ -39,6 +40,15 @@ export async function createCollectionAction(
 
   const auth = await getSessionUserId();
   if (!("userId" in auth)) return auth;
+
+  try {
+    await assertWithinCollectionLimit(auth.userId);
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Collection limit reached",
+    };
+  }
 
   const result = await createCollection(auth.userId, {
     name: validation.data.name,

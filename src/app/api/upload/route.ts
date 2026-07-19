@@ -3,12 +3,22 @@ import { headers } from "next/headers"
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { auth } from "@/lib/auth"
 import { filebaseClient, FILEBASE_BUCKET, getFilebaseKey, validateFileUpload } from "@/lib/filebase"
+import { requireProForFeature } from "@/lib/usage-limits"
 
 export async function POST(request: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: await headers() })
     if (!session?.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
+    try {
+      await requireProForFeature(session.user.id, "fileUpload")
+    } catch (error) {
+      return NextResponse.json(
+        { error: error instanceof Error ? error.message : "Pro subscription required" },
+        { status: 403 }
+      )
     }
 
     const formData = await request.formData()

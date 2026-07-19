@@ -8,6 +8,7 @@ import {
   validateSimple,
   notFound,
 } from "@/lib/action-utils";
+import { assertWithinItemLimit } from "@/lib/usage-limits";
 
 const updateItemSchema = z.object({
   itemId: z.string().min(1),
@@ -121,6 +122,15 @@ export async function createItemAction(
 
   const auth = await getSessionUserId();
   if (!("userId" in auth)) return auth;
+
+  try {
+    await assertWithinItemLimit(auth.userId);
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Item limit reached",
+    };
+  }
 
   const result = await createItem(auth.userId, {
     title: validation.data.title,

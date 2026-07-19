@@ -20,12 +20,18 @@ vi.mock("@/lib/db/collections", () => ({
   createCollection: vi.fn(),
 }));
 
+vi.mock("@/lib/usage-limits", () => ({
+  assertWithinCollectionLimit: vi.fn(),
+}));
+
 import { createCollectionAction } from "./collections";
 import { auth } from "@/lib/auth";
 import { createCollection } from "@/lib/db/collections";
+import { assertWithinCollectionLimit } from "@/lib/usage-limits";
 
 const mockGetSession = vi.mocked(auth.api.getSession);
 const mockCreateCollection = vi.mocked(createCollection);
+const mockAssertWithinCollectionLimit = vi.mocked(assertWithinCollectionLimit);
 
 describe("createCollectionAction", () => {
   beforeEach(() => {
@@ -33,6 +39,7 @@ describe("createCollectionAction", () => {
     mockGetSession.mockResolvedValue({
       user: { id: "user-1", email: "test@example.com" },
     } as never);
+    mockAssertWithinCollectionLimit.mockResolvedValue(undefined);
   });
 
   it("returns error when name is empty", async () => {

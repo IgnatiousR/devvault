@@ -18,14 +18,20 @@ vi.mock("@/lib/db/items", () => ({
   createItem: vi.fn(),
 }));
 
+vi.mock("@/lib/usage-limits", () => ({
+  assertWithinItemLimit: vi.fn(),
+}));
+
 import { updateItemAction, deleteItemAction, createItemAction } from "./items";
 import { auth } from "@/lib/auth";
 import { updateItem, deleteItem, createItem } from "@/lib/db/items";
+import { assertWithinItemLimit } from "@/lib/usage-limits";
 
 const mockGetSession = vi.mocked(auth.api.getSession);
 const mockUpdateItem = vi.mocked(updateItem);
 const mockDeleteItem = vi.mocked(deleteItem);
 const mockCreateItem = vi.mocked(createItem);
+const mockAssertWithinItemLimit = vi.mocked(assertWithinItemLimit);
 
 describe("updateItemAction", () => {
   beforeEach(() => {
@@ -230,6 +236,7 @@ describe("createItemAction", () => {
     mockGetSession.mockResolvedValue({
       user: { id: "user-1", email: "test@example.com" },
     } as never);
+    mockAssertWithinItemLimit.mockResolvedValue(undefined);
   });
 
   it("returns error when title is empty", async () => {
