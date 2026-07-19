@@ -24,6 +24,11 @@
       "type": "remote",
       "url": "https://mcp.context7.com/mcp",
       "enabled": true
+    },
+    "figwright": {
+      "command": "npx",
+      "args": ["-y", "@figwright/mcp@latest"],
+      "enabled": true
     }
   }
 }
