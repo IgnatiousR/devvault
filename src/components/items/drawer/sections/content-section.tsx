@@ -20,13 +20,13 @@ export function ContentSection({
 }: ContentSectionProps) {
   return (
     <>
-      <EditorContent
+      <LanguageField
         item={item}
         isEditing={isEditing}
         editData={editData}
         setEditData={setEditData}
       />
-      <LanguageField
+      <EditorContent
         item={item}
         isEditing={isEditing}
         editData={editData}

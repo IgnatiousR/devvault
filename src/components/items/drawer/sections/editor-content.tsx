@@ -27,7 +27,7 @@ export function EditorContent({
           <CodeEditor
             value={editData.content}
             onChange={(v) => setEditData({ ...editData, content: v })}
-            language={item.language || "plaintext"}
+            language={editData.language || "plaintext"}
             placeholder="Add content..."
           />
         ) : (

@@ -1,4 +1,4 @@
-import { Input } from "@/components/ui/input";
+import { LanguageSelect } from "@/components/ui/language-select";
 import { LANGUAGE_TYPES } from "@/lib/item-types";
 import type { ItemDetail } from "@/types/dashboard";
 import type { EditData } from "../types";
@@ -22,12 +22,9 @@ export function LanguageField({
     <div className="space-y-2">
       <h3 className="text-sm font-medium text-foreground">Language</h3>
       {isEditing ? (
-        <Input
+        <LanguageSelect
           value={editData.language}
-          onChange={(e) =>
-            setEditData({ ...editData, language: e.target.value })
-          }
-          placeholder="e.g., javascript, python"
+          onChange={(v) => setEditData({ ...editData, language: v })}
         />
       ) : item.language ? (
         <span className="text-sm text-muted-foreground">{item.language}</span>

@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { FileUpload } from "@/components/ui/file-upload"
+import { LanguageSelect } from "@/components/ui/language-select"
 import { FILE_TYPES } from "@/lib/item-types"
 import { ContentField } from "./content-field"
 
@@ -73,6 +74,19 @@ export function FormFields({
         />
       </div>
 
+      {/* Language */}
+      {showLanguage && (
+        <div>
+          <label className="text-sm font-medium text-foreground mb-2 block">
+            Language
+          </label>
+          <LanguageSelect
+            value={language}
+            onChange={onLanguageChange}
+          />
+        </div>
+      )}
+
       {/* Content */}
       {showContent && (
         <ContentField
@@ -81,20 +95,6 @@ export function FormFields({
           language={language}
           onChange={onContentChange}
         />
-      )}
-
-      {/* Language */}
-      {showLanguage && (
-        <div>
-          <label className="text-sm font-medium text-foreground mb-2 block">
-            Language
-          </label>
-          <Input
-            value={language}
-            onChange={(e) => onLanguageChange(e.target.value)}
-            placeholder="e.g., javascript, python"
-          />
-        </div>
       )}
 
       {/* URL */}
