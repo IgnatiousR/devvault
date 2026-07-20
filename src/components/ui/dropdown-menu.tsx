@@ -26,7 +26,7 @@ function DropdownMenu({ children }: DropdownMenuProps) {
   const [open, setOpen] = useState(false);
   return (
     <DropdownMenuContext.Provider value={{ open, setOpen }}>
-      <div className="relative inline-block">{children}</div>
+      <div className="relative inline-flex items-center">{children}</div>
     </DropdownMenuContext.Provider>
   );
 }

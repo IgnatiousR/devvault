@@ -68,7 +68,7 @@ export function ItemCard({ item, onItemClick }: ItemCardProps) {
       <div className={`absolute inset-y-4 left-0 w-1 ${getColorBgClass(item.itemType.color)} rounded-r-full`}></div>
       {item.isPinned && (
         <div className="absolute top-3 right-3">
-          <span className="material-symbols-outlined text-blue-500 text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+          <span className="material-symbols-outlined text-blue-500 text-[12px]" style={{ fontVariationSettings: "'FILL' 1" }}>
             push_pin
           </span>
         </div>
@@ -120,7 +120,7 @@ export function ListItem({ item, onItemClick }: ListItemProps) {
       <div className={`absolute inset-y-4 left-0 w-1 ${getColorBgClass(item.itemType.color)} rounded-r-full`}></div>
       {item.isPinned && (
         <div className="absolute top-3 right-3">
-          <span className="material-symbols-outlined text-blue-500 text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+          <span className="material-symbols-outlined text-blue-500 text-[12px]" style={{ fontVariationSettings: "'FILL' 1" }}>
             push_pin
           </span>
         </div>
