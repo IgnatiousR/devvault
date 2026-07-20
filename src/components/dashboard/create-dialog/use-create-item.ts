@@ -7,6 +7,7 @@ import { createItemAction } from "@/actions/items";
 import { ITEM_TYPE_OPTIONS, FILE_TYPES } from "@/lib/item-types";
 import { parseTags, shouldIncludeContent, hasLanguage, isUrlType } from "@/lib/item-helpers";
 import { useAutoTags } from "@/components/ui/use-auto-tags";
+import { useAutoDescription } from "@/components/ui/use-auto-description";
 
 interface Collection {
   id: string;
@@ -84,6 +85,11 @@ export function useCreateItem({ pathname, onOpenChange }: UseCreateItemOptions) 
     clearSuggestions,
   } = useAutoTags();
 
+  const {
+    isGenerating: isGeneratingDescription,
+    generate,
+  } = useAutoDescription();
+
   useEffect(() => {
     fetch("/api/collections")
       .then((res) => res.json())
@@ -128,6 +134,20 @@ export function useCreateItem({ pathname, onOpenChange }: UseCreateItemOptions) 
     },
     [acceptTag, tags]
   );
+
+  const handleGenerateDescription = useCallback(async () => {
+    const description = await generate({
+      title,
+      content: showContent ? content : undefined,
+      itemType: selectedType,
+      language: showLanguage ? language : undefined,
+      url: showUrl ? url : undefined,
+      tags: parseTags(tags),
+    });
+    if (description) {
+      setDescription(description);
+    }
+  }, [generate, title, content, selectedType, language, url, tags, showContent, showLanguage, showUrl]);
 
   const handleCreate = async () => {
     setIsCreating(true);
@@ -190,5 +210,7 @@ export function useCreateItem({ pathname, onOpenChange }: UseCreateItemOptions) 
     handleSuggestTags,
     handleAcceptTag,
     handleRejectTag: rejectTag,
+    isGeneratingDescription,
+    handleGenerateDescription,
   };
 }

@@ -21,6 +21,8 @@ interface DrawerContentSectionsProps {
   onSuggestTags?: () => void;
   onAcceptSuggestion?: (tag: string) => void;
   onRejectSuggestion?: (tag: string) => void;
+  isGeneratingDescription?: boolean;
+  onGenerateDescription?: () => void;
 }
 
 export function DrawerContentSections({
@@ -35,6 +37,8 @@ export function DrawerContentSections({
   onSuggestTags,
   onAcceptSuggestion,
   onRejectSuggestion,
+  isGeneratingDescription,
+  onGenerateDescription,
 }: DrawerContentSectionsProps) {
   return (
     <div className="p-6 space-y-6">
@@ -43,6 +47,9 @@ export function DrawerContentSections({
         isEditing={isEditing}
         editData={editData}
         setEditData={setEditData}
+        aiAccess={aiAccess}
+        isGeneratingDescription={isGeneratingDescription}
+        onGenerateDescription={onGenerateDescription}
       />
       <ContentSection
         item={item}

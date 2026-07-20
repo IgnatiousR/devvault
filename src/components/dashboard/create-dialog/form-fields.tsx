@@ -31,6 +31,8 @@ interface FormFieldsProps {
   onSuggestTags?: () => void
   onAcceptSuggestion?: (tag: string) => void
   onRejectSuggestion?: (tag: string) => void
+  isGeneratingDescription?: boolean
+  onGenerateDescription?: () => void
 }
 
 export function FormFields({
@@ -56,6 +58,8 @@ export function FormFields({
   onSuggestTags,
   onAcceptSuggestion,
   onRejectSuggestion,
+  isGeneratingDescription,
+  onGenerateDescription,
 }: FormFieldsProps) {
   const showContent = ["snippet", "prompt", "command", "note"].includes(selectedType)
   const showLanguage = ["snippet", "command"].includes(selectedType)
@@ -78,9 +82,28 @@ export function FormFields({
 
       {/* Description */}
       <div>
-        <label className="text-sm font-medium text-foreground mb-2 block">
-          Description
-        </label>
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-sm font-medium text-foreground">
+            Description
+          </label>
+          {aiAccess && onGenerateDescription && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={onGenerateDescription}
+              disabled={isGeneratingDescription || !title.trim()}
+              className="h-7 px-2 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
+            >
+              {isGeneratingDescription ? (
+                <Spinner size="sm" />
+              ) : (
+                <span className="material-symbols-outlined text-sm">auto_awesome</span>
+              )}
+              {isGeneratingDescription ? "Generating..." : "Generate"}
+            </Button>
+          )}
+        </div>
         <Textarea
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}

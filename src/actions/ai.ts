@@ -163,3 +163,154 @@ export async function generateAutoTags(
 
   return { success: true, tags };
 }
+
+const generateDescriptionSchema = z.object({
+  title: z.string().trim().min(1).max(500),
+  content: z.string().max(10_000).optional(),
+  itemType: z.string().max(50).optional(),
+  language: z.string().max(50).optional(),
+  url: z.string().max(2000).optional(),
+  tags: z.array(z.string().max(50)).max(20).optional(),
+});
+
+type GenerateDescriptionInput = z.infer<typeof generateDescriptionSchema>;
+
+export type GenerateDescriptionResult =
+  | { success: true; description: string }
+  | { success: false; error: string };
+
+const DESCRIPTION_SYSTEM_PROMPT = `You are a developer-content description assistant. Return ONLY the description text.
+Write a concise 1-2 sentence description for the item below.
+- Be specific about what the item does or contains
+- Use clear, direct language
+- Do not include quotes, markdown, or explanations
+- Do not prefix with "Description:" or similar`;
+
+function buildDescriptionUserPrompt(
+  title: string,
+  itemType: string | undefined,
+  language: string | undefined,
+  url: string | undefined,
+  tags: string[],
+  content: string
+): string {
+  const parts = [`Title: ${title}`];
+  if (itemType) parts.push(`Type: ${itemType}`);
+  if (language) parts.push(`Language: ${language}`);
+  if (url) parts.push(`URL: ${url}`);
+  if (tags.length > 0) parts.push(`Tags: ${tags.join(", ")}`);
+  if (content) parts.push(`\nContent:\n${content}`);
+  return parts.join("\n");
+}
+
+export async function generateDescription(
+  input: GenerateDescriptionInput
+): Promise<GenerateDescriptionResult> {
+  const validation = validateSimple(generateDescriptionSchema, input);
+  if (!validation.success) return validation;
+
+  const auth = await getSessionUserId();
+  if (!("userId" in auth)) return auth;
+
+  const entitlements = await getUserEntitlements(auth.userId);
+  if (!entitlements.aiAccess) {
+    return { success: false, error: "AI features require a Pro subscription" };
+  }
+
+  const limitResult = await rateLimit(
+    `ai:${auth.userId}`,
+    AI_RATE_LIMIT_MAX_REQUESTS,
+    AI_RATE_LIMIT_WINDOW
+  );
+  if (!limitResult.success) {
+    return {
+      success: false,
+      error: "You have reached the AI request limit. Try again later.",
+    };
+  }
+
+  const truncatedContent = validation.data.content
+    ? validation.data.content.slice(0, AUTO_TAG_CONTENT_LIMIT)
+    : "";
+
+  const userPrompt = buildDescriptionUserPrompt(
+    validation.data.title,
+    validation.data.itemType,
+    validation.data.language,
+    validation.data.url,
+    validation.data.tags ?? [],
+    truncatedContent
+  );
+
+  assertFreeOpenRouterModel(OPENROUTER_FREE_MODEL);
+
+  let response;
+  try {
+    response = await getOpenRouterClient().chat.send(
+      {
+        chatRequest: {
+          model: OPENROUTER_FREE_MODEL,
+          messages: [
+            { role: "system", content: DESCRIPTION_SYSTEM_PROMPT },
+            { role: "user", content: userPrompt },
+          ],
+        },
+      },
+      { fetchOptions: { signal: AbortSignal.timeout(30_000) } }
+    );
+  } catch (err: unknown) {
+    const status =
+      (err as { response?: { status?: number }; statusCode?: number })
+        .response?.status ??
+      (err as { statusCode?: number }).statusCode;
+
+    if (status === 401) {
+      return {
+        success: false,
+        error: "AI service configuration error",
+      };
+    }
+
+    if (status === 402) {
+      return {
+        success: false,
+        error: "Free AI models are busy or unavailable. Try again later.",
+      };
+    }
+
+    if (status === 429 || status === 502 || status === 503) {
+      return {
+        success: false,
+        error: "Free AI models are busy or unavailable. Try again later.",
+      };
+    }
+
+    return {
+      success: false,
+      error: "AI service configuration error",
+    };
+  }
+
+  const chatResult = response as {
+    choices?: Array<{ message?: { content?: string } }>;
+  };
+  const resultContent = chatResult.choices?.[0]?.message?.content;
+
+  if (!resultContent || typeof resultContent !== "string") {
+    return {
+      success: false,
+      error: "The AI service returned an invalid response. Try again.",
+    };
+  }
+
+  const description = resultContent.trim().replace(/^[""]|[""]$/g, "");
+
+  if (description.length === 0) {
+    return {
+      success: false,
+      error: "The AI service returned an invalid response. Try again.",
+    };
+  }
+
+  return { success: true, description };
+}

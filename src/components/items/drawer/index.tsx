@@ -10,6 +10,7 @@ import { DrawerContentSections } from "./drawer-content-sections";
 import { DrawerDeleteDialog } from "./drawer-delete-dialog";
 import { useDrawerState } from "./use-drawer-state";
 import { useAutoTags } from "@/components/ui/use-auto-tags";
+import { useAutoDescription } from "@/components/ui/use-auto-description";
 import { parseTags } from "@/lib/item-helpers";
 import type { ItemDrawerProps } from "./types";
 
@@ -51,6 +52,11 @@ export function ItemDrawer({
     clearSuggestions,
   } = useAutoTags();
 
+  const {
+    isGenerating: isGeneratingDescription,
+    generate,
+  } = useAutoDescription();
+
   useEffect(() => {
     clearSuggestions();
   }, [item?.id, isEditing, clearSuggestions]);
@@ -72,6 +78,20 @@ export function ItemDrawer({
         ...editData,
         tags: editData.tags ? `${editData.tags}, ${tag}` : tag,
       });
+    }
+  };
+
+  const handleGenerateDescription = async () => {
+    const description = await generate({
+      title: editData.title,
+      content: editData.content || undefined,
+      itemType: item?.itemType.name,
+      language: editData.language || undefined,
+      url: editData.url || undefined,
+      tags: parseTags(editData.tags),
+    });
+    if (description) {
+      setEditData({ ...editData, description });
     }
   };
 
@@ -142,6 +162,8 @@ export function ItemDrawer({
                   onSuggestTags={handleSuggestTags}
                   onAcceptSuggestion={handleAcceptTag}
                   onRejectSuggestion={rejectTag}
+                  isGeneratingDescription={isGeneratingDescription}
+                  onGenerateDescription={handleGenerateDescription}
                 />
               </>
             )}

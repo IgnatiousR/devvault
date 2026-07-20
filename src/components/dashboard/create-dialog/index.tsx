@@ -56,6 +56,8 @@ export function CreateItemDialog({ open, onOpenChange, aiAccess }: CreateItemDia
     handleSuggestTags,
     handleAcceptTag,
     handleRejectTag,
+    isGeneratingDescription,
+    handleGenerateDescription,
   } = useCreateItem({ pathname, onOpenChange })
 
   const handleClose = (value: boolean) => {
@@ -100,6 +102,8 @@ export function CreateItemDialog({ open, onOpenChange, aiAccess }: CreateItemDia
             onSuggestTags={handleSuggestTags}
             onAcceptSuggestion={handleAcceptTag}
             onRejectSuggestion={handleRejectTag}
+            isGeneratingDescription={isGeneratingDescription}
+            onGenerateDescription={handleGenerateDescription}
           />
 
           <div>

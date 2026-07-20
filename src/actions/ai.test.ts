@@ -30,7 +30,7 @@ vi.mock("@/lib/ai-tag-parser", () => ({
   parseAutoTags: vi.fn(),
 }));
 
-import { generateAutoTags } from "./ai";
+import { generateAutoTags, generateDescription } from "./ai";
 import { auth } from "@/lib/auth";
 import { getUserEntitlements } from "@/lib/entitlements";
 import { rateLimit } from "@/lib/rate-limit";
@@ -432,6 +432,237 @@ describe("generateAutoTags", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.error).toBe("AI service configuration error");
+    }
+  });
+});
+
+describe("generateDescription", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("rejects invalid input (empty title)", async () => {
+    const result = await generateDescription({
+      title: "",
+      content: "test content",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("Invalid input");
+    }
+  });
+
+  it("rejects unauthenticated users", async () => {
+    mockAuth(null);
+
+    const result = await generateDescription({
+      title: "Test Item",
+      content: "test content",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("Unauthorized");
+    }
+  });
+
+  it("rejects users without aiAccess", async () => {
+    mockAuth("user-1");
+    mockEntitlements(false);
+
+    const result = await generateDescription({
+      title: "Test Item",
+      content: "test content",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("AI features require a Pro subscription");
+    }
+  });
+
+  it("rejects denied rate limit", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitDenied();
+
+    const result = await generateDescription({
+      title: "Test Item",
+      content: "test content",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe(
+        "You have reached the AI request limit. Try again later."
+      );
+    }
+  });
+
+  it("calls the model as openrouter/free", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("A React component for handling user authentication.");
+
+    await generateDescription({
+      title: "Auth Component",
+      content: "test content",
+      itemType: "snippet",
+      language: "typescript",
+    });
+
+    expect(mockAssertFreeOpenRouterModel).toHaveBeenCalledWith("openrouter/free");
+    expect(mockGetOpenRouterClient).toHaveBeenCalled();
+  });
+
+  it("returns the generated description", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("A React component for handling user authentication.");
+
+    const result = await generateDescription({
+      title: "Auth Component",
+      content: "export function Auth() { ... }",
+      itemType: "snippet",
+      language: "typescript",
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.description).toBe(
+        "A React component for handling user authentication."
+      );
+    }
+  });
+
+  it("strips surrounding quotes from the description", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess('"A React component for authentication."');
+
+    const result = await generateDescription({
+      title: "Auth Component",
+      content: "test content",
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.description).toBe("A React component for authentication.");
+    }
+  });
+
+  it("trims whitespace from the description", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("  A React component for authentication.  ");
+
+    const result = await generateDescription({
+      title: "Auth Component",
+      content: "test content",
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.description).toBe("A React component for authentication.");
+    }
+  });
+
+  it("returns a controlled error for empty content", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("");
+
+    const result = await generateDescription({
+      title: "Test Item",
+      content: "test content",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe(
+        "The AI service returned an invalid response. Try again."
+      );
+    }
+  });
+
+  it("maps 429/provider-unavailable failures without retrying a paid model", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterError(429);
+
+    const result = await generateDescription({
+      title: "Test Item",
+      content: "test content",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe(
+        "Free AI models are busy or unavailable. Try again later."
+      );
+    }
+  });
+
+  it("maps 402 without retrying a paid model", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterError(402);
+
+    const result = await generateDescription({
+      title: "Test Item",
+      content: "test content",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe(
+        "Free AI models are busy or unavailable. Try again later."
+      );
+    }
+  });
+
+  it("handles a missing OPENROUTER_API_KEY", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockGetOpenRouterClient.mockImplementation(() => {
+      throw new Error("OPENROUTER_API_KEY is not configured");
+    });
+
+    const result = await generateDescription({
+      title: "Test Item",
+      content: "test content",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("AI service configuration error");
+    }
+  });
+
+  it("accepts optional fields (language, url, tags)", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("A useful link.");
+
+    const result = await generateDescription({
+      title: "Docs",
+      url: "https://docs.example.com",
+      tags: ["docs", "reference"],
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.description).toBe("A useful link.");
     }
   });
 });
