@@ -10,6 +10,7 @@ interface ContentSectionProps {
   isEditing: boolean;
   editData: EditData;
   setEditData: (data: EditData) => void;
+  aiAccess?: boolean;
 }
 
 export function ContentSection({
@@ -17,6 +18,7 @@ export function ContentSection({
   isEditing,
   editData,
   setEditData,
+  aiAccess,
 }: ContentSectionProps) {
   return (
     <>
@@ -31,6 +33,7 @@ export function ContentSection({
         isEditing={isEditing}
         editData={editData}
         setEditData={setEditData}
+        aiAccess={aiAccess}
       />
       <UrlField
         item={item}

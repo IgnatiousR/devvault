@@ -125,14 +125,22 @@
     @apply bg-background text-foreground;
   }
 
-  .material-symbols-outlined {
+  /* .material-symbols-outlined {
     font-variation-settings:
       "FILL" 0,
       "wght" 400,
       "GRAD" 0,
       "opsz" 20;
-    font-size: 14px;
-  }
+  } */
+
+  /* .material-symbols-outlined.icon-sm {
+    font-size: 12px;
+    font-variation-settings:
+      "FILL" 0,
+      "wght" 400,
+      "GRAD" 0,
+      "opsz" 18;
+  } */
 }
 
 @layer utilities {

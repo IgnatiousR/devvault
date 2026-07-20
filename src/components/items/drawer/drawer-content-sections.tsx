@@ -56,6 +56,7 @@ export function DrawerContentSections({
         isEditing={isEditing}
         editData={editData}
         setEditData={setEditData}
+        aiAccess={aiAccess}
       />
       <MetadataSection
         item={item}

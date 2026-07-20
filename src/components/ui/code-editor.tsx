@@ -11,6 +11,10 @@ interface CodeEditorProps {
   language?: string
   readOnly?: boolean
   placeholder?: string
+  headerControls?: React.ReactNode
+  viewTabs?: React.ReactNode
+  hideFloatingCopy?: boolean
+  customContent?: React.ReactNode
 }
 
 const defineMonokaiTheme: BeforeMount = (monaco) => {
@@ -55,6 +59,10 @@ export function CodeEditor({
   language = "plaintext",
   readOnly = false,
   placeholder,
+  headerControls,
+  viewTabs,
+  hideFloatingCopy = false,
+  customContent,
 }: CodeEditorProps) {
   const editorRef = useRef<Parameters<OnMount>[0] | null>(null)
   const [isCopied, setIsCopied] = useState(false)
@@ -107,6 +115,8 @@ export function CodeEditor({
               {isCopied ? "Copied" : "Copy"}
             </button>
           )}
+          {/* Injected header controls */}
+          {headerControls}
           {/* Linux window controls */}
           <div className="flex items-center gap-1.5 ml-1">
             <span className="w-3 h-3 rounded-full bg-[#2d2d2d] border border-[#555] hover:bg-[#3c3c3c] transition-colors" />
@@ -116,54 +126,63 @@ export function CodeEditor({
         </div>
       </div>
 
-      {/* Editor */}
-      <div className="relative max-h-[600px] overflow-y-auto code-editor-scrollbar">
-        <Editor
-          height="300px"
-          language={language}
-          value={value}
-          onChange={(v) => onChange?.(v || "")}
-          beforeMount={handleBeforeMount}
-          onMount={handleEditorMount}
-          theme={preferences.theme}
-          options={{
-            readOnly,
-            minimap: { enabled: preferences.minimap },
-            scrollBeyondLastLine: false,
-            fontSize: preferences.fontSize,
-            tabSize: preferences.tabSize,
-            wordWrap: preferences.wordWrap ? "on" : "off",
-            fontFamily: "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace",
-            lineNumbers: "on",
-            glyphMargin: false,
-            folding: false,
-            lineDecorationsWidth: 10,
-            lineNumbersMinChars: 3,
-            renderLineHighlight: "none",
-            scrollbar: {
-              vertical: "auto",
-              horizontal: "auto",
-              verticalScrollbarSize: 8,
-              horizontalScrollbarSize: 8,
-            },
-            padding: { top: 12, bottom: 12 },
-            placeholder: placeholder || "",
-          }}
-        />
+      {/* View tabs slot */}
+      {viewTabs}
 
-        {/* Floating copy button - shown on hover when readOnly */}
-        {readOnly && (
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="absolute bottom-3 right-3 p-2 rounded-md bg-[#2d2d2d] border border-[#555] text-[#858585] hover:text-[#cccccc] hover:bg-[#3c3c3c] opacity-0 group-hover/editor:opacity-100 transition-opacity z-10"
-          >
-            <span className="material-symbols-outlined text-base">
-              {isCopied ? "check" : "content_copy"}
-            </span>
-          </button>
-        )}
-      </div>
+      {/* Editor or custom content */}
+      {customContent ? (
+        <div className="max-h-[600px] overflow-y-auto code-editor-scrollbar">
+          {customContent}
+        </div>
+      ) : (
+        <div className="relative max-h-[600px] overflow-y-auto code-editor-scrollbar">
+          <Editor
+            height="300px"
+            language={language}
+            value={value}
+            onChange={(v) => onChange?.(v || "")}
+            beforeMount={handleBeforeMount}
+            onMount={handleEditorMount}
+            theme={preferences.theme}
+            options={{
+              readOnly,
+              minimap: { enabled: preferences.minimap },
+              scrollBeyondLastLine: false,
+              fontSize: preferences.fontSize,
+              tabSize: preferences.tabSize,
+              wordWrap: preferences.wordWrap ? "on" : "off",
+              fontFamily: "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace",
+              lineNumbers: "on",
+              glyphMargin: false,
+              folding: false,
+              lineDecorationsWidth: 10,
+              lineNumbersMinChars: 3,
+              renderLineHighlight: "none",
+              scrollbar: {
+                vertical: "auto",
+                horizontal: "auto",
+                verticalScrollbarSize: 8,
+                horizontalScrollbarSize: 8,
+              },
+              padding: { top: 12, bottom: 12 },
+              placeholder: placeholder || "",
+            }}
+          />
+
+          {/* Floating copy button - shown on hover when readOnly */}
+          {readOnly && !hideFloatingCopy && (
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="absolute bottom-3 right-3 p-2 rounded-md bg-[#2d2d2d] border border-[#555] text-[#858585] hover:text-[#cccccc] hover:bg-[#3c3c3c] opacity-0 group-hover/editor:opacity-100 transition-opacity z-10"
+            >
+              <span className="material-symbols-outlined text-base">
+                {isCopied ? "check" : "content_copy"}
+              </span>
+            </button>
+          )}
+        </div>
+      )}
     </div>
   )
 }

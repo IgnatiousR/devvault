@@ -1,11 +1,14 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 interface MarkdownEditorHeaderProps {
   readOnly: boolean;
   activeTab: "write" | "preview";
   onTabChange: (tab: "write" | "preview") => void;
   isCopied: boolean;
   onCopy: () => void;
+  headerControls?: ReactNode;
 }
 
 export function MarkdownEditorHeader({
@@ -14,6 +17,7 @@ export function MarkdownEditorHeader({
   onTabChange,
   isCopied,
   onCopy,
+  headerControls,
 }: MarkdownEditorHeaderProps) {
   return (
     <div className="flex items-center justify-between px-3 py-2 bg-[#252526] border-b border-border">
@@ -48,7 +52,9 @@ export function MarkdownEditorHeader({
         )}
       </div>
 
-      {!readOnly && (
+      {headerControls ? (
+        <div className="flex items-center gap-2">{headerControls}</div>
+      ) : !readOnly ? (
         <div className="flex items-center gap-2">
           <button
             type="button"
@@ -61,7 +67,7 @@ export function MarkdownEditorHeader({
             {isCopied ? "Copied" : "Copy"}
           </button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

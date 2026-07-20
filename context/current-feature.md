@@ -2,7 +2,7 @@
 
 ## Status
 <!-- Not Started | In Progress | Completed -->
-Not Started
+In Progress
 
 ## Goals
 <!-- Goals & requirements -->
@@ -18,6 +18,16 @@ Not Started
 - Truncate content to 2,000 characters server-side before sending to OpenRouter
 - All OpenRouter calls use `openrouter/free` model only; no paid model fallbacks
 - Write comprehensive unit tests for action, parser, entitlements, rate limiting, and free-only invariant
+- Add `explainCode` server action in `src/actions/ai.ts` with Zod validation (Snippet/Command only, non-empty content, optional language), entitlement checks, shared AI rate limit (20 req/h), content truncation (12,000 chars), and OpenRouter free-model request
+- Build system prompt targeting concise 200–300 word Markdown explanation; user prompt includes item type, language, and truncated content
+- Extend `CodeEditor` with optional header-controls and view-tabs slots for Explain integration (backward compatible)
+- Add Explain button (Sparkles icon) in CodeEditor read-only header for Pro users; disabled Crown icon with tooltip for free users
+- Show Code/Explain tabs after successful generation; auto-select Explain; permit regeneration while respecting rate limit
+- Track `activeView`, `explanation`, `isExplaining` client state; clear on item change, drawer close, or edit mode
+- Render explanation as sanitized Markdown via react-markdown, remark-gfm, rehype-sanitize
+- Derive `aiAccess` from `getUserEntitlements()` in Server Component, propagate via `ItemDrawerProps`
+- All OpenRouter calls use `openrouter/free` only; no paid model fallbacks; fail closed on free-model exhaustion
+- Write comprehensive unit tests for validation, auth, entitlement, rate limiting, output handling, provider failures, and free-only invariant
 
 ## References
 - @context/features/stripe-phase-1-spec.md
@@ -48,6 +58,7 @@ Not Started
 - @context/features/pinned-spec.md
 - @context/features/homepage-spec.md
 - @context/features/ai-auto-tag-spec.md
+- @context/features/ai-explain-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -157,3 +168,4 @@ Not Started
 - **Phase 37 Completed**: Stripe Phase 1 implemented — installed `@better-auth/stripe` and `stripe` packages, created `src/lib/stripe-config.ts` with Stripe client initialization, created `src/lib/entitlements.ts` with `getUserEntitlements()`, `requirePro()`, `isProUser()` functions, created `src/lib/usage-limits.ts` with `getUsageStatus()`, `canCreateItem()`, `canCreateCollection()`, `assertWithinItemLimit()`, `assertWithinCollectionLimit()`, `requireProForFeature()` functions. Updated `src/lib/auth.ts` with Stripe server plugin (subscription plans, lifecycle hooks for onSubscriptionComplete/Cancel/Deleted), added `user.additionalFields` for `isPro` cache field. Updated `src/lib/auth-client.ts` with `stripeClient` plugin and `subscription` export. Updated environment variables (STRIPE_PRO_MONTHLY_PRICE_ID, STRIPE_PRO_ANNUAL_PRICE_ID, NEXT_PUBLIC_BETTER_AUTH_URL). Created comprehensive unit tests for entitlements and usage-limits (91 tests passing). All tests pass, TypeScript compiles, build succeeds.
 - **Phase 38 Completed**: Stripe Phase 2 implemented — added server-side feature gates to item creation (`assertWithinItemLimit`), collection creation (`assertWithinCollectionLimit`), and file upload (`requireProForFeature`). Created billing server actions (`src/actions/billing.ts`) with `createCheckoutSession`, `openBillingPortal`, `getBillingStatus`. Created billing status API route (`/api/billing/status`). Created checkout success and cancel pages (`/settings/billing/success`, `/settings/billing/cancel`). Created `BillingSection` component with plan display, pricing cards, usage progress bars, and manage subscription button. Created `UpgradePrompt` component for feature-gated prompts. Updated settings page to include BillingSection. Updated tests with mocks for usage-limits. All 91 tests pass, TypeScript compiles, build succeeds.
 - **Phase 39 Started**: AI auto-tagging — OpenRouter free-only integration for Pro users. Server action `generateAutoTags` with entitlement checks, 20 req/hour rate limit, content truncation. Shared OpenRouter client (`src/lib/openrouter.ts`) and AI config (`src/lib/ai-config.ts`). "Suggest Tags" button in Create Item dialog and Item Drawer edit mode. Tag suggestion parser with normalize/dedup/limit. Unit tests for auth, entitlements, validation, parsing, provider failures, free-only invariant. Spec: ai-auto-tag-spec.md.
+- **Phase 40 Started**: AI code explanation — OpenRouter free-only, `explainCode` server action in `src/actions/ai.ts`, Code/Explain tabs in CodeEditor, Pro-only with Crown control for free users, shared AI rate limit (20 req/h), content truncation (12,000 chars), sanitized Markdown rendering. Spec: ai-explain-spec.md.

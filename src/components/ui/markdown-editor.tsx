@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 import { toast } from "sonner"
 import { MarkdownEditorHeader } from "./markdown-editor-header"
 import { MarkdownEditorContent } from "./markdown-editor-content"
@@ -10,6 +10,10 @@ interface MarkdownEditorProps {
   onChange?: (value: string) => void
   readOnly?: boolean
   placeholder?: string
+  headerControls?: ReactNode
+  viewTabs?: ReactNode
+  hideFloatingCopy?: boolean
+  customContent?: ReactNode
 }
 
 export function MarkdownEditor({
@@ -17,6 +21,10 @@ export function MarkdownEditor({
   onChange,
   readOnly = false,
   placeholder,
+  headerControls,
+  viewTabs,
+  hideFloatingCopy = false,
+  customContent,
 }: MarkdownEditorProps) {
   const [activeTab, setActiveTab] = useState<"write" | "preview">(
     readOnly ? "preview" : "write"
@@ -44,16 +52,24 @@ export function MarkdownEditor({
         onTabChange={setActiveTab}
         isCopied={isCopied}
         onCopy={handleCopy}
+        headerControls={headerControls}
       />
-      <div className="max-h-[400px] overflow-y-auto code-editor-scrollbar">
-        <MarkdownEditorContent
-          value={value}
-          onChange={onChange}
-          readOnly={readOnly}
-          activeTab={activeTab}
-          placeholder={placeholder}
-        />
-      </div>
+      {viewTabs}
+      {hideFloatingCopy ? (
+        <div className="max-h-[400px] overflow-y-auto code-editor-scrollbar">
+          {customContent}
+        </div>
+      ) : (
+        <div className="max-h-[400px] overflow-y-auto code-editor-scrollbar">
+          <MarkdownEditorContent
+            value={value}
+            onChange={onChange}
+            readOnly={readOnly}
+            activeTab={activeTab}
+            placeholder={placeholder}
+          />
+        </div>
+      )}
     </div>
   )
 }

@@ -30,7 +30,7 @@ vi.mock("@/lib/ai-tag-parser", () => ({
   parseAutoTags: vi.fn(),
 }));
 
-import { generateAutoTags, generateDescription } from "./ai";
+import { generateAutoTags, generateDescription, explainCode, optimizePrompt } from "./ai";
 import { auth } from "@/lib/auth";
 import { getUserEntitlements } from "@/lib/entitlements";
 import { rateLimit } from "@/lib/rate-limit";
@@ -664,5 +664,482 @@ describe("generateDescription", () => {
     if (result.success) {
       expect(result.description).toBe("A useful link.");
     }
+  });
+});
+
+describe("explainCode", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("accepts Snippet", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("This is a React component that renders a user profile.");
+
+    const result = await explainCode({
+      itemType: "Snippet",
+      content: "function Profile() { return <div>Hello</div>; }",
+      language: "typescript",
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.explanation).toBe("This is a React component that renders a user profile.");
+    }
+  });
+
+  it("accepts Command", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("This lists all running Docker containers.");
+
+    const result = await explainCode({
+      itemType: "Command",
+      content: "docker ps",
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.explanation).toBe("This lists all running Docker containers.");
+    }
+  });
+
+  it("rejects non-CODE_TYPES (Prompt)", async () => {
+    const result = await explainCode({
+      itemType: "Prompt" as "Snippet",
+      content: "some content",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("Invalid input");
+    }
+  });
+
+  it("rejects empty content", async () => {
+    const result = await explainCode({
+      itemType: "Snippet",
+      content: "   ",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("Invalid input");
+    }
+  });
+
+  it("rejects unauthenticated users", async () => {
+    mockAuth(null);
+
+    const result = await explainCode({
+      itemType: "Snippet",
+      content: "test code",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("Unauthorized");
+    }
+  });
+
+  it("rejects users without aiAccess", async () => {
+    mockAuth("user-1");
+    mockEntitlements(false);
+
+    const result = await explainCode({
+      itemType: "Snippet",
+      content: "test code",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("AI features require a Pro subscription");
+    }
+  });
+
+  it("rejects denied rate limit", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitDenied();
+
+    const result = await explainCode({
+      itemType: "Snippet",
+      content: "test code",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe(
+        "You have reached the AI request limit. Try again later."
+      );
+    }
+  });
+
+  it("truncates content to 12,000 characters server-side", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("This is an explanation.");
+
+    const longContent = "a".repeat(20_000);
+
+    const result = await explainCode({
+      itemType: "Snippet",
+      content: longContent,
+    });
+
+    expect(result.success).toBe(true);
+  });
+
+  it("calls the model as openrouter/free", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("explanation");
+
+    await explainCode({
+      itemType: "Snippet",
+      content: "test code",
+    });
+
+    expect(mockAssertFreeOpenRouterModel).toHaveBeenCalledWith("openrouter/free");
+    expect(mockGetOpenRouterClient).toHaveBeenCalled();
+  });
+
+  it("verifies the free-model guard rejects openrouter/auto", async () => {
+    mockAssertFreeOpenRouterModel.mockImplementation((model) => {
+      if (model === "openrouter/auto") {
+        throw new Error("Refusing to use non-free OpenRouter model: openrouter/auto");
+      }
+    });
+
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("explanation");
+
+    await expect(
+      explainCode({
+        itemType: "Snippet",
+        content: "test code",
+      })
+    ).resolves.toBeDefined();
+  });
+
+  it("verifies the free-model guard rejects an un-suffixed provider model", async () => {
+    mockAssertFreeOpenRouterModel.mockImplementation((model) => {
+      if (!model.endsWith(":free") && model !== "openrouter/free") {
+        throw new Error(
+          `Refusing to use non-free OpenRouter model: ${model}`
+        );
+      }
+    });
+
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("explanation");
+
+    await expect(
+      explainCode({
+        itemType: "Snippet",
+        content: "test code",
+      })
+    ).resolves.toBeDefined();
+  });
+
+  it("returns trimmed non-empty Markdown", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("  **Hello** world.  ");
+
+    const result = await explainCode({
+      itemType: "Snippet",
+      content: "test code",
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.explanation).toBe("**Hello** world.");
+    }
+  });
+
+  it("returns a controlled error for empty/non-text output", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("");
+
+    const result = await explainCode({
+      itemType: "Snippet",
+      content: "test code",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("The AI service returned an empty explanation. Try again.");
+    }
+  });
+
+  it("maps 429/provider-unavailable errors without retrying a paid model", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterError(429);
+
+    const result = await explainCode({
+      itemType: "Snippet",
+      content: "test code",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe(
+        "Free AI models are busy or unavailable. Try again later."
+      );
+    }
+  });
+
+  it("maps 402 without retrying a paid model", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterError(402);
+
+    const result = await explainCode({
+      itemType: "Snippet",
+      content: "test code",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe(
+        "Free AI models are busy or unavailable. Try again later."
+      );
+    }
+  });
+
+  it("handles a missing OPENROUTER_API_KEY", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockGetOpenRouterClient.mockImplementation(() => {
+      throw new Error("OPENROUTER_API_KEY is not configured");
+    });
+
+    const result = await explainCode({
+      itemType: "Snippet",
+      content: "test code",
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("AI service configuration error");
+    }
+  });
+
+  it("does not include user identity, collection metadata, or database IDs in the prompt", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+
+    let capturedUserPrompt = "";
+    mockGetOpenRouterClient.mockReturnValue({
+      chat: {
+        send: vi.fn().mockImplementation(({ chatRequest }: { chatRequest: { messages: Array<{ role: string; content: string }> } }) => {
+          capturedUserPrompt = chatRequest.messages[1]?.content ?? "";
+          return { choices: [{ message: { content: "explanation" } }] };
+        }),
+      },
+    } as never);
+
+    await explainCode({
+      itemType: "Snippet",
+      content: "test code",
+    });
+
+    expect(capturedUserPrompt).not.toContain("user-1");
+    expect(capturedUserPrompt).not.toContain("userId");
+    expect(capturedUserPrompt).not.toContain("collection");
+  });
+});
+
+describe("optimizePrompt", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("rejects empty content", async () => {
+    const result = await optimizePrompt({ content: "   " });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("Invalid input");
+    }
+  });
+
+  it("rejects unauthenticated users", async () => {
+    mockAuth(null);
+
+    const result = await optimizePrompt({ content: "some prompt" });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("Unauthorized");
+    }
+  });
+
+  it("rejects users without aiAccess", async () => {
+    mockAuth("user-1");
+    mockEntitlements(false);
+
+    const result = await optimizePrompt({ content: "some prompt" });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("AI features require a Pro subscription");
+    }
+  });
+
+  it("rejects denied rate limit", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitDenied();
+
+    const result = await optimizePrompt({ content: "some prompt" });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe(
+        "You have reached the AI request limit. Try again later."
+      );
+    }
+  });
+
+  it("calls the model as openrouter/free", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("Optimized prompt text");
+
+    await optimizePrompt({ content: "some prompt" });
+
+    expect(mockAssertFreeOpenRouterModel).toHaveBeenCalledWith("openrouter/free");
+    expect(mockGetOpenRouterClient).toHaveBeenCalled();
+  });
+
+  it("returns trimmed non-empty content", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("  Optimized prompt text.  ");
+
+    const result = await optimizePrompt({ content: "some prompt" });
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.optimized).toBe("Optimized prompt text.");
+    }
+  });
+
+  it("truncates content to 12,000 characters server-side", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("Optimized");
+
+    const longContent = "a".repeat(20_000);
+
+    const result = await optimizePrompt({ content: longContent });
+
+    expect(result.success).toBe(true);
+  });
+
+  it("returns a controlled error for empty/non-text output", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterSuccess("");
+
+    const result = await optimizePrompt({ content: "some prompt" });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("The AI service returned an empty response. Try again.");
+    }
+  });
+
+  it("maps 429/provider-unavailable errors without retrying a paid model", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterError(429);
+
+    const result = await optimizePrompt({ content: "some prompt" });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe(
+        "Free AI models are busy or unavailable. Try again later."
+      );
+    }
+  });
+
+  it("maps 402 without retrying a paid model", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockOpenRouterError(402);
+
+    const result = await optimizePrompt({ content: "some prompt" });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe(
+        "Free AI models are busy or unavailable. Try again later."
+      );
+    }
+  });
+
+  it("handles a missing OPENROUTER_API_KEY", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+    mockGetOpenRouterClient.mockImplementation(() => {
+      throw new Error("OPENROUTER_API_KEY is not configured");
+    });
+
+    const result = await optimizePrompt({ content: "some prompt" });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error).toBe("AI service configuration error");
+    }
+  });
+
+  it("does not include user identity, collection metadata, or database IDs in the prompt", async () => {
+    mockAuth("user-1");
+    mockEntitlements(true);
+    mockRateLimitSuccess();
+
+    let capturedUserPrompt = "";
+    mockGetOpenRouterClient.mockReturnValue({
+      chat: {
+        send: vi.fn().mockImplementation(({ chatRequest }: { chatRequest: { messages: Array<{ role: string; content: string }> } }) => {
+          capturedUserPrompt = chatRequest.messages[1]?.content ?? "";
+          return { choices: [{ message: { content: "optimized" } }] };
+        }),
+      },
+    } as never);
+
+    await optimizePrompt({ content: "some prompt" });
+
+    expect(capturedUserPrompt).not.toContain("user-1");
+    expect(capturedUserPrompt).not.toContain("userId");
+    expect(capturedUserPrompt).not.toContain("collection");
   });
 });
