@@ -2,18 +2,22 @@
 
 ## Status
 <!-- Not Started | In Progress | Completed -->
-Completed
+Not Started
 
 ## Goals
 <!-- Goals & requirements -->
-- Add server-side feature gates to item creation, collection creation, and file upload
-- Create billing server actions (checkout, portal)
-- Create checkout success/cancel pages
-- Add billing section to settings UI
-- Test webhook handling with Stripe CLI
-- Verify signature validation and idempotency
-- Add upgrade prompts when limits are reached
-- Handle edge cases (duplicate checkout, active subscription, canceled checkout)
+- Install `@openrouter/sdk` and create shared OpenRouter foundation (`src/lib/openrouter.ts`) with free-model guard and lazy client
+- Create shared AI configuration (`src/lib/ai-config.ts`) with rate limit constants and content limits
+- Implement `generateAutoTags` server action in `src/actions/ai.ts` with Zod validation, entitlement checks, rate limiting, and OpenRouter free-model request
+- Create tag suggestion parser/normalizer (JSON parsing, lowercase, trim, strip `#`, dedup, limit to 5)
+- Add "Suggest Tags" button to Create Item dialog (Pro-only, with loading state and suggestion badges)
+- Add "Suggest Tags" to Item Drawer edit mode (Pro-only, reusing shared suggestion component/hook)
+- Accept/reject individual tag suggestions; accepted tags append to tag input without duplicates
+- Enforce server-side entitlement gating (free users rejected even with direct invocation)
+- Limit AI requests to 20 per user per hour across all AI features
+- Truncate content to 2,000 characters server-side before sending to OpenRouter
+- All OpenRouter calls use `openrouter/free` model only; no paid model fallbacks
+- Write comprehensive unit tests for action, parser, entitlements, rate limiting, and free-only invariant
 
 ## References
 - @context/features/stripe-phase-1-spec.md
@@ -43,6 +47,7 @@ Completed
 - @context/features/favorites-spec.md
 - @context/features/pinned-spec.md
 - @context/features/homepage-spec.md
+- @context/features/ai-auto-tag-spec.md
 - @context/project-overview.md
 - @context/coding-standards.md
 - Prisma docs: https://prisma.io/docs
@@ -82,6 +87,8 @@ Completed
 - Entitlement source of truth: database-backed subscription records
 - `user.isPro` is a denormalized cache field updated by webhook hooks
 - Webhook endpoint: `/api/auth/stripe/webhook` (handled by Better Auth plugin)
+- OpenRouter API key: `OPENROUTER_API_KEY` (server-only, never prefixed with `NEXT_PUBLIC_`)
+- AI rate limit: 20 requests per hour per user, shared across all AI features via `ai:${userId}` key
 
 ## History
 <!-- Keep this updated. Earliest to latest -->
@@ -149,3 +156,4 @@ Completed
 - **Phase 37 Started**: Stripe integration — Phase 1: Core infrastructure. Installing Better Auth Stripe plugin, configuring subscription plans (Pro: $8/mo, $72/yr), creating entitlement service and usage-limits module with unit tests. Spec: stripe-phase-1-spec.md.
 - **Phase 37 Completed**: Stripe Phase 1 implemented — installed `@better-auth/stripe` and `stripe` packages, created `src/lib/stripe-config.ts` with Stripe client initialization, created `src/lib/entitlements.ts` with `getUserEntitlements()`, `requirePro()`, `isProUser()` functions, created `src/lib/usage-limits.ts` with `getUsageStatus()`, `canCreateItem()`, `canCreateCollection()`, `assertWithinItemLimit()`, `assertWithinCollectionLimit()`, `requireProForFeature()` functions. Updated `src/lib/auth.ts` with Stripe server plugin (subscription plans, lifecycle hooks for onSubscriptionComplete/Cancel/Deleted), added `user.additionalFields` for `isPro` cache field. Updated `src/lib/auth-client.ts` with `stripeClient` plugin and `subscription` export. Updated environment variables (STRIPE_PRO_MONTHLY_PRICE_ID, STRIPE_PRO_ANNUAL_PRICE_ID, NEXT_PUBLIC_BETTER_AUTH_URL). Created comprehensive unit tests for entitlements and usage-limits (91 tests passing). All tests pass, TypeScript compiles, build succeeds.
 - **Phase 38 Completed**: Stripe Phase 2 implemented — added server-side feature gates to item creation (`assertWithinItemLimit`), collection creation (`assertWithinCollectionLimit`), and file upload (`requireProForFeature`). Created billing server actions (`src/actions/billing.ts`) with `createCheckoutSession`, `openBillingPortal`, `getBillingStatus`. Created billing status API route (`/api/billing/status`). Created checkout success and cancel pages (`/settings/billing/success`, `/settings/billing/cancel`). Created `BillingSection` component with plan display, pricing cards, usage progress bars, and manage subscription button. Created `UpgradePrompt` component for feature-gated prompts. Updated settings page to include BillingSection. Updated tests with mocks for usage-limits. All 91 tests pass, TypeScript compiles, build succeeds.
+- **Phase 39 Started**: AI auto-tagging — OpenRouter free-only integration for Pro users. Server action `generateAutoTags` with entitlement checks, 20 req/hour rate limit, content truncation. Shared OpenRouter client (`src/lib/openrouter.ts`) and AI config (`src/lib/ai-config.ts`). "Suggest Tags" button in Create Item dialog and Item Drawer edit mode. Tag suggestion parser with normalize/dedup/limit. Unit tests for auth, entitlements, validation, parsing, provider failures, free-only invariant. Spec: ai-auto-tag-spec.md.

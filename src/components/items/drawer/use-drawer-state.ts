@@ -65,6 +65,20 @@ export function useDrawerState(
     }
   }, [item]);
 
+  useEffect(() => {
+    if (item && !isEditing) {
+      setEditData({
+        title: item.title,
+        description: item.description || "",
+        content: item.content || "",
+        language: item.language || "",
+        url: item.url || "",
+        tags: item.tags.join(", "),
+        collections: item.collections.map((c) => c.id),
+      });
+    }
+  }, [item, isEditing]);
+
   const handleCancel = () => {
     if (item) {
       setEditData({
