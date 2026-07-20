@@ -1,4 +1,7 @@
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { TagSuggestions } from "@/components/ui/tag-suggestions";
 import { formatDate } from "@/lib/item-helpers";
 import { CollectionSelector } from "@/components/ui/collection-selector";
 import type { ItemDetail } from "@/types/dashboard";
@@ -15,6 +18,12 @@ interface MetadataSectionProps {
   editData: EditData;
   setEditData: (data: EditData) => void;
   collections: Collection[];
+  aiAccess?: boolean;
+  isSuggesting?: boolean;
+  suggestions?: string[];
+  onSuggestTags?: () => void;
+  onAcceptSuggestion?: (tag: string) => void;
+  onRejectSuggestion?: (tag: string) => void;
 }
 
 export function MetadataSection({
@@ -23,25 +32,59 @@ export function MetadataSection({
   editData,
   setEditData,
   collections,
+  aiAccess,
+  isSuggesting,
+  suggestions = [],
+  onSuggestTags,
+  onAcceptSuggestion,
+  onRejectSuggestion,
 }: MetadataSectionProps) {
   return (
     <>
       {/* Tags */}
       <div className="space-y-2">
-        <div className="flex items-center gap-1.5">
-          <span className="material-symbols-outlined text-sm text-muted-foreground">
-            tag
-          </span>
-          <h3 className="text-sm font-medium text-foreground">Tags</h3>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="material-symbols-outlined text-sm text-muted-foreground">
+              tag
+            </span>
+            <h3 className="text-sm font-medium text-foreground">Tags</h3>
+          </div>
+          {isEditing && aiAccess && onSuggestTags && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={onSuggestTags}
+              disabled={isSuggesting || !editData.title.trim()}
+              className="h-7 px-2 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
+            >
+              {isSuggesting ? (
+                <Spinner size="sm" />
+              ) : (
+                <span className="material-symbols-outlined text-sm">auto_awesome</span>
+              )}
+              {isSuggesting ? "Suggesting..." : "Suggest Tags"}
+            </Button>
+          )}
         </div>
         {isEditing ? (
-          <Input
-            value={editData.tags}
-            onChange={(e) =>
-              setEditData({ ...editData, tags: e.target.value })
-            }
-            placeholder="Comma-separated tags"
-          />
+          <>
+            <Input
+              value={editData.tags}
+              onChange={(e) =>
+                setEditData({ ...editData, tags: e.target.value })
+              }
+              placeholder="Comma-separated tags"
+            />
+            {onAcceptSuggestion && onRejectSuggestion && (
+              <TagSuggestions
+                suggestions={suggestions}
+                onAccept={onAcceptSuggestion}
+                onReject={onRejectSuggestion}
+              />
+            )}
+          </>
         ) : item.tags.length > 0 ? (
           <div className="flex flex-wrap gap-2">
             {item.tags.map((tag) => (

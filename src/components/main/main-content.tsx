@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useItemDetail } from "@/hooks/use-item-detail";
+import { useAiAccess } from "@/hooks/use-ai-access";
 import { DashboardContentSkeleton } from "@/components/ui/dashboard-skeletons";
 import { Button } from "@/components/ui/button";
 import { ItemCard, ListItem } from "@/components/items/item-card";
@@ -129,6 +130,7 @@ function ItemsSection({ title, items, onItemClick }: ItemsSectionProps) {
 export function MainContent({ initialData }: MainContentProps) {
   const data = initialData;
   const { data: selectedItem, isLoading: isDrawerLoading, error: drawerError, open: openDrawer, close: closeDrawer, isOpen: isDrawerOpen } = useItemDetail();
+  const aiAccess = useAiAccess();
 
   if (!data) {
     return <DashboardContentSkeleton />;
@@ -153,6 +155,7 @@ export function MainContent({ initialData }: MainContentProps) {
         item={selectedItem}
         isLoading={isDrawerLoading}
         error={drawerError}
+        aiAccess={aiAccess}
       />
     </div>
   );

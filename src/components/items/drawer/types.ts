@@ -16,4 +16,5 @@ export interface ItemDrawerProps {
   item: ItemDetail | null;
   isLoading: boolean;
   error: string | null;
+  aiAccess?: boolean;
 }

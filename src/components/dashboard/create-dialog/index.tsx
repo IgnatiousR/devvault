@@ -19,9 +19,10 @@ import { useCreateItem } from "./use-create-item"
 interface CreateItemDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  aiAccess?: boolean
 }
 
-export function CreateItemDialog({ open, onOpenChange }: CreateItemDialogProps) {
+export function CreateItemDialog({ open, onOpenChange, aiAccess }: CreateItemDialogProps) {
   const pathname = usePathname()
   const {
     selectedType,
@@ -50,6 +51,11 @@ export function CreateItemDialog({ open, onOpenChange }: CreateItemDialogProps) 
     showFileUpload,
     resetForm,
     handleCreate,
+    isSuggesting,
+    suggestions,
+    handleSuggestTags,
+    handleAcceptTag,
+    handleRejectTag,
   } = useCreateItem({ pathname, onOpenChange })
 
   const handleClose = (value: boolean) => {
@@ -88,6 +94,12 @@ export function CreateItemDialog({ open, onOpenChange }: CreateItemDialogProps) 
             onTagsChange={setTags}
             onFileUpload={setUploadedFile}
             onFileClear={() => setUploadedFile(null)}
+            aiAccess={aiAccess}
+            isSuggesting={isSuggesting}
+            suggestions={suggestions}
+            onSuggestTags={handleSuggestTags}
+            onAcceptSuggestion={handleAcceptTag}
+            onRejectSuggestion={handleRejectTag}
           />
 
           <div>

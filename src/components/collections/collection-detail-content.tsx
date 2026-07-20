@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ItemDrawer } from "@/components/items/drawer";
 import { useItemDetail } from "@/hooks/use-item-detail";
+import { useAiAccess } from "@/hooks/use-ai-access";
 import { EditCollectionDialog } from "@/components/collections/edit-collection-dialog";
 import { DeleteCollectionDialog } from "@/components/collections/delete-collection-dialog";
 import { toggleCollectionFavoriteAction } from "@/actions/collections";
@@ -29,6 +30,7 @@ export function CollectionDetailContent({ collection: initialCollection, items, 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const { data: selectedItem, isLoading: isDrawerLoading, error: drawerError, open: openDrawer, close: closeDrawer, isOpen: isDrawerOpen } = useItemDetail();
+  const aiAccess = useAiAccess();
 
   const itemTypes = [...new Set(items.map((item) => item.itemType.name.toLowerCase()))];
   const showViewToggle = !itemTypes.some((t) => FIXED_LAYOUT_TYPES.includes(t));
@@ -73,6 +75,7 @@ export function CollectionDetailContent({ collection: initialCollection, items, 
         item={selectedItem}
         isLoading={isDrawerLoading}
         error={drawerError}
+        aiAccess={aiAccess}
       />
       <EditCollectionDialog
         open={editOpen}

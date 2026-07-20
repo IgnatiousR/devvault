@@ -8,6 +8,7 @@ import { ItemDrawer } from "@/components/items/drawer";
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
 import { useItemDetail } from "@/hooks/use-item-detail";
+import { useAiAccess } from "@/hooks/use-ai-access";
 import type { DashboardItem } from "@/types/dashboard";
 
 function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode: "grid" | "list") => void }) {
@@ -51,6 +52,7 @@ const FIXED_LAYOUT_TYPES = ["image", "file"];
 export function ItemsListContent({ typeName, items, currentPage, totalPages }: ItemsListContentProps) {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const { data: selectedItem, isLoading: isDrawerLoading, error: drawerError, open: openDrawer, close: closeDrawer, isOpen: isDrawerOpen } = useItemDetail();
+  const aiAccess = useAiAccess();
   const showViewToggle = !FIXED_LAYOUT_TYPES.includes(typeName.toLowerCase());
 
   return (
@@ -102,6 +104,7 @@ export function ItemsListContent({ typeName, items, currentPage, totalPages }: I
         item={selectedItem}
         isLoading={isDrawerLoading}
         error={drawerError}
+        aiAccess={aiAccess}
       />
     </div>
   );

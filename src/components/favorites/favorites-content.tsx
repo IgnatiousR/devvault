@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { ItemDrawer } from "@/components/items/drawer";
 import { useItemDetail } from "@/hooks/use-item-detail";
+import { useAiAccess } from "@/hooks/use-ai-access";
 import { getColorTextClass, getColorBgAlphaClass } from "@/lib/color-utils";
 import {
   Select,
@@ -162,6 +163,7 @@ function SortSelect({
 
 export function FavoritesContent({ items, collections }: FavoritesContentProps) {
   const { data: selectedItem, isLoading, error, open, close, isOpen } = useItemDetail();
+  const aiAccess = useAiAccess();
   const [itemSort, setItemSort] = useState<SortOption>("newest");
   const [collectionSort, setCollectionSort] = useState<SortOption>("newest");
 
@@ -247,6 +249,7 @@ export function FavoritesContent({ items, collections }: FavoritesContentProps) 
         item={selectedItem}
         isLoading={isLoading}
         error={error}
+        aiAccess={aiAccess}
       />
     </>
   );

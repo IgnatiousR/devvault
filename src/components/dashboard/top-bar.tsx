@@ -65,7 +65,7 @@ export function TopBar({ isPro }: { isPro: boolean }) {
         </Link>
       </div>
     </header>
-    <CreateItemDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+    <CreateItemDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} aiAccess={isPro} />
     <CreateCollectionDialog open={isCollectionCreateOpen} onOpenChange={setIsCollectionCreateOpen} />
     </>
   );

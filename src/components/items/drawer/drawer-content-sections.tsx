@@ -15,6 +15,12 @@ interface DrawerContentSectionsProps {
   editData: EditData;
   setEditData: (data: EditData) => void;
   collections: Collection[];
+  aiAccess?: boolean;
+  isSuggesting?: boolean;
+  suggestions?: string[];
+  onSuggestTags?: () => void;
+  onAcceptSuggestion?: (tag: string) => void;
+  onRejectSuggestion?: (tag: string) => void;
 }
 
 export function DrawerContentSections({
@@ -23,6 +29,12 @@ export function DrawerContentSections({
   editData,
   setEditData,
   collections,
+  aiAccess,
+  isSuggesting,
+  suggestions,
+  onSuggestTags,
+  onAcceptSuggestion,
+  onRejectSuggestion,
 }: DrawerContentSectionsProps) {
   return (
     <div className="p-6 space-y-6">
@@ -44,6 +56,12 @@ export function DrawerContentSections({
         editData={editData}
         setEditData={setEditData}
         collections={collections}
+        aiAccess={aiAccess}
+        isSuggesting={isSuggesting}
+        suggestions={suggestions}
+        onSuggestTags={onSuggestTags}
+        onAcceptSuggestion={onAcceptSuggestion}
+        onRejectSuggestion={onRejectSuggestion}
       />
     </div>
   );

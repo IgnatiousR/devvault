@@ -2,6 +2,9 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { FileUpload } from "@/components/ui/file-upload"
 import { LanguageSelect } from "@/components/ui/language-select"
+import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
+import { TagSuggestions } from "@/components/ui/tag-suggestions"
 import { FILE_TYPES } from "@/lib/item-types"
 import { ContentField } from "./content-field"
 
@@ -22,6 +25,12 @@ interface FormFieldsProps {
   onTagsChange: (v: string) => void
   onFileUpload: (file: { fileUrl: string; fileName: string; fileSize: number }) => void
   onFileClear: () => void
+  aiAccess?: boolean
+  isSuggesting?: boolean
+  suggestions?: string[]
+  onSuggestTags?: () => void
+  onAcceptSuggestion?: (tag: string) => void
+  onRejectSuggestion?: (tag: string) => void
 }
 
 export function FormFields({
@@ -41,6 +50,12 @@ export function FormFields({
   onTagsChange,
   onFileUpload,
   onFileClear,
+  aiAccess,
+  isSuggesting,
+  suggestions = [],
+  onSuggestTags,
+  onAcceptSuggestion,
+  onRejectSuggestion,
 }: FormFieldsProps) {
   const showContent = ["snippet", "prompt", "command", "note"].includes(selectedType)
   const showLanguage = ["snippet", "command"].includes(selectedType)
@@ -128,14 +143,40 @@ export function FormFields({
 
       {/* Tags */}
       <div>
-        <label className="text-sm font-medium text-foreground mb-2 block">
-          Tags
-        </label>
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-sm font-medium text-foreground">
+            Tags
+          </label>
+          {aiAccess && onSuggestTags && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={onSuggestTags}
+              disabled={isSuggesting || !title.trim()}
+              className="h-7 px-2 text-xs gap-1.5 text-muted-foreground hover:text-foreground"
+            >
+              {isSuggesting ? (
+                <Spinner size="sm" />
+              ) : (
+                <span className="material-symbols-outlined text-sm">auto_awesome</span>
+              )}
+              {isSuggesting ? "Suggesting..." : "Suggest Tags"}
+            </Button>
+          )}
+        </div>
         <Input
           value={tags}
           onChange={(e) => onTagsChange(e.target.value)}
           placeholder="Comma-separated tags"
         />
+        {onAcceptSuggestion && onRejectSuggestion && (
+          <TagSuggestions
+            suggestions={suggestions}
+            onAccept={onAcceptSuggestion}
+            onReject={onRejectSuggestion}
+          />
+        )}
       </div>
     </div>
   )

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { createItemAction } from "@/actions/items";
 import { ITEM_TYPE_OPTIONS, FILE_TYPES } from "@/lib/item-types";
 import { parseTags, shouldIncludeContent, hasLanguage, isUrlType } from "@/lib/item-helpers";
+import { useAutoTags } from "@/components/ui/use-auto-tags";
 
 interface Collection {
   id: string;
@@ -74,6 +75,15 @@ export function useCreateItem({ pathname, onOpenChange }: UseCreateItemOptions) 
     fileSize: number;
   } | null>(null);
 
+  const {
+    isSuggesting,
+    suggestions,
+    suggestTags,
+    acceptTag,
+    rejectTag,
+    clearSuggestions,
+  } = useAutoTags();
+
   useEffect(() => {
     fetch("/api/collections")
       .then((res) => res.json())
@@ -96,7 +106,28 @@ export function useCreateItem({ pathname, onOpenChange }: UseCreateItemOptions) 
     setTags("");
     setSelectedCollectionIds([]);
     setUploadedFile(null);
+    clearSuggestions();
   };
+
+  const handleSuggestTags = useCallback(() => {
+    suggestTags({
+      title,
+      content: showContent ? content : undefined,
+      itemType: selectedType,
+      existingTags: parseTags(tags),
+    });
+  }, [suggestTags, title, content, selectedType, tags, showContent]);
+
+  const handleAcceptTag = useCallback(
+    (tag: string) => {
+      acceptTag(tag);
+      const currentTags = parseTags(tags);
+      if (!currentTags.includes(tag)) {
+        setTags((prev) => (prev ? `${prev}, ${tag}` : tag));
+      }
+    },
+    [acceptTag, tags]
+  );
 
   const handleCreate = async () => {
     setIsCreating(true);
@@ -154,5 +185,10 @@ export function useCreateItem({ pathname, onOpenChange }: UseCreateItemOptions) 
     showFileUpload,
     resetForm,
     handleCreate,
+    isSuggesting,
+    suggestions,
+    handleSuggestTags,
+    handleAcceptTag,
+    handleRejectTag: rejectTag,
   };
 }
