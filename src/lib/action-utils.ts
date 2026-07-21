@@ -35,3 +35,5 @@ export function validateSimple<T extends z.ZodType>(
 export function notFound(entity: string): { success: false; error: string } {
   return { success: false, error: `${entity} not found` };
 }
+
+

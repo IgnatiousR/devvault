@@ -2,34 +2,37 @@ import { AUTO_TAG_MAX_SUGGESTIONS } from "./ai-config";
 
 const MAX_TAG_LENGTH = 50;
 
-export function parseAutoTags(raw: string, existingTags: string[]): string[] {
-  if (!raw || raw.trim().length === 0) {
-    return [];
-  }
-
-  let text = raw.trim();
-
+function stripFence(text: string): string {
   const fenceMatch = text.match(/^```(?:json)?\s*\n?([\s\S]*?)\n?\s*```$/);
-  if (fenceMatch) {
-    text = fenceMatch[1].trim();
-  }
+  return fenceMatch ? fenceMatch[1].trim() : text;
+}
 
-  let parsed: unknown;
+function parseJsonTags(text: string): string[] | null {
   try {
-    parsed = JSON.parse(text);
+    const parsed = JSON.parse(text);
+    if (Array.isArray(parsed)) {
+      return parsed.filter((t): t is string => typeof t === "string");
+    }
+    if (
+      parsed &&
+      typeof parsed === "object" &&
+      "tags" in parsed &&
+      Array.isArray((parsed as { tags: unknown }).tags)
+    ) {
+      return ((parsed as { tags: unknown }).tags as unknown[]).filter(
+        (t): t is string => typeof t === "string"
+      );
+    }
+    return null;
   } catch {
-    return [];
+    return null;
   }
+}
 
-  let tags: string[];
-  if (Array.isArray(parsed)) {
-    tags = parsed.filter((t): t is string => typeof t === "string");
-  } else if (parsed && typeof parsed === "object" && "tags" in parsed && Array.isArray((parsed as { tags: unknown }).tags)) {
-    tags = ((parsed as { tags: unknown }).tags as unknown[]).filter((t): t is string => typeof t === "string");
-  } else {
-    return [];
-  }
-
+function deduplicateAndLimit(
+  tags: string[],
+  existingTags: string[]
+): string[] {
   const normalizedExisting = new Set(
     existingTags.map((t) => t.trim().toLowerCase())
   );
@@ -61,4 +64,18 @@ export function parseAutoTags(raw: string, existingTags: string[]): string[] {
   }
 
   return result;
+}
+
+export function parseAutoTags(raw: string, existingTags: string[]): string[] {
+  if (!raw || raw.trim().length === 0) {
+    return [];
+  }
+
+  const text = stripFence(raw.trim());
+  const tags = parseJsonTags(text);
+  if (!tags) {
+    return [];
+  }
+
+  return deduplicateAndLimit(tags, existingTags);
 }

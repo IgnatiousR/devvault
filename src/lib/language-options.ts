@@ -54,8 +54,6 @@ export const LANGUAGE_OPTIONS: LanguageOption[] = [
   { id: "objective-c", label: "Objective-C" },
 ];
 
-export const MONACO_LANGUAGE_IDS = LANGUAGE_OPTIONS.map((l) => l.id);
-
 export function getLanguageLabel(id: string): string {
   return LANGUAGE_OPTIONS.find((l) => l.id === id)?.label ?? id;
 }

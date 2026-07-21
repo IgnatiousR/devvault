@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { COLLECTIONS_PER_PAGE } from "@/lib/constants";
+import { parsePagination, type ItemTypeRef } from "@/lib/db/base";
+import { mapItemRelationToDashboard, type DashboardItem } from "@/lib/db/items";
 
 export interface CreateCollectionData {
   name: string;
@@ -37,7 +39,6 @@ export async function createCollection(
   };
 }
 
-type ItemTypeRef = { id: string; name: string; icon: string; color: string };
 type TypeCount = { name: string; icon: string; color: string; count: number };
 
 function countTypesByItem(items: { itemType: ItemTypeRef }[]) {
@@ -66,6 +67,18 @@ function findMostUsedType(typeCount: Map<string, TypeCount>) {
   return mostUsedType;
 }
 
+function extractUniqueTypeIcons(typeCount: Map<string, TypeCount>): { icon: string; color: string }[] {
+  const seen = new Set<string>();
+  const icons: { icon: string; color: string }[] = [];
+  for (const t of typeCount.values()) {
+    if (!seen.has(t.icon)) {
+      seen.add(t.icon);
+      icons.push({ icon: t.icon, color: t.color });
+    }
+  }
+  return icons;
+}
+
 export interface CollectionWithStats {
   id: string;
   name: string;
@@ -84,9 +97,7 @@ export async function getCollectionsWithStats(
   userId: string,
   options?: { page?: number; limit?: number }
 ): Promise<{ collections: CollectionWithStats[]; totalCount: number }> {
-  const page = options?.page ?? 1;
-  const limit = options?.limit ?? COLLECTIONS_PER_PAGE;
-  const skip = (page - 1) * limit;
+  const { skip, limit } = parsePagination(options, COLLECTIONS_PER_PAGE);
 
   const [rawCollections, totalCount] = await Promise.all([
     prisma.collection.findMany({
@@ -113,15 +124,6 @@ export async function getCollectionsWithStats(
     const items = collection.items.map((ic) => ic.item);
     const typeCount = countTypesByItem(items);
 
-    const seen = new Set<string>();
-    const typeIcons: { icon: string; color: string }[] = [];
-    for (const t of typeCount.values()) {
-      if (!seen.has(t.icon)) {
-        seen.add(t.icon);
-        typeIcons.push({ icon: t.icon, color: t.color });
-      }
-    }
-
     return {
       id: collection.id,
       name: collection.name,
@@ -129,7 +131,7 @@ export async function getCollectionsWithStats(
       isFavorite: collection.isFavorite,
       resourceCount: items.length,
       mostUsedType: findMostUsedType(typeCount),
-      typeIcons,
+      typeIcons: extractUniqueTypeIcons(typeCount),
     };
   });
 
@@ -269,15 +271,6 @@ export async function getCollectionById(
   const items = collection.items.map((ic) => ic.item);
   const typeCount = countTypesByItem(items);
 
-  const seen = new Set<string>();
-  const typeIcons: { icon: string; color: string }[] = [];
-  for (const t of typeCount.values()) {
-    if (!seen.has(t.icon)) {
-      seen.add(t.icon);
-      typeIcons.push({ icon: t.icon, color: t.color });
-    }
-  }
-
   return {
     id: collection.id,
     name: collection.name,
@@ -285,7 +278,7 @@ export async function getCollectionById(
     isFavorite: collection.isFavorite,
     resourceCount: items.length,
     mostUsedType: findMostUsedType(typeCount),
-    typeIcons,
+    typeIcons: extractUniqueTypeIcons(typeCount),
   };
 }
 
@@ -293,16 +286,14 @@ export async function getItemsByCollectionId(
   collectionId: string,
   userId: string,
   options?: { page?: number; limit?: number }
-): Promise<{ items: { id: string; title: string; description: string | null; content: string | null; url: string | null; isPinned: boolean; isFavorite: boolean; itemType: { name: string; icon: string; color: string }; tags: string[]; updatedAt: Date; collectionName: string | null; fileUrl: string | null; fileName: string | null; fileSize: number | null }[]; totalCount: number } | null> {
+): Promise<{ items: DashboardItem[]; totalCount: number } | null> {
   const collection = await prisma.collection.findFirst({
     where: { id: collectionId, userId },
   });
 
   if (!collection) return null;
 
-  const page = options?.page ?? 1;
-  const limit = options?.limit ?? COLLECTIONS_PER_PAGE;
-  const skip = (page - 1) * limit;
+  const { skip, limit } = parsePagination(options, COLLECTIONS_PER_PAGE);
 
   const [relations, totalCount] = await Promise.all([
     prisma.itemCollection.findMany({
@@ -326,28 +317,7 @@ export async function getItemsByCollectionId(
     prisma.itemCollection.count({ where: { collectionId } }),
   ]);
 
-  const items = relations
-    .map((rel) => ({
-      id: rel.item.id,
-      title: rel.item.title,
-      description: rel.item.description,
-      content: rel.item.content,
-      url: rel.item.url,
-      isPinned: rel.item.isPinned,
-      isFavorite: rel.item.isFavorite,
-      itemType: {
-        name: rel.item.itemType.name,
-        icon: rel.item.itemType.icon,
-        color: rel.item.itemType.color,
-      },
-      tags: rel.item.tags.map((t) => t.name),
-      updatedAt: rel.item.updatedAt,
-      collectionName: rel.item.collections[0]?.collection.name ?? null,
-      fileUrl: rel.item.fileUrl,
-      fileName: rel.item.fileName,
-      fileSize: rel.item.fileSize,
-    }))
-    .sort((a, b) => (a.isPinned === b.isPinned ? 0 : a.isPinned ? -1 : 1));
+  const items = relations.map(mapItemRelationToDashboard);
 
   return { items, totalCount };
 }

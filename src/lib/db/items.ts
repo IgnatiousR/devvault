@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { filebaseClient, FILEBASE_BUCKET } from "@/lib/filebase";
 import { ITEMS_PER_PAGE } from "@/lib/constants";
+import { parsePagination } from "@/lib/db/base";
 
 interface PrismaItemWithRelations {
   id: string;
@@ -129,6 +130,10 @@ function mapPrismaItemToDashboard(item: PrismaItemWithRelations): DashboardItem 
   };
 }
 
+export function mapItemRelationToDashboard(rel: { item: PrismaItemWithRelations }): DashboardItem {
+  return mapPrismaItemToDashboard(rel.item);
+}
+
 export interface UpdateItemData {
   title: string;
   description?: string | null;
@@ -232,9 +237,7 @@ export async function getItemsByType(
   typeName: string,
   options?: { page?: number; limit?: number }
 ): Promise<PaginatedResult<DashboardItem>> {
-  const page = options?.page ?? 1;
-  const limit = options?.limit ?? ITEMS_PER_PAGE;
-  const skip = (page - 1) * limit;
+  const { skip, limit } = parsePagination(options, ITEMS_PER_PAGE);
 
   const where = {
     userId,

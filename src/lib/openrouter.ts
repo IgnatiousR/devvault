@@ -4,7 +4,7 @@ import { OpenRouter } from "@openrouter/sdk";
 
 export const OPENROUTER_FREE_MODEL = "openrouter/free" as const;
 
-export function isFreeOpenRouterModel(model: string): boolean {
+function isFreeOpenRouterModel(model: string): boolean {
   return model === OPENROUTER_FREE_MODEL || model.endsWith(":free");
 }
 
