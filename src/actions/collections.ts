@@ -17,6 +17,7 @@ import {
   notFound,
 } from "@/lib/action-utils";
 import { assertWithinCollectionLimit } from "@/lib/usage-limits";
+import { idOnlySchema } from "@/lib/schemas";
 
 const createCollectionSchema = z.object({
   name: z.string().trim().min(1, "Name is required"),
@@ -136,11 +137,7 @@ export async function updateCollectionAction(
   return { success: true };
 }
 
-const deleteCollectionSchema = z.object({
-  id: z.string().min(1),
-});
-
-type DeleteCollectionInput = z.infer<typeof deleteCollectionSchema>;
+type DeleteCollectionInput = z.infer<typeof idOnlySchema>;
 
 interface DeleteCollectionResult {
   success: boolean;
@@ -150,7 +147,7 @@ interface DeleteCollectionResult {
 export async function deleteCollectionAction(
   input: DeleteCollectionInput
 ): Promise<DeleteCollectionResult> {
-  const validation = validateSimple(deleteCollectionSchema, input);
+  const validation = validateSimple(idOnlySchema, input);
   if (!validation.success) return validation;
 
   const auth = await getSessionUserId();
@@ -166,11 +163,7 @@ export async function deleteCollectionAction(
   return { success: true };
 }
 
-const toggleFavoriteSchema = z.object({
-  id: z.string().min(1),
-});
-
-type ToggleFavoriteInput = z.infer<typeof toggleFavoriteSchema>;
+type ToggleFavoriteInput = z.infer<typeof idOnlySchema>;
 
 interface ToggleFavoriteResult {
   success: boolean;
@@ -181,7 +174,7 @@ interface ToggleFavoriteResult {
 export async function toggleCollectionFavoriteAction(
   input: ToggleFavoriteInput
 ): Promise<ToggleFavoriteResult> {
-  const validation = validateSimple(toggleFavoriteSchema, input);
+  const validation = validateSimple(idOnlySchema, input);
   if (!validation.success) return validation;
 
   const auth = await getSessionUserId();

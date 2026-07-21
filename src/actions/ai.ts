@@ -20,6 +20,84 @@ import {
   OPTIMIZE_PROMPT_CONTENT_LIMIT,
 } from "@/lib/ai-config";
 
+type AiError = { success: false; error: string };
+
+async function requireAiAccess(userId: string): Promise<null | AiError> {
+  const entitlements = await getUserEntitlements(userId);
+  if (!entitlements.aiAccess) {
+    return { success: false, error: "AI features require a Pro subscription" };
+  }
+
+  const limitResult = await rateLimit(
+    `ai:${userId}`,
+    AI_RATE_LIMIT_MAX_REQUESTS,
+    AI_RATE_LIMIT_WINDOW
+  );
+  if (!limitResult.success) {
+    return {
+      success: false,
+      error: "You have reached the AI request limit. Try again later.",
+    };
+  }
+
+  return null;
+}
+
+async function sendAiChatRequest(
+  systemPrompt: string,
+  userPrompt: string
+): Promise<{ success: true; content: string } | AiError> {
+  assertFreeOpenRouterModel(OPENROUTER_FREE_MODEL);
+
+  let response;
+  try {
+    response = await getOpenRouterClient().chat.send(
+      {
+        chatRequest: {
+          model: OPENROUTER_FREE_MODEL,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userPrompt },
+          ],
+        },
+      },
+      { fetchOptions: { signal: AbortSignal.timeout(30_000) } }
+    );
+  } catch (err: unknown) {
+    const status =
+      (err as { response?: { status?: number }; statusCode?: number })
+        .response?.status ??
+      (err as { statusCode?: number }).statusCode;
+
+    if (status === 401) {
+      return { success: false, error: "AI service configuration error" };
+    }
+
+    if (status === 402 || status === 429 || status === 502 || status === 503) {
+      return {
+        success: false,
+        error: "Free AI models are busy or unavailable. Try again later.",
+      };
+    }
+
+    return { success: false, error: "AI service configuration error" };
+  }
+
+  const chatResult = response as {
+    choices?: Array<{ message?: { content?: string } }>;
+  };
+  const content = chatResult.choices?.[0]?.message?.content;
+
+  if (!content || typeof content !== "string" || content.trim().length === 0) {
+    return {
+      success: false,
+      error: "The AI service returned an invalid response. Try again.",
+    };
+  }
+
+  return { success: true, content: content.trim() };
+}
+
 const generateAutoTagsSchema = z.object({
   title: z.string().trim().min(1).max(500),
   content: z.string().max(10_000).optional(),
@@ -66,22 +144,8 @@ export async function generateAutoTags(
   const auth = await getSessionUserId();
   if (!("userId" in auth)) return auth;
 
-  const entitlements = await getUserEntitlements(auth.userId);
-  if (!entitlements.aiAccess) {
-    return { success: false, error: "AI features require a Pro subscription" };
-  }
-
-  const limitResult = await rateLimit(
-    `ai:${auth.userId}`,
-    AI_RATE_LIMIT_MAX_REQUESTS,
-    AI_RATE_LIMIT_WINDOW
-  );
-  if (!limitResult.success) {
-    return {
-      success: false,
-      error: "You have reached the AI request limit. Try again later.",
-    };
-  }
+  const aiCheck = await requireAiAccess(auth.userId);
+  if (aiCheck) return aiCheck;
 
   const truncatedContent = validation.data.content
     ? validation.data.content.slice(0, AUTO_TAG_CONTENT_LIMIT)
@@ -94,68 +158,10 @@ export async function generateAutoTags(
     truncatedContent
   );
 
-  assertFreeOpenRouterModel(OPENROUTER_FREE_MODEL);
+  const aiResult = await sendAiChatRequest(SYSTEM_PROMPT, userPrompt);
+  if (!aiResult.success) return aiResult;
 
-  let response;
-  try {
-    response = await getOpenRouterClient().chat.send(
-      {
-        chatRequest: {
-          model: OPENROUTER_FREE_MODEL,
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: userPrompt },
-          ],
-        },
-      },
-      { fetchOptions: { signal: AbortSignal.timeout(30_000) } }
-    );
-  } catch (err: unknown) {
-    const status =
-      (err as { response?: { status?: number }; statusCode?: number })
-        .response?.status ??
-      (err as { statusCode?: number }).statusCode;
-
-    if (status === 401) {
-      return {
-        success: false,
-        error: "AI service configuration error",
-      };
-    }
-
-    if (status === 402) {
-      return {
-        success: false,
-        error: "Free AI models are busy or unavailable. Try again later.",
-      };
-    }
-
-    if (status === 429 || status === 502 || status === 503) {
-      return {
-        success: false,
-        error: "Free AI models are busy or unavailable. Try again later.",
-      };
-    }
-
-    return {
-      success: false,
-      error: "AI service configuration error",
-    };
-  }
-
-  const chatResult = response as {
-    choices?: Array<{ message?: { content?: string } }>;
-  };
-  const content = chatResult.choices?.[0]?.message?.content;
-
-  if (!content || typeof content !== "string") {
-    return {
-      success: false,
-      error: "The AI service returned an invalid response. Try again.",
-    };
-  }
-
-  const tags = parseAutoTags(content, validation.data.existingTags ?? []);
+  const tags = parseAutoTags(aiResult.content, validation.data.existingTags ?? []);
 
   if (tags.length === 0) {
     return {
@@ -215,22 +221,8 @@ export async function generateDescription(
   const auth = await getSessionUserId();
   if (!("userId" in auth)) return auth;
 
-  const entitlements = await getUserEntitlements(auth.userId);
-  if (!entitlements.aiAccess) {
-    return { success: false, error: "AI features require a Pro subscription" };
-  }
-
-  const limitResult = await rateLimit(
-    `ai:${auth.userId}`,
-    AI_RATE_LIMIT_MAX_REQUESTS,
-    AI_RATE_LIMIT_WINDOW
-  );
-  if (!limitResult.success) {
-    return {
-      success: false,
-      error: "You have reached the AI request limit. Try again later.",
-    };
-  }
+  const aiCheck = await requireAiAccess(auth.userId);
+  if (aiCheck) return aiCheck;
 
   const truncatedContent = validation.data.content
     ? validation.data.content.slice(0, AUTO_TAG_CONTENT_LIMIT)
@@ -245,68 +237,10 @@ export async function generateDescription(
     truncatedContent
   );
 
-  assertFreeOpenRouterModel(OPENROUTER_FREE_MODEL);
+  const aiResult = await sendAiChatRequest(DESCRIPTION_SYSTEM_PROMPT, userPrompt);
+  if (!aiResult.success) return aiResult;
 
-  let response;
-  try {
-    response = await getOpenRouterClient().chat.send(
-      {
-        chatRequest: {
-          model: OPENROUTER_FREE_MODEL,
-          messages: [
-            { role: "system", content: DESCRIPTION_SYSTEM_PROMPT },
-            { role: "user", content: userPrompt },
-          ],
-        },
-      },
-      { fetchOptions: { signal: AbortSignal.timeout(30_000) } }
-    );
-  } catch (err: unknown) {
-    const status =
-      (err as { response?: { status?: number }; statusCode?: number })
-        .response?.status ??
-      (err as { statusCode?: number }).statusCode;
-
-    if (status === 401) {
-      return {
-        success: false,
-        error: "AI service configuration error",
-      };
-    }
-
-    if (status === 402) {
-      return {
-        success: false,
-        error: "Free AI models are busy or unavailable. Try again later.",
-      };
-    }
-
-    if (status === 429 || status === 502 || status === 503) {
-      return {
-        success: false,
-        error: "Free AI models are busy or unavailable. Try again later.",
-      };
-    }
-
-    return {
-      success: false,
-      error: "AI service configuration error",
-    };
-  }
-
-  const chatResult = response as {
-    choices?: Array<{ message?: { content?: string } }>;
-  };
-  const resultContent = chatResult.choices?.[0]?.message?.content;
-
-  if (!resultContent || typeof resultContent !== "string") {
-    return {
-      success: false,
-      error: "The AI service returned an invalid response. Try again.",
-    };
-  }
-
-  const description = resultContent.trim().replace(/^[""]|[""]$/g, "");
+  const description = aiResult.content.replace(/^[""]|[""]$/g, "");
 
   if (description.length === 0) {
     return {
@@ -362,22 +296,8 @@ export async function explainCode(
   const auth = await getSessionUserId();
   if (!("userId" in auth)) return auth;
 
-  const entitlements = await getUserEntitlements(auth.userId);
-  if (!entitlements.aiAccess) {
-    return { success: false, error: "AI features require a Pro subscription" };
-  }
-
-  const limitResult = await rateLimit(
-    `ai:${auth.userId}`,
-    AI_RATE_LIMIT_MAX_REQUESTS,
-    AI_RATE_LIMIT_WINDOW
-  );
-  if (!limitResult.success) {
-    return {
-      success: false,
-      error: "You have reached the AI request limit. Try again later.",
-    };
-  }
+  const aiCheck = await requireAiAccess(auth.userId);
+  if (aiCheck) return aiCheck;
 
   const truncatedContent = validation.data.content.slice(
     0,
@@ -390,68 +310,10 @@ export async function explainCode(
     truncatedContent
   );
 
-  assertFreeOpenRouterModel(OPENROUTER_FREE_MODEL);
+  const aiResult = await sendAiChatRequest(EXPLAIN_SYSTEM_PROMPT, userPrompt);
+  if (!aiResult.success) return aiResult;
 
-  let response;
-  try {
-    response = await getOpenRouterClient().chat.send(
-      {
-        chatRequest: {
-          model: OPENROUTER_FREE_MODEL,
-          messages: [
-            { role: "system", content: EXPLAIN_SYSTEM_PROMPT },
-            { role: "user", content: userPrompt },
-          ],
-        },
-      },
-      { fetchOptions: { signal: AbortSignal.timeout(30_000) } }
-    );
-  } catch (err: unknown) {
-    const status =
-      (err as { response?: { status?: number }; statusCode?: number })
-        .response?.status ??
-      (err as { statusCode?: number }).statusCode;
-
-    if (status === 401) {
-      return {
-        success: false,
-        error: "AI service configuration error",
-      };
-    }
-
-    if (status === 402) {
-      return {
-        success: false,
-        error: "Free AI models are busy or unavailable. Try again later.",
-      };
-    }
-
-    if (status === 429 || status === 502 || status === 503) {
-      return {
-        success: false,
-        error: "Free AI models are busy or unavailable. Try again later.",
-      };
-    }
-
-    return {
-      success: false,
-      error: "AI service configuration error",
-    };
-  }
-
-  const chatResult = response as {
-    choices?: Array<{ message?: { content?: string } }>;
-  };
-  const content = chatResult.choices?.[0]?.message?.content;
-
-  if (!content || typeof content !== "string") {
-    return {
-      success: false,
-      error: "The AI service returned an empty explanation. Try again.",
-    };
-  }
-
-  const explanation = content.trim();
+  const explanation = aiResult.content;
 
   if (explanation.length === 0) {
     return {
@@ -495,22 +357,8 @@ export async function optimizePrompt(
   const auth = await getSessionUserId();
   if (!("userId" in auth)) return auth;
 
-  const entitlements = await getUserEntitlements(auth.userId);
-  if (!entitlements.aiAccess) {
-    return { success: false, error: "AI features require a Pro subscription" };
-  }
-
-  const limitResult = await rateLimit(
-    `ai:${auth.userId}`,
-    AI_RATE_LIMIT_MAX_REQUESTS,
-    AI_RATE_LIMIT_WINDOW
-  );
-  if (!limitResult.success) {
-    return {
-      success: false,
-      error: "You have reached the AI request limit. Try again later.",
-    };
-  }
+  const aiCheck = await requireAiAccess(auth.userId);
+  if (aiCheck) return aiCheck;
 
   const truncatedContent = validation.data.content.slice(
     0,
@@ -519,68 +367,10 @@ export async function optimizePrompt(
 
   const userPrompt = buildOptimizeUserPrompt(truncatedContent);
 
-  assertFreeOpenRouterModel(OPENROUTER_FREE_MODEL);
+  const aiResult = await sendAiChatRequest(OPTIMIZE_SYSTEM_PROMPT, userPrompt);
+  if (!aiResult.success) return aiResult;
 
-  let response;
-  try {
-    response = await getOpenRouterClient().chat.send(
-      {
-        chatRequest: {
-          model: OPENROUTER_FREE_MODEL,
-          messages: [
-            { role: "system", content: OPTIMIZE_SYSTEM_PROMPT },
-            { role: "user", content: userPrompt },
-          ],
-        },
-      },
-      { fetchOptions: { signal: AbortSignal.timeout(30_000) } }
-    );
-  } catch (err: unknown) {
-    const status =
-      (err as { response?: { status?: number }; statusCode?: number })
-        .response?.status ??
-      (err as { statusCode?: number }).statusCode;
-
-    if (status === 401) {
-      return {
-        success: false,
-        error: "AI service configuration error",
-      };
-    }
-
-    if (status === 402) {
-      return {
-        success: false,
-        error: "Free AI models are busy or unavailable. Try again later.",
-      };
-    }
-
-    if (status === 429 || status === 502 || status === 503) {
-      return {
-        success: false,
-        error: "Free AI models are busy or unavailable. Try again later.",
-      };
-    }
-
-    return {
-      success: false,
-      error: "AI service configuration error",
-    };
-  }
-
-  const chatResult = response as {
-    choices?: Array<{ message?: { content?: string } }>;
-  };
-  const content = chatResult.choices?.[0]?.message?.content;
-
-  if (!content || typeof content !== "string") {
-    return {
-      success: false,
-      error: "The AI service returned an empty response. Try again.",
-    };
-  }
-
-  const optimized = content.trim();
+  const optimized = aiResult.content;
 
   if (optimized.length === 0) {
     return {

@@ -148,7 +148,7 @@ describe("getBillingStatus", () => {
 
     const result = await getBillingStatus();
 
-    expect(result).toEqual({ error: "Unauthorized" });
+    expect(result).toEqual({ success: false, error: "Unauthorized" });
   });
 
   it("returns billing status for free user", async () => {

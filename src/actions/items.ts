@@ -9,6 +9,7 @@ import {
   notFound,
 } from "@/lib/action-utils";
 import { assertWithinItemLimit } from "@/lib/usage-limits";
+import { idOnlySchema } from "@/lib/schemas";
 
 const updateItemSchema = z.object({
   itemId: z.string().min(1),
@@ -64,11 +65,7 @@ export async function updateItemAction(
   };
 }
 
-const deleteItemSchema = z.object({
-  itemId: z.string().min(1),
-});
-
-type DeleteItemInput = z.infer<typeof deleteItemSchema>;
+type DeleteItemInput = z.infer<typeof idOnlySchema>;
 
 interface DeleteItemResult {
   success: boolean;
@@ -78,13 +75,13 @@ interface DeleteItemResult {
 export async function deleteItemAction(
   input: DeleteItemInput
 ): Promise<DeleteItemResult> {
-  const validation = validateSimple(deleteItemSchema, input, "Invalid item ID");
+  const validation = validateSimple(idOnlySchema, input, "Invalid item ID");
   if (!validation.success) return validation;
 
   const auth = await getSessionUserId();
   if (!("userId" in auth)) return auth;
 
-  const result = await deleteItem(validation.data.itemId, auth.userId);
+  const result = await deleteItem(validation.data.id, auth.userId);
 
   if (!result) return notFound("Item");
 
@@ -151,11 +148,7 @@ export async function createItemAction(
   return { success: true, data: result };
 }
 
-const toggleFavoriteSchema = z.object({
-  itemId: z.string().min(1),
-});
-
-type ToggleFavoriteInput = z.infer<typeof toggleFavoriteSchema>;
+type ToggleFavoriteInput = z.infer<typeof idOnlySchema>;
 
 interface ToggleFavoriteResult {
   success: boolean;
@@ -166,14 +159,14 @@ interface ToggleFavoriteResult {
 export async function toggleItemFavoriteAction(
   input: ToggleFavoriteInput
 ): Promise<ToggleFavoriteResult> {
-  const validation = validateSimple(toggleFavoriteSchema, input, "Invalid item ID");
+  const validation = validateSimple(idOnlySchema, input, "Invalid item ID");
   if (!validation.success) return validation;
 
   const auth = await getSessionUserId();
   if (!("userId" in auth)) return auth;
 
   const result = await toggleItemFavorite(
-    validation.data.itemId,
+    validation.data.id,
     auth.userId
   );
 
@@ -182,11 +175,7 @@ export async function toggleItemFavoriteAction(
   return { success: true, isFavorite: result };
 }
 
-const togglePinSchema = z.object({
-  itemId: z.string().min(1),
-});
-
-type TogglePinInput = z.infer<typeof togglePinSchema>;
+type TogglePinInput = z.infer<typeof idOnlySchema>;
 
 interface TogglePinResult {
   success: boolean;
@@ -197,14 +186,14 @@ interface TogglePinResult {
 export async function toggleItemPinAction(
   input: TogglePinInput
 ): Promise<TogglePinResult> {
-  const validation = validateSimple(togglePinSchema, input, "Invalid item ID");
+  const validation = validateSimple(idOnlySchema, input, "Invalid item ID");
   if (!validation.success) return validation;
 
   const auth = await getSessionUserId();
   if (!("userId" in auth)) return auth;
 
   const result = await toggleItemPin(
-    validation.data.itemId,
+    validation.data.id,
     auth.userId
   );
 

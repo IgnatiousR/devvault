@@ -1,7 +1,6 @@
 "use server";
 
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { getSessionUser } from "@/actions/shared";
 import { getUserEntitlements } from "@/lib/entitlements";
 
 interface BillingResult {
@@ -14,12 +13,10 @@ export async function createCheckoutSession(
   annual: boolean
 ): Promise<BillingResult> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) {
-      return { success: false, error: "Unauthorized" };
-    }
+    const user = await getSessionUser();
+    if (!("userId" in user)) return user;
 
-    const entitlements = await getUserEntitlements(session.user.id);
+    const entitlements = await getUserEntitlements(user.userId);
     if (entitlements.isPro) {
       return { success: false, error: "Already subscribed to Pro" };
     }
@@ -36,10 +33,8 @@ export async function createCheckoutSession(
 
 export async function openBillingPortal(): Promise<BillingResult> {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) {
-      return { success: false, error: "Unauthorized" };
-    }
+    const user = await getSessionUser();
+    if (!("userId" in user)) return user;
 
     return {
       success: true,
@@ -53,16 +48,14 @@ export async function openBillingPortal(): Promise<BillingResult> {
 
 export async function getBillingStatus() {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) {
-      return { error: "Unauthorized" };
-    }
+    const user = await getSessionUser();
+    if (!("userId" in user)) return user;
 
-    const entitlements = await getUserEntitlements(session.user.id);
+    const entitlements = await getUserEntitlements(user.userId);
 
     return {
-      userId: session.user.id,
-      email: session.user.email,
+      userId: user.userId,
+      email: user.email,
       isPro: entitlements.isPro,
       entitlements,
     };

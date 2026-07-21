@@ -195,7 +195,7 @@ describe("deleteItemAction", () => {
   });
 
   it("returns error when itemId is empty", async () => {
-    const result = await deleteItemAction({ itemId: "" });
+    const result = await deleteItemAction({ id: "" });
 
     expect(result.success).toBe(false);
     expect(result.error).toBe("Invalid item ID");
@@ -204,7 +204,7 @@ describe("deleteItemAction", () => {
   it("returns error when not authenticated", async () => {
     mockGetSession.mockResolvedValue(null);
 
-    const result = await deleteItemAction({ itemId: "item-1" });
+    const result = await deleteItemAction({ id: "item-1" });
 
     expect(result.success).toBe(false);
     expect(result.error).toBe("Unauthorized");
@@ -213,7 +213,7 @@ describe("deleteItemAction", () => {
   it("returns error when item not found", async () => {
     mockDeleteItem.mockResolvedValue(false);
 
-    const result = await deleteItemAction({ itemId: "nonexistent" });
+    const result = await deleteItemAction({ id: "nonexistent" });
 
     expect(result.success).toBe(false);
     expect(result.error).toBe("Item not found");
@@ -222,7 +222,7 @@ describe("deleteItemAction", () => {
   it("returns success when item is deleted", async () => {
     mockDeleteItem.mockResolvedValue(true);
 
-    const result = await deleteItemAction({ itemId: "item-1" });
+    const result = await deleteItemAction({ id: "item-1" });
 
     expect(result.success).toBe(true);
     expect(result.error).toBeUndefined();
