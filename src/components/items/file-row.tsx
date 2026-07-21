@@ -1,6 +1,7 @@
 import { Download } from "lucide-react";
 import type { DashboardItem } from "@/types/dashboard";
-import { formatFileSize, formatRelativeTime } from "@/lib/format-utils";
+import { formatFileSize } from "@/lib/format-file-size";
+import { formatRelativeTime } from "@/lib/format-relative-time";
 
 interface FileRowProps {
   item: DashboardItem;

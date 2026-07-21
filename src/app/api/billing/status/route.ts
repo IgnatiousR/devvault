@@ -1,24 +1,23 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { requireAuth } from "@/lib/api-utils";
 import { getUserEntitlements } from "@/lib/entitlements";
 import { getUsageStatus } from "@/lib/usage-limits";
 
 export async function GET() {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session?.user) {
+    const user = await requireAuth();
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const [entitlements, usage] = await Promise.all([
-      getUserEntitlements(session.user.id),
-      getUsageStatus(session.user.id),
+      getUserEntitlements(user.id),
+      getUsageStatus(user.id),
     ]);
 
     return NextResponse.json({
-      userId: session.user.id,
-      email: session.user.email,
+      userId: user.id,
+      email: user.email,
       isPro: entitlements.isPro,
       entitlements,
       usage,

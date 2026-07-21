@@ -15,7 +15,7 @@ const navLinks = [
   { label: "AI", href: "#ai" },
 ];
 
-export function Navbar() {
+function useNavbar() {
   const { data: session } = useSession();
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
@@ -88,6 +88,217 @@ export function Navbar() {
     router.push("/login");
   };
 
+  return {
+    session,
+    scrolled,
+    mobileOpen,
+    setMobileOpen,
+    userMenuOpen,
+    setUserMenuOpen,
+    isSigningOut,
+    isPro,
+    billingLoaded,
+    isLoggedIn,
+    mobileMenuRef,
+    closeButtonRef,
+    userMenuRef,
+    handleSignOut,
+  };
+}
+
+function NavLinks({ className }: { className?: string }) {
+  return (
+    <div className={className}>
+      {navLinks.map((link) => (
+        <a
+          key={link.href}
+          href={link.href}
+          className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function UserMenu({
+  user,
+  userMenuOpen,
+  setUserMenuOpen,
+  isSigningOut,
+  handleSignOut,
+  userMenuRef,
+}: {
+  user: { name: string; email: string };
+  userMenuOpen: boolean;
+  setUserMenuOpen: (open: boolean) => void;
+  isSigningOut: boolean;
+  handleSignOut: () => void;
+  userMenuRef: React.RefObject<HTMLDivElement | null>;
+}) {
+  return (
+    <div className="relative" ref={userMenuRef}>
+      <button
+        onClick={() => setUserMenuOpen(!userMenuOpen)}
+        aria-label="User menu"
+        aria-expanded={userMenuOpen}
+        aria-haspopup="true"
+        className="flex items-center gap-2 rounded-md p-1 hover:bg-white/10 transition-colors"
+      >
+        <UserAvatar user={user} className="w-8 h-8 rounded-md" />
+      </button>
+
+      {userMenuOpen && (
+        <div
+          role="menu"
+          className="absolute right-0 top-full mt-2 w-56 rounded-lg border border-border bg-background shadow-lg z-50"
+        >
+          <div className="p-3 border-b border-border">
+            <p className="text-sm font-medium text-foreground">{user.name}</p>
+            <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+          </div>
+          <div className="p-1">
+            <Link
+              href="/dashboard"
+              role="menuitem"
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors text-foreground"
+              onClick={() => setUserMenuOpen(false)}
+            >
+              <span className="material-symbols-outlined text-sm">dashboard</span>
+              Dashboard
+            </Link>
+            <button
+              role="menuitem"
+              onClick={handleSignOut}
+              disabled={isSigningOut}
+              className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors text-left disabled:opacity-50 text-foreground"
+            >
+              <span className="material-symbols-outlined text-sm">logout</span>
+              {isSigningOut ? "Signing out..." : "Sign Out"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MobileMenu({
+  isOpen,
+  onClose,
+  isLoggedIn,
+  isPro,
+  billingLoaded,
+  isSigningOut,
+  handleSignOut,
+  mobileMenuRef,
+  closeButtonRef,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  isLoggedIn: boolean;
+  isPro: boolean;
+  billingLoaded: boolean;
+  isSigningOut: boolean;
+  handleSignOut: () => void;
+  mobileMenuRef: React.RefObject<HTMLDivElement | null>;
+  closeButtonRef: React.RefObject<HTMLButtonElement | null>;
+}) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] md:hidden" role="dialog" aria-modal="true" aria-label="Navigation menu">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="fixed inset-y-0 right-0 w-72 bg-popover border-l border-border shadow-lg p-4 flex flex-col gap-2 animate-in slide-in-from-right" ref={mobileMenuRef}>
+        <div className="flex items-center justify-between mb-2">
+          <span className="font-semibold text-sm">Navigation</span>
+          <Button
+            ref={closeButtonRef}
+            variant="ghost"
+            size="icon-sm"
+            onClick={onClose}
+            aria-label="Close navigation menu"
+          >
+            <XIcon className="size-4" />
+          </Button>
+        </div>
+        {navLinks.map((link) => (
+          <a
+            key={link.href}
+            href={link.href}
+            onClick={onClose}
+            className="px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+          >
+            {link.label}
+          </a>
+        ))}
+        <div className="h-px bg-border my-2" />
+        {isLoggedIn ? (
+          <>
+            {!isPro && billingLoaded && (
+              <Link
+                href="/dashboard/upgrade"
+                onClick={onClose}
+                className="px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+              >
+                Upgrade
+              </Link>
+            )}
+            <Link
+              href="/dashboard"
+              onClick={onClose}
+              className="px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+            >
+              Dashboard
+            </Link>
+            <button
+              onClick={() => { onClose(); handleSignOut(); }}
+              disabled={isSigningOut}
+              className="px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors text-left disabled:opacity-50"
+            >
+              {isSigningOut ? "Signing out..." : "Sign Out"}
+            </button>
+          </>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              onClick={onClose}
+              className="px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+            >
+              Sign In
+            </Link>
+            <Link href="/register" onClick={onClose}>
+              <Button className="w-full bg-white text-black hover:bg-gray-200 rounded-lg px-4 py-2 text-sm font-semibold">
+                Get Started
+              </Button>
+            </Link>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function Navbar() {
+  const {
+    session,
+    scrolled,
+    mobileOpen,
+    setMobileOpen,
+    userMenuOpen,
+    setUserMenuOpen,
+    isSigningOut,
+    isPro,
+    billingLoaded,
+    isLoggedIn,
+    mobileMenuRef,
+    closeButtonRef,
+    userMenuRef,
+    handleSignOut,
+  } = useNavbar();
+
   return (
     <>
       <nav
@@ -116,17 +327,7 @@ export function Navbar() {
             <span className="font-bold text-lg tracking-tight">DevVault</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
+          <NavLinks className="hidden md:flex items-center gap-1" />
 
           <div className="flex items-center gap-2">
             {isLoggedIn ? (
@@ -138,54 +339,16 @@ export function Navbar() {
                     </Button>
                   </Link>
                 )}
-                <div className="relative" ref={userMenuRef}>
-                <button
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  aria-label="User menu"
-                  aria-expanded={userMenuOpen}
-                  aria-haspopup="true"
-                  className="flex items-center gap-2 rounded-md p-1 hover:bg-white/10 transition-colors"
-                >
-                  <UserAvatar
+                {session && (
+                  <UserMenu
                     user={session.user}
-                    className="w-8 h-8 rounded-md"
+                    userMenuOpen={userMenuOpen}
+                    setUserMenuOpen={setUserMenuOpen}
+                    isSigningOut={isSigningOut}
+                    handleSignOut={handleSignOut}
+                    userMenuRef={userMenuRef}
                   />
-                </button>
-
-                {userMenuOpen && (
-                  <div
-                    role="menu"
-                    className="absolute right-0 top-full mt-2 w-56 rounded-lg border border-border bg-background shadow-lg z-50"
-                  >
-                    <div className="p-3 border-b border-border">
-                      <p className="text-sm font-medium text-foreground">{session.user.name}</p>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {session.user.email}
-                      </p>
-                    </div>
-                    <div className="p-1">
-                      <Link
-                        href="/dashboard"
-                        role="menuitem"
-                        className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors text-foreground"
-                        onClick={() => setUserMenuOpen(false)}
-                      >
-                        <span className="material-symbols-outlined text-sm">dashboard</span>
-                        Dashboard
-                      </Link>
-                      <button
-                        role="menuitem"
-                        onClick={handleSignOut}
-                        disabled={isSigningOut}
-                        className="flex items-center gap-2 w-full px-3 py-2 text-sm rounded-md hover:bg-accent transition-colors text-left disabled:opacity-50 text-foreground"
-                      >
-                        <span className="material-symbols-outlined text-sm">logout</span>
-                        {isSigningOut ? "Signing out..." : "Sign Out"}
-                      </button>
-                    </div>
-                  </div>
                 )}
-              </div>
               </>
             ) : (
               <>
@@ -215,81 +378,17 @@ export function Navbar() {
         </div>
       </nav>
 
-      {mobileOpen && (
-        <div className="fixed inset-0 z-[60] md:hidden" role="dialog" aria-modal="true" aria-label="Navigation menu">
-          <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setMobileOpen(false)}
-          />
-          <div className="fixed inset-y-0 right-0 w-72 bg-popover border-l border-border shadow-lg p-4 flex flex-col gap-2 animate-in slide-in-from-right" ref={mobileMenuRef}>
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-semibold text-sm">Navigation</span>
-              <Button
-                ref={closeButtonRef}
-                variant="ghost"
-                size="icon-sm"
-                onClick={() => setMobileOpen(false)}
-                aria-label="Close navigation menu"
-              >
-                <XIcon className="size-4" />
-              </Button>
-            </div>
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-            <div className="h-px bg-border my-2" />
-            {isLoggedIn ? (
-              <>
-                {!isPro && billingLoaded && (
-                  <Link
-                    href="/dashboard/upgrade"
-                    onClick={() => setMobileOpen(false)}
-                    className="px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-                  >
-                    Upgrade
-                  </Link>
-                )}
-                <Link
-                  href="/dashboard"
-                  onClick={() => setMobileOpen(false)}
-                  className="px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-                >
-                  Dashboard
-                </Link>
-                <button
-                  onClick={() => { setMobileOpen(false); handleSignOut(); }}
-                  disabled={isSigningOut}
-                  className="px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors text-left disabled:opacity-50"
-                >
-                  {isSigningOut ? "Signing out..." : "Sign Out"}
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  onClick={() => setMobileOpen(false)}
-                  className="px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link href="/register" onClick={() => setMobileOpen(false)}>
-                  <Button className="w-full bg-white text-black hover:bg-gray-200 rounded-lg px-4 py-2 text-sm font-semibold">
-                    Get Started
-                  </Button>
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      <MobileMenu
+        isOpen={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+        isLoggedIn={isLoggedIn}
+        isPro={isPro}
+        billingLoaded={billingLoaded}
+        isSigningOut={isSigningOut}
+        handleSignOut={handleSignOut}
+        mobileMenuRef={mobileMenuRef}
+        closeButtonRef={closeButtonRef}
+      />
     </>
   );
 }

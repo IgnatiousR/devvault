@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { headers } from "next/headers"
-import { auth } from "@/lib/auth"
+import { requireAuth } from "@/lib/api-utils"
 import { streamS3File, extractS3Key } from "@/lib/filebase"
 import { prisma } from "@/lib/prisma"
 
@@ -9,8 +8,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) {
+    const user = await requireAuth()
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
@@ -22,7 +21,7 @@ export async function GET(
       select: { fileUrl: true, fileName: true, userId: true },
     })
 
-    if (!item || item.userId !== session.user.id) {
+    if (!item || item.userId !== user.id) {
       return NextResponse.json({ error: "Not found" }, { status: 404 })
     }
 

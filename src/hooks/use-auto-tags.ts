@@ -42,11 +42,7 @@ export function useAutoTags() {
     }
   }, []);
 
-  const acceptTag = useCallback((tag: string) => {
-    setSuggestions((prev) => prev.filter((t) => t !== tag));
-  }, []);
-
-  const rejectTag = useCallback((tag: string) => {
+  const removeTag = useCallback((tag: string) => {
     setSuggestions((prev) => prev.filter((t) => t !== tag));
   }, []);
 
@@ -60,8 +56,7 @@ export function useAutoTags() {
     suggestions,
     error,
     suggestTags,
-    acceptTag,
-    rejectTag,
+    removeTag,
     clearSuggestions,
   };
 }

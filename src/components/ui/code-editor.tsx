@@ -53,6 +53,66 @@ const defineGithubDarkTheme: BeforeMount = (monaco) => {
   })
 }
 
+function CopyButton({
+  isCopied,
+  onCopy,
+  className = "",
+}: {
+  isCopied: boolean
+  onCopy: () => void
+  className?: string
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onCopy}
+      className={className}
+    >
+      <span className="material-symbols-outlined text-sm">
+        {isCopied ? "check" : "content_copy"}
+      </span>
+      {isCopied ? "Copied" : "Copy"}
+    </button>
+  )
+}
+
+function EditorHeader({
+  displayLanguage,
+  readOnly,
+  isCopied,
+  onCopy,
+  headerControls,
+}: {
+  displayLanguage: string
+  readOnly: boolean
+  isCopied: boolean
+  onCopy: () => void
+  headerControls?: React.ReactNode
+}) {
+  return (
+    <div className="flex items-center justify-between px-3 py-2 bg-[#252526] border-b border-border">
+      <span className="text-xs text-[#858585] font-mono">
+        {displayLanguage}
+      </span>
+      <div className="flex items-center gap-2">
+        {!readOnly && (
+          <CopyButton
+            isCopied={isCopied}
+            onCopy={onCopy}
+            className="flex items-center gap-1 px-2 py-1 rounded text-xs text-[#858585] hover:text-[#cccccc] hover:bg-[#3c3c3c] transition-colors"
+          />
+        )}
+        {headerControls}
+        <div className="flex items-center gap-1.5 ml-1">
+          <span className="w-3 h-3 rounded-full bg-[#2d2d2d] border border-[#555] hover:bg-[#3c3c3c] transition-colors" />
+          <span className="w-3 h-3 rounded-full bg-[#2d2d2d] border border-[#555] hover:bg-[#3c3c3c] transition-colors" />
+          <span className="w-3 h-3 rounded-full bg-[#2d2d2d] border border-[#555] hover:bg-[#ef4444] hover:border-[#ef4444] transition-colors" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export function CodeEditor({
   value,
   onChange,
@@ -92,44 +152,42 @@ export function CodeEditor({
   }
 
   const displayLanguage = language === "plaintext" ? "text" : language
+  const editorOptions: import("@monaco-editor/react").EditorProps["options"] = {
+    readOnly,
+    minimap: { enabled: preferences.minimap },
+    scrollBeyondLastLine: false,
+    fontSize: preferences.fontSize,
+    tabSize: preferences.tabSize,
+    wordWrap: preferences.wordWrap ? "on" : "off",
+    fontFamily: "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace",
+    lineNumbers: "on",
+    glyphMargin: false,
+    folding: false,
+    lineDecorationsWidth: 10,
+    lineNumbersMinChars: 3,
+    renderLineHighlight: "none",
+    scrollbar: {
+      vertical: "auto",
+      horizontal: "auto",
+      verticalScrollbarSize: 8,
+      horizontalScrollbarSize: 8,
+    },
+    padding: { top: 12, bottom: 12 },
+    placeholder: placeholder || "",
+  }
 
   return (
     <div className="group/editor relative rounded-lg border border-border overflow-hidden bg-[#1e1e1e]">
-      {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2 bg-[#252526] border-b border-border">
-        {/* Language */}
-        <span className="text-xs text-[#858585] font-mono">
-          {displayLanguage}
-        </span>
-        <div className="flex items-center gap-2">
-          {/* Copy button */}
-          {!readOnly && (
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="flex items-center gap-1 px-2 py-1 rounded text-xs text-[#858585] hover:text-[#cccccc] hover:bg-[#3c3c3c] transition-colors"
-            >
-              <span className="material-symbols-outlined text-sm">
-                {isCopied ? "check" : "content_copy"}
-              </span>
-              {isCopied ? "Copied" : "Copy"}
-            </button>
-          )}
-          {/* Injected header controls */}
-          {headerControls}
-          {/* Linux window controls */}
-          <div className="flex items-center gap-1.5 ml-1">
-            <span className="w-3 h-3 rounded-full bg-[#2d2d2d] border border-[#555] hover:bg-[#3c3c3c] transition-colors" />
-            <span className="w-3 h-3 rounded-full bg-[#2d2d2d] border border-[#555] hover:bg-[#3c3c3c] transition-colors" />
-            <span className="w-3 h-3 rounded-full bg-[#2d2d2d] border border-[#555] hover:bg-[#ef4444] hover:border-[#ef4444] transition-colors" />
-          </div>
-        </div>
-      </div>
+      <EditorHeader
+        displayLanguage={displayLanguage}
+        readOnly={readOnly}
+        isCopied={isCopied}
+        onCopy={handleCopy}
+        headerControls={headerControls}
+      />
 
-      {/* View tabs slot */}
       {viewTabs}
 
-      {/* Editor or custom content */}
       {customContent ? (
         <div className="max-h-[600px] overflow-y-auto code-editor-scrollbar">
           {customContent}
@@ -144,42 +202,15 @@ export function CodeEditor({
             beforeMount={handleBeforeMount}
             onMount={handleEditorMount}
             theme={preferences.theme}
-            options={{
-              readOnly,
-              minimap: { enabled: preferences.minimap },
-              scrollBeyondLastLine: false,
-              fontSize: preferences.fontSize,
-              tabSize: preferences.tabSize,
-              wordWrap: preferences.wordWrap ? "on" : "off",
-              fontFamily: "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace",
-              lineNumbers: "on",
-              glyphMargin: false,
-              folding: false,
-              lineDecorationsWidth: 10,
-              lineNumbersMinChars: 3,
-              renderLineHighlight: "none",
-              scrollbar: {
-                vertical: "auto",
-                horizontal: "auto",
-                verticalScrollbarSize: 8,
-                horizontalScrollbarSize: 8,
-              },
-              padding: { top: 12, bottom: 12 },
-              placeholder: placeholder || "",
-            }}
+            options={editorOptions}
           />
 
-          {/* Floating copy button - shown on hover when readOnly */}
           {readOnly && !hideFloatingCopy && (
-            <button
-              type="button"
-              onClick={handleCopy}
+            <CopyButton
+              isCopied={isCopied}
+              onCopy={handleCopy}
               className="absolute bottom-3 right-3 p-2 rounded-md bg-[#2d2d2d] border border-[#555] text-[#858585] hover:text-[#cccccc] hover:bg-[#3c3c3c] opacity-0 group-hover/editor:opacity-100 transition-opacity z-10"
-            >
-              <span className="material-symbols-outlined text-base">
-                {isCopied ? "check" : "content_copy"}
-              </span>
-            </button>
+            />
           )}
         </div>
       )}

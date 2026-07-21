@@ -5,31 +5,13 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { updateItemAction, deleteItemAction, toggleItemFavoriteAction, toggleItemPinAction } from "@/actions/items";
 import { updateItemCollectionsAction } from "@/actions/collections";
-import { parseTags, shouldIncludeContent, hasLanguage, isUrlType } from "@/lib/item-helpers";
+import { buildEditDataFromItem, buildItemEditPayload } from "@/lib/item-edit-utils";
 import type { ItemDetail } from "@/types/dashboard";
-import type { EditData } from "./types";
+import type { EditData } from "@/components/items/drawer/types";
 
 interface Collection {
   id: string;
   name: string;
-}
-
-function buildItemEditPayload(item: ItemDetail, editData: EditData) {
-  return {
-    itemId: item.id,
-    title: editData.title,
-    description: editData.description || null,
-    content: shouldIncludeContent(item.itemType.name)
-      ? editData.content || null
-      : undefined,
-    language: hasLanguage(item.itemType.name)
-      ? editData.language || null
-      : undefined,
-    url: isUrlType(item.itemType.name)
-      ? editData.url || null
-      : undefined,
-    tags: parseTags(editData.tags),
-  };
 }
 
 export function useDrawerState(
@@ -44,15 +26,17 @@ export function useDrawerState(
   const [collections, setCollections] = useState<Collection[]>([]);
   const [isFavorite, setIsFavorite] = useState(item?.isFavorite ?? false);
   const [isPinned, setIsPinned] = useState(item?.isPinned ?? false);
-  const [editData, setEditData] = useState<EditData>(() => ({
-    title: item?.title || "",
-    description: item?.description || "",
-    content: item?.content || "",
-    language: item?.language || "",
-    url: item?.url || "",
-    tags: item?.tags.join(", ") || "",
-    collections: item?.collections.map((c) => c.id) || [],
-  }));
+  const [editData, setEditData] = useState<EditData>(() =>
+    item ? buildEditDataFromItem(item) : {
+      title: "",
+      description: "",
+      content: "",
+      language: "",
+      url: "",
+      tags: "",
+      collections: [],
+    }
+  );
 
   useEffect(() => {
     if (item) {
@@ -67,29 +51,13 @@ export function useDrawerState(
 
   useEffect(() => {
     if (item && !isEditing) {
-      setEditData({
-        title: item.title,
-        description: item.description || "",
-        content: item.content || "",
-        language: item.language || "",
-        url: item.url || "",
-        tags: item.tags.join(", "),
-        collections: item.collections.map((c) => c.id),
-      });
+      setEditData(buildEditDataFromItem(item));
     }
   }, [item, isEditing]);
 
   const handleCancel = () => {
     if (item) {
-      setEditData({
-        title: item.title,
-        description: item.description || "",
-        content: item.content || "",
-        language: item.language || "",
-        url: item.url || "",
-        tags: item.tags.join(", "),
-        collections: item.collections.map((c) => c.id),
-      });
+      setEditData(buildEditDataFromItem(item));
     }
     setIsEditing(false);
   };
@@ -125,7 +93,7 @@ export function useDrawerState(
     if (!item) return;
 
     setIsDeleting(true);
-    const result = await deleteItemAction({ itemId: item.id });
+    const result = await deleteItemAction({ id: item.id });
     setIsDeleting(false);
 
     if (result.success) {
@@ -141,7 +109,7 @@ export function useDrawerState(
   const handleToggleFavorite = async () => {
     if (!item) return;
 
-    const result = await toggleItemFavoriteAction({ itemId: item.id });
+    const result = await toggleItemFavoriteAction({ id: item.id });
 
     if (result.success) {
       setIsFavorite(result.isFavorite ?? false);
@@ -155,7 +123,7 @@ export function useDrawerState(
   const handleTogglePin = async () => {
     if (!item) return;
 
-    const result = await toggleItemPinAction({ itemId: item.id });
+    const result = await toggleItemPinAction({ id: item.id });
 
     if (result.success) {
       setIsPinned(result.isPinned ?? false);

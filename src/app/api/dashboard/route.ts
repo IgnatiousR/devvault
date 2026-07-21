@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { requireAuth } from "@/lib/api-utils";
 import {
   getPinnedItems,
   getRecentItems,
@@ -11,54 +10,59 @@ import {
 import { getCollectionsWithStats } from "@/lib/db/collections";
 
 export async function GET() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  try {
+    const user = await requireAuth();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const dbUser = await prisma.user.findUnique({
+      where: { id: user.id },
+    });
+
+    if (!dbUser) {
+      return NextResponse.json({ error: "No user found" }, { status: 404 });
+    }
+
+    const [collectionsResult, pinnedItems, recentItems, itemCounts, itemTypesByCount] =
+      await Promise.all([
+        getCollectionsWithStats(user.id, { limit: 6 }),
+        getPinnedItems(user.id),
+        getRecentItems(user.id, 10),
+        getItemCounts(user.id),
+        getItemsByTypeCount(user.id),
+      ]);
+
+    const collections = collectionsResult.collections;
+    const favoriteCollections = collections.filter((c) => c.isFavorite).length;
+
+    return NextResponse.json({
+      user: {
+        id: dbUser.id,
+        name: dbUser.name,
+        email: dbUser.email,
+        image: dbUser.image,
+        isPro: dbUser.isPro,
+      },
+      collections,
+      pinnedItems: pinnedItems.map((item) => ({
+        ...item,
+        updatedAt: item.updatedAt.toISOString(),
+      })),
+      recentItems: recentItems.map((item) => ({
+        ...item,
+        updatedAt: item.updatedAt.toISOString(),
+      })),
+      itemCounts,
+      itemTypesByCount,
+      favoriteCollections,
+      totalCollections: collections.length,
+    });
+  } catch (error) {
+    console.error("Error fetching dashboard:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch dashboard" },
+      { status: 500 }
+    );
   }
-
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-  });
-
-  if (!user) {
-    return NextResponse.json({ error: "No user found" }, { status: 404 });
-  }
-
-  const [collectionsResult, pinnedItems, recentItems, itemCounts, itemTypesByCount] =
-    await Promise.all([
-      getCollectionsWithStats(user.id, { limit: 6 }),
-      getPinnedItems(user.id),
-      getRecentItems(user.id, 10),
-      getItemCounts(user.id),
-      getItemsByTypeCount(user.id),
-    ]);
-
-  const collections = collectionsResult.collections;
-  const favoriteCollections = collections.filter((c) => c.isFavorite).length;
-
-  return NextResponse.json({
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      image: user.image,
-      isPro: user.isPro,
-    },
-    collections,
-    pinnedItems: pinnedItems.map((item) => ({
-      ...item,
-      updatedAt: item.updatedAt.toISOString(),
-    })),
-    recentItems: recentItems.map((item) => ({
-      ...item,
-      updatedAt: item.updatedAt.toISOString(),
-    })),
-    itemCounts,
-    itemTypesByCount,
-    favoriteCollections,
-    totalCollections: collections.length,
-  });
 }

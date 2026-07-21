@@ -1,5 +1,5 @@
 import type { DashboardItem } from "@/types/dashboard";
-import { formatRelativeTime } from "@/lib/format-utils";
+import { formatRelativeTime } from "@/lib/format-relative-time";
 
 interface ImageCardProps {
   item: DashboardItem;

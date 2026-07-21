@@ -5,40 +5,11 @@ import { ItemCard, ListItem } from "@/components/items/item-card";
 import { ImageCard } from "@/components/items/image-card";
 import { FileRow } from "@/components/items/file-row";
 import { ItemDrawer } from "@/components/items/drawer";
-import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
+import { ViewToggle } from "@/components/ui/view-toggle";
 import { useItemDetail } from "@/hooks/use-item-detail";
 import { useAiAccess } from "@/hooks/use-ai-access";
 import type { DashboardItem } from "@/types/dashboard";
-
-function ViewToggle({ mode, onChange }: { mode: "grid" | "list"; onChange: (mode: "grid" | "list") => void }) {
-  return (
-    <div className="inline-flex items-center bg-muted/50 p-1 rounded-lg border border-border">
-      <Button
-        variant="ghost"
-        onClick={() => onChange("grid")}
-        className={`px-3 py-1 text-[11px] font-medium uppercase tracking-wide rounded transition-colors ${
-          mode === "grid"
-            ? "bg-background text-foreground shadow-sm border border-border"
-            : "text-muted-foreground hover:text-foreground"
-        }`}
-      >
-        Grid
-      </Button>
-      <Button
-        variant="ghost"
-        onClick={() => onChange("list")}
-        className={`px-3 py-1 text-[11px] font-medium uppercase tracking-wide rounded transition-colors ${
-          mode === "list"
-            ? "bg-background text-foreground shadow-sm border border-border"
-            : "text-muted-foreground hover:text-foreground"
-        }`}
-      >
-        List
-      </Button>
-    </div>
-  );
-}
 
 interface ItemsListContentProps {
   typeName: string;

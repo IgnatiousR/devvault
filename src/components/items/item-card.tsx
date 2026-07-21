@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { DashboardItem } from "@/types/dashboard";
-import { formatRelativeTime } from "@/lib/format-utils";
+import { formatRelativeTime } from "@/lib/format-relative-time";
 import { getColorBgClass } from "@/lib/color-utils";
 import { getItemColorClasses } from "@/lib/item-helpers";
 import { toast } from "sonner";

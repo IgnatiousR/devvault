@@ -1,20 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useFetch } from "@/hooks/use-fetch";
+import type { ProfileData } from "@/types/profile";
 
 export function useAiAccess() {
-  const [aiAccess, setAiAccess] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/profile")
-      .then((res) => res.json())
-      .then((data) => {
-        setAiAccess(data.user?.isPro ?? false);
-      })
-      .catch(() => {
-        setAiAccess(false);
-      });
-  }, []);
-
-  return aiAccess;
+  const { data } = useFetch<ProfileData>("/api/profile");
+  return data?.user?.isPro ?? false;
 }

@@ -4,10 +4,11 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { createItemAction } from "@/actions/items";
-import { ITEM_TYPE_OPTIONS, FILE_TYPES } from "@/lib/item-types";
+import { FILE_TYPES } from "@/lib/item-types";
 import { parseTags, shouldIncludeContent, hasLanguage, isUrlType } from "@/lib/item-helpers";
-import { useAutoTags } from "@/components/ui/use-auto-tags";
-import { useAutoDescription } from "@/components/ui/use-auto-description";
+import { buildItemCreatePayload, getDefaultType } from "@/lib/item-edit-utils";
+import { useAutoTags } from "@/hooks/use-auto-tags";
+import { useAutoDescription } from "@/hooks/use-auto-description";
 
 interface Collection {
   id: string;
@@ -17,45 +18,6 @@ interface Collection {
 interface UseCreateItemOptions {
   pathname: string;
   onOpenChange: (open: boolean) => void;
-}
-
-function buildItemCreatePayload(
-  selectedType: string,
-  title: string,
-  description: string,
-  content: string,
-  language: string,
-  url: string,
-  tags: string,
-  uploadedFile: { fileUrl: string; fileName: string; fileSize: number } | null,
-  selectedCollectionIds: string[]
-) {
-  const itemType = ITEM_TYPE_OPTIONS.find((t) => t.id === selectedType);
-
-  return {
-    title,
-    description: description || null,
-    content: shouldIncludeContent(selectedType) ? content || null : null,
-    language: hasLanguage(selectedType) ? language || null : null,
-    url: isUrlType(selectedType) ? url || null : null,
-    fileUrl: uploadedFile?.fileUrl || null,
-    fileName: uploadedFile?.fileName || null,
-    fileSize: uploadedFile?.fileSize || null,
-    tags: parseTags(tags),
-    itemTypeId: itemType?.id || "snippet",
-    collectionIds: selectedCollectionIds,
-  };
-}
-
-function getDefaultType(pathname: string): string {
-  const match = pathname.match(/^\/items\/([^/]+)/);
-  if (match) {
-    const routeType = match[1];
-    if (ITEM_TYPE_OPTIONS.some((t) => t.id === routeType)) {
-      return routeType;
-    }
-  }
-  return "snippet";
 }
 
 export function useCreateItem({ pathname, onOpenChange }: UseCreateItemOptions) {
@@ -80,8 +42,7 @@ export function useCreateItem({ pathname, onOpenChange }: UseCreateItemOptions) 
     isSuggesting,
     suggestions,
     suggestTags,
-    acceptTag,
-    rejectTag,
+    removeTag,
     clearSuggestions,
   } = useAutoTags();
 
@@ -126,13 +87,13 @@ export function useCreateItem({ pathname, onOpenChange }: UseCreateItemOptions) 
 
   const handleAcceptTag = useCallback(
     (tag: string) => {
-      acceptTag(tag);
+      removeTag(tag);
       const currentTags = parseTags(tags);
       if (!currentTags.includes(tag)) {
         setTags((prev) => (prev ? `${prev}, ${tag}` : tag));
       }
     },
-    [acceptTag, tags]
+    [removeTag, tags]
   );
 
   const handleGenerateDescription = useCallback(async () => {
@@ -209,7 +170,7 @@ export function useCreateItem({ pathname, onOpenChange }: UseCreateItemOptions) 
     suggestions,
     handleSuggestTags,
     handleAcceptTag,
-    handleRejectTag: rejectTag,
+    handleRejectTag: removeTag,
     isGeneratingDescription,
     handleGenerateDescription,
   };

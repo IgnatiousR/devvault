@@ -9,12 +9,11 @@ import { toast } from "sonner";
 import { PasswordInput } from "./password-input";
 import { EmailInput } from "./email-input";
 import { signInSchema } from "@/lib/schemas";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { useAuthForm } from "@/hooks/use-auth-form";
 import { AuthFormField } from "./auth-form-field";
 import { AuthFormDivider } from "./auth-form-divider";
 import { UnverifiedEmailBanner } from "./unverified-email-banner";
+import { FormErrorAlert, FormSubmitButton } from "./auth-form-components";
 
 interface SignInFormProps {
   callbackURL?: string;
@@ -82,14 +81,7 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
         </p>
       </div>
 
-      {error && (
-        <div
-          role="alert"
-          className="rounded-md bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-500"
-        >
-          {error}
-        </div>
-      )}
+      <FormErrorAlert error={error} />
 
       {unverifiedEmail && (
         <UnverifiedEmailBanner
@@ -131,14 +123,11 @@ export function SignInForm({ callbackURL: initialCallbackURL, className }: SignI
           </div>
         </div>
 
-        <Button
-          type="submit"
-          disabled={loading}
-          className="flex w-full items-center justify-center gap-2 rounded-md bg-red-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
-        >
-          {loading && <Spinner size="sm" />}
-          {loading ? "Signing in..." : "Sign In"}
-        </Button>
+        <FormSubmitButton
+          loading={loading}
+          label="Sign In"
+          loadingLabel="Signing in..."
+        />
       </form>
 
       <AuthFormDivider callbackURL={callbackURL} />

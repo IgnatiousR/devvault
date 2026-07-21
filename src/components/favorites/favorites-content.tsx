@@ -6,6 +6,7 @@ import { ItemDrawer } from "@/components/items/drawer";
 import { useItemDetail } from "@/hooks/use-item-detail";
 import { useAiAccess } from "@/hooks/use-ai-access";
 import { getColorTextClass, getColorBgAlphaClass } from "@/lib/color-utils";
+import { formatRelativeTime } from "@/lib/format-relative-time";
 import {
   Select,
   SelectContent,
@@ -61,19 +62,6 @@ function sortCollections(collections: FavoriteCollection[], sort: SortOption): F
   }
 }
 
-function formatDate(date: Date): string {
-  const now = new Date();
-  const diff = now.getTime() - new Date(date).getTime();
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-  if (days === 0) return "today";
-  if (days === 1) return "yesterday";
-  if (days < 7) return `${days}d ago`;
-  if (days < 30) return `${Math.floor(days / 7)}w ago`;
-  if (days < 365) return `${Math.floor(days / 30)}mo ago`;
-  return `${Math.floor(days / 365)}y ago`;
-}
-
 function ItemRow({
   item,
   onClick,
@@ -101,7 +89,7 @@ function ItemRow({
         {item.itemType.name}
       </span>
       <span className="text-xs text-muted-foreground shrink-0 w-16 text-right">
-        {formatDate(item.updatedAt)}
+        {formatRelativeTime(item.updatedAt)}
       </span>
     </button>
   );
@@ -127,7 +115,7 @@ function CollectionRow({
         {collection.resourceCount} items
       </span>
       <span className="text-xs text-muted-foreground shrink-0 w-16 text-right">
-        {formatDate(collection.updatedAt)}
+        {formatRelativeTime(collection.updatedAt)}
       </span>
     </Link>
   );

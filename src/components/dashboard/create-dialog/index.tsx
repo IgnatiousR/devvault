@@ -14,7 +14,7 @@ import { Spinner } from "@/components/ui/spinner"
 import { TypeSelector } from "./type-selector"
 import { FormFields } from "./form-fields"
 import { CollectionSelector } from "@/components/ui/collection-selector"
-import { useCreateItem } from "./use-create-item"
+import { useCreateItem } from "@/hooks/use-create-item"
 
 interface CreateItemDialogProps {
   open: boolean
@@ -45,8 +45,6 @@ export function CreateItemDialog({ open, onOpenChange, aiAccess }: CreateItemDia
     isCreating,
     uploadedFile,
     setUploadedFile,
-    showContent,
-    showLanguage,
     showUrl,
     showFileUpload,
     resetForm,
@@ -81,29 +79,37 @@ export function CreateItemDialog({ open, onOpenChange, aiAccess }: CreateItemDia
           <TypeSelector value={selectedType} onChange={setSelectedType} />
           <FormFields
             selectedType={selectedType}
-            title={title}
-            description={description}
-            content={content}
-            language={language}
-            url={url}
-            tags={tags}
-            uploadedFile={uploadedFile}
-            onTitleChange={setTitle}
-            onDescriptionChange={setDescription}
-            onContentChange={setContent}
-            onLanguageChange={setLanguage}
-            onUrlChange={setUrl}
-            onTagsChange={setTags}
-            onFileUpload={setUploadedFile}
-            onFileClear={() => setUploadedFile(null)}
-            aiAccess={aiAccess}
-            isSuggesting={isSuggesting}
-            suggestions={suggestions}
-            onSuggestTags={handleSuggestTags}
-            onAcceptSuggestion={handleAcceptTag}
-            onRejectSuggestion={handleRejectTag}
-            isGeneratingDescription={isGeneratingDescription}
-            onGenerateDescription={handleGenerateDescription}
+            values={{
+              title,
+              description,
+              content,
+              language,
+              url,
+              tags,
+            }}
+            callbacks={{
+              onTitleChange: setTitle,
+              onDescriptionChange: setDescription,
+              onContentChange: setContent,
+              onLanguageChange: setLanguage,
+              onUrlChange: setUrl,
+              onTagsChange: setTags,
+            }}
+            fileUpload={{
+              uploadedFile,
+              onFileUpload: setUploadedFile,
+              onFileClear: () => setUploadedFile(null),
+            }}
+            ai={{
+              aiAccess,
+              isSuggesting,
+              suggestions,
+              onSuggestTags: handleSuggestTags,
+              onAcceptSuggestion: handleAcceptTag,
+              onRejectSuggestion: handleRejectTag,
+              isGeneratingDescription,
+              onGenerateDescription: handleGenerateDescription,
+            }}
           />
 
           <div>

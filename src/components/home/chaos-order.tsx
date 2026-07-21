@@ -152,6 +152,54 @@ function useChaoticIcons(containerRef: React.RefObject<HTMLDivElement | null>) {
 
     lastTimeRef.current = performance.now();
 
+    function applyRepelForce(ic: IconState, mouse: typeof mouseRef.current, repelR: number) {
+      if (!mouse.active) return;
+      const cx = ic.x + ICON_SIZE / 2;
+      const cy = ic.y + ICON_SIZE / 2;
+      const dx = cx - mouse.x;
+      const dy = cy - mouse.y;
+      const distSq = dx * dx + dy * dy;
+      if (distSq >= repelR * repelR || distSq <= 1) return;
+      const dist = Math.sqrt(distSq);
+      const force = (1 - dist / repelR) * 1.2;
+      ic.vx += (dx / dist) * force;
+      ic.vy += (dy / dist) * force;
+    }
+
+    function clampPosition(ic: IconState, fw: number, fh: number) {
+      if (ic.x < 0) {
+        ic.x = 0;
+        ic.vx = Math.abs(ic.vx) * 0.85;
+      }
+      if (ic.x > fw - ICON_SIZE) {
+        ic.x = fw - ICON_SIZE;
+        ic.vx = -Math.abs(ic.vx) * 0.85;
+      }
+      if (ic.y < 0) {
+        ic.y = 0;
+        ic.vy = Math.abs(ic.vy) * 0.85;
+      }
+      if (ic.y > fh - ICON_SIZE) {
+        ic.y = fh - ICON_SIZE;
+        ic.vy = -Math.abs(ic.vy) * 0.85;
+      }
+    }
+
+    function applyDamping(ic: IconState) {
+      ic.vx *= 0.985;
+      ic.vy *= 0.985;
+      const speed = Math.hypot(ic.vx, ic.vy);
+      const maxV = 4;
+      if (speed < 0.4) {
+        ic.vx += (Math.random() - 0.5) * 0.25;
+        ic.vy += (Math.random() - 0.5) * 0.25;
+      }
+      if (speed > maxV) {
+        ic.vx = (ic.vx / speed) * maxV;
+        ic.vy = (ic.vy / speed) * maxV;
+      }
+    }
+
     const animate = (now: number) => {
       const dt = Math.min(2, (now - lastTimeRef.current) / 16);
       lastTimeRef.current = now;
@@ -160,55 +208,11 @@ function useChaoticIcons(containerRef: React.RefObject<HTMLDivElement | null>) {
       const fh = r.height;
 
       iconsRef.current.forEach((ic) => {
-        if (mouseRef.current.active) {
-          const cx = ic.x + ICON_SIZE / 2;
-          const cy = ic.y + ICON_SIZE / 2;
-          const dx = cx - mouseRef.current.x;
-          const dy = cy - mouseRef.current.y;
-          const distSq = dx * dx + dy * dy;
-          const repelR = 110;
-          if (distSq < repelR * repelR && distSq > 1) {
-            const dist = Math.sqrt(distSq);
-            const force = (1 - dist / repelR) * 1.2;
-            ic.vx += (dx / dist) * force;
-            ic.vy += (dy / dist) * force;
-          }
-        }
-
+        applyRepelForce(ic, mouseRef.current, 110);
         ic.x += ic.vx * dt;
         ic.y += ic.vy * dt;
-
-        if (ic.x < 0) {
-          ic.x = 0;
-          ic.vx = Math.abs(ic.vx) * 0.85;
-        }
-        if (ic.x > fw - ICON_SIZE) {
-          ic.x = fw - ICON_SIZE;
-          ic.vx = -Math.abs(ic.vx) * 0.85;
-        }
-        if (ic.y < 0) {
-          ic.y = 0;
-          ic.vy = Math.abs(ic.vy) * 0.85;
-        }
-        if (ic.y > fh - ICON_SIZE) {
-          ic.y = fh - ICON_SIZE;
-          ic.vy = -Math.abs(ic.vy) * 0.85;
-        }
-
-        ic.vx *= 0.985;
-        ic.vy *= 0.985;
-
-        const speed = Math.hypot(ic.vx, ic.vy);
-        if (speed < 0.4) {
-          ic.vx += (Math.random() - 0.5) * 0.25;
-          ic.vy += (Math.random() - 0.5) * 0.25;
-        }
-        const maxV = 4;
-        if (speed > maxV) {
-          ic.vx = (ic.vx / speed) * maxV;
-          ic.vy = (ic.vy / speed) * maxV;
-        }
-
+        clampPosition(ic, fw, fh);
+        applyDamping(ic);
         ic.rot += ic.rotV * dt;
         ic.scale = 1 + Math.sin(now / 1200 + ic.x * 0.01) * 0.02;
       });

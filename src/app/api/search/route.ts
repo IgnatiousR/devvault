@@ -1,22 +1,26 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { requireAuth } from "@/lib/api-utils";
 import { getAllSearchItems } from "@/lib/db/items";
 import { getAllSearchCollections } from "@/lib/db/collections";
 
 export async function GET() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  try {
+    const user = await requireAuth();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const [items, collections] = await Promise.all([
+      getAllSearchItems(user.id),
+      getAllSearchCollections(user.id),
+    ]);
+
+    return NextResponse.json({ items, collections });
+  } catch (error) {
+    console.error("Error fetching search data:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch search data" },
+      { status: 500 }
+    );
   }
-
-  const [items, collections] = await Promise.all([
-    getAllSearchItems(session.user.id),
-    getAllSearchCollections(session.user.id),
-  ]);
-
-  return NextResponse.json({ items, collections });
 }

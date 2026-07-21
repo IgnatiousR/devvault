@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Checks, X } from "@phosphor-icons/react";
+import { FreeFeatureList, ProFeatureList, PricingToggle } from "@/components/ui/pricing-shared";
 
 const freeFeatures = [
   { text: "50 items", included: true },
@@ -15,17 +15,12 @@ const freeFeatures = [
 ];
 
 const proFeatures = [
-  { text: "Unlimited items", included: true, bold: true },
-  { text: "Unlimited collections", included: true, bold: true },
-  { text: "All item types", included: true },
-  { text: "Instant search", included: true },
-  {
-    text: "AI features — auto-tags, descriptions, search",
-    included: true,
-    bold: true,
-    highlight: true,
-  },
-  { text: "Cloud sync across devices", included: true },
+  { text: "Unlimited items", bold: true },
+  { text: "Unlimited collections", bold: true },
+  { text: "All item types" },
+  { text: "Instant search" },
+  { text: "AI features — auto-tags, descriptions, search", bold: true, highlight: true },
+  { text: "Cloud sync across devices" },
 ];
 
 export function Pricing() {
@@ -49,41 +44,7 @@ export function Pricing() {
           </p>
         </div>
 
-        <div className="flex items-center justify-center gap-4 mb-10">
-          <span
-            className={`text-sm font-medium transition-colors ${
-              !yearly ? "text-foreground" : "text-muted-foreground"
-            }`}
-          >
-            Monthly
-          </span>
-          <button
-            onClick={() => setYearly(!yearly)}
-            className={`relative w-14 h-7.5 rounded-full transition-colors ${
-              yearly
-                ? "bg-linear-to-r from-red-500 to-red-600"
-                : "bg-white/10"
-            }`}
-            role="switch"
-            aria-checked={yearly}
-          >
-            <div
-              className={`absolute top-0.75 left-0.75 w-6 h-6 rounded-full bg-white shadow-md transition-transform duration-300 ${
-                yearly ? "`translate-x-6.5" : ""
-              }`}
-            />
-          </button>
-          <span
-            className={`text-sm font-medium transition-colors flex items-center gap-2 ${
-              yearly ? "text-foreground" : "text-muted-foreground"
-            }`}
-          >
-            Yearly
-            <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 text-[10px] font-semibold">
-              SAVE 25%
-            </span>
-          </span>
-        </div>
+        <PricingToggle yearly={yearly} onChange={setYearly} />
 
         <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
           <div className="rounded-2xl border border-white/10 bg-white/2 p-7 flex flex-col">
@@ -114,23 +75,7 @@ export function Pricing() {
               </Button>
             </Link>
 
-            <ul className="space-y-3 text-sm">
-              {freeFeatures.map((f) => (
-                <li
-                  key={f.text}
-                  className={`flex items-center gap-3 ${
-                    f.included ? "text-gray-300" : "text-muted-foreground"
-                  }`}
-                >
-                  {f.included ? (
-                    <Checks className="size-4 text-emerald-400 shrink-0" />
-                  ) : (
-                    <X className="size-4 text-gray-600 shrink-0" />
-                  )}
-                  {f.text}
-                </li>
-              ))}
-            </ul>
+            <FreeFeatureList features={freeFeatures} />
           </div>
 
           <div className="relative rounded-2xl border border-red-500/40 bg-gradient-to-b from-red-500/[0.08] to-transparent p-7 flex flex-col shadow-[0_30px_60px_-15px_rgba(239,68,68,0.3)]">
@@ -168,16 +113,7 @@ export function Pricing() {
               </Button>
             </Link>
 
-            <ul className="space-y-3 text-sm">
-              {proFeatures.map((f) => (
-                <li key={f.text} className="flex items-center gap-3 text-gray-200">
-                  <Checks className="size-4 text-emerald-400 shrink-0" />
-                  <span className={f.bold ? "font-semibold" : ""}>
-                    {f.text}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <ProFeatureList features={proFeatures} />
           </div>
         </div>
       </div>

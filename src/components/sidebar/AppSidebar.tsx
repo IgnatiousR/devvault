@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -47,7 +47,7 @@ function SidebarLogo() {
   );
 }
 
-function FavoritesSection({ collections }: { collections: SidebarCollection[] }) {
+function FavoritesSection({ collections, currentPath }: { collections: SidebarCollection[]; currentPath?: string }) {
   const favorites = collections.filter((c) => c.isFavorite);
 
   if (favorites.length === 0) return null;
@@ -63,6 +63,7 @@ function FavoritesSection({ collections }: { collections: SidebarCollection[] })
             <SidebarMenuButton
               render={<Link href={`/collections/${collection.id}`} />}
               tooltip={collection.name}
+              isActive={currentPath === `/collections/${collection.id}`}
               className="font-medium text-sm transition-all text-muted-foreground"
             >
               <span className="w-2 h-2 shrink-0 rounded-full bg-brand-red"></span>
@@ -75,7 +76,7 @@ function FavoritesSection({ collections }: { collections: SidebarCollection[] })
   );
 }
 
-function RecentCollectionsSection({ collections }: { collections: SidebarCollection[] }) {
+function RecentCollectionsSection({ collections, currentPath }: { collections: SidebarCollection[]; currentPath?: string }) {
   const recent = collections.slice(0, 3);
 
   if (recent.length === 0) return null;
@@ -91,6 +92,7 @@ function RecentCollectionsSection({ collections }: { collections: SidebarCollect
             <SidebarMenuButton
               render={<Link href={`/collections/${collection.id}`} />}
               tooltip={collection.name}
+              isActive={currentPath === `/collections/${collection.id}`}
               className="font-medium text-sm transition-all text-muted-foreground"
             >
               <span
@@ -104,6 +106,7 @@ function RecentCollectionsSection({ collections }: { collections: SidebarCollect
           <SidebarMenuButton
             render={<Link href="/collections" />}
             tooltip="View all collections"
+            isActive={currentPath === "/collections"}
             className="font-medium text-sm transition-all text-muted-foreground"
           >
             <span className="material-symbols-outlined opacity-70 text-sm shrink-0">
@@ -117,14 +120,14 @@ function RecentCollectionsSection({ collections }: { collections: SidebarCollect
   );
 }
 
-function CollectionsMenu({ collections }: { collections: SidebarCollection[] }) {
+function CollectionsMenu({ collections, currentPath }: { collections: SidebarCollection[]; currentPath?: string }) {
   return (
     <SidebarGroup>
       <SidebarGroupLabel className="text-xs font-bold uppercase text-muted-foreground tracking-wider mb-2 group-data-[collapsible=icon]:hidden">
         Collections
       </SidebarGroupLabel>
-      <FavoritesSection collections={collections} />
-      <RecentCollectionsSection collections={collections} />
+      <FavoritesSection collections={collections} currentPath={currentPath} />
+      <RecentCollectionsSection collections={collections} currentPath={currentPath} />
     </SidebarGroup>
   );
 }
@@ -145,9 +148,11 @@ function pluralize(name: string): string {
 function ItemTypesMenu({
   itemTypes,
   isPro,
+  currentPath,
 }: {
   itemTypes: ItemTypeCount[];
   isPro: boolean;
+  currentPath?: string;
 }) {
   const router = useRouter();
 
@@ -187,6 +192,7 @@ function ItemTypesMenu({
               <SidebarMenuButton
                 render={<Link href={`/items/${itemType.name.toLowerCase()}`} />}
                 tooltip={`${pluralize(itemType.name)} (${itemType.count})`}
+                isActive={currentPath === `/items/${itemType.name.toLowerCase()}`}
                 className="font-medium text-sm transition-all text-muted-foreground"
               >
                 <span
@@ -220,11 +226,12 @@ function UserFooter() {
 interface AppSidebarProps {
   itemTypes: ItemTypeCount[];
   collections: SidebarCollection[];
-  currentPath?: string;
   isPro?: boolean;
 }
 
-export function AppSidebar({ itemTypes, collections, currentPath, isPro = false }: AppSidebarProps) {
+export function AppSidebar({ itemTypes, collections, isPro = false }: AppSidebarProps) {
+  const pathname = usePathname();
+
   return (
     <Sidebar collapsible="icon">
       <SidebarLogo />
@@ -235,8 +242,8 @@ export function AppSidebar({ itemTypes, collections, currentPath, isPro = false 
               <SidebarMenuButton
                 render={<Link href="/dashboard" />}
                 tooltip="Dashboard"
+                isActive={pathname === "/dashboard"}
                 className="font-medium text-sm transition-all text-muted-foreground"
-                aria-current={currentPath === "/dashboard" ? "page" : undefined}
               >
                 <span className="material-symbols-outlined opacity-70 text-sm shrink-0">
                   dashboard
@@ -247,9 +254,9 @@ export function AppSidebar({ itemTypes, collections, currentPath, isPro = false 
           </SidebarMenu>
         </SidebarGroup>
         <div className="mx-4 h-px bg-border" />
-        <ItemTypesMenu itemTypes={itemTypes} isPro={isPro} />
+        <ItemTypesMenu itemTypes={itemTypes} isPro={isPro} currentPath={pathname} />
         <div className="mx-4 h-px bg-border" />
-        <CollectionsMenu collections={collections} />
+        <CollectionsMenu collections={collections} currentPath={pathname} />
       </SidebarContent>
       <UserFooter />
     </Sidebar>

@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react"
 import { Upload, FileText, ImageIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { formatFileSize } from "@/lib/format-utils"
+import { formatFileSize } from "@/lib/format-file-size"
 
 interface FileDropZoneProps {
   type: "image" | "file"

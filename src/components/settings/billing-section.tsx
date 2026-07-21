@@ -15,6 +15,141 @@ interface BillingStatus {
   usage: UsageStatus | null;
 }
 
+function PlanBadge({ isPro }: { isPro: boolean }) {
+  return (
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="font-medium">Current Plan</p>
+        <p className="text-sm text-muted-foreground">
+          {isPro ? "DevVault Pro" : "Free Tier"}
+        </p>
+      </div>
+      <span
+        className={`px-2 py-1 text-xs font-medium rounded ${
+          isPro
+            ? "bg-primary text-primary-foreground"
+            : "bg-secondary text-secondary-foreground"
+        }`}
+      >
+        {isPro ? "Pro" : "Free"}
+      </span>
+    </div>
+  );
+}
+
+function UsageBar({
+  label,
+  current,
+  limit,
+  percentage,
+}: {
+  label: string;
+  current: number;
+  limit: number;
+  percentage: number;
+}) {
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between text-sm">
+        <span>{label}</span>
+        <span>{current} / {limit}</span>
+      </div>
+      <div className="w-full bg-secondary rounded-full h-2">
+        <div
+          className="bg-primary h-2 rounded-full transition-all"
+          style={{ width: `${Math.min(percentage, 100)}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ProSubscription({
+  onManageBilling,
+  isLoading,
+}: {
+  onManageBilling: () => void;
+  isLoading: boolean;
+}) {
+  return (
+    <div className="space-y-4">
+      <div className="text-sm text-muted-foreground">
+        <p>You have access to all Pro features:</p>
+        <ul className="list-disc list-inside mt-2 space-y-1">
+          <li>Unlimited items and collections</li>
+          <li>File uploads (images and documents)</li>
+          <li>AI-powered features</li>
+          <li>Custom item types</li>
+          <li>Export functionality</li>
+        </ul>
+      </div>
+      <Button variant="outline" onClick={onManageBilling} disabled={isLoading}>
+        Manage Subscription
+      </Button>
+    </div>
+  );
+}
+
+function FreeTierInfo({
+  usage,
+  onUpgrade,
+  isLoading,
+}: {
+  usage: UsageStatus | null;
+  onUpgrade: (annual: boolean) => void;
+  isLoading: boolean;
+}) {
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="border border-border rounded-lg p-4 cursor-pointer hover:border-primary transition-colors">
+          <h3 className="font-medium">Monthly</h3>
+          <p className="text-sm text-muted-foreground">$8/month</p>
+          <Button className="w-full mt-4" onClick={() => onUpgrade(false)} disabled={isLoading}>
+            Upgrade Monthly
+          </Button>
+        </div>
+
+        <div className="border border-primary rounded-lg p-4 cursor-pointer hover:border-primary transition-colors">
+          <h3 className="font-medium">Annual</h3>
+          <p className="text-sm text-muted-foreground">$72/year (Save 25%)</p>
+          <Button className="w-full mt-4" onClick={() => onUpgrade(true)} disabled={isLoading}>
+            Upgrade Annual
+          </Button>
+        </div>
+      </div>
+
+      {usage && (
+        <div className="space-y-2">
+          <p className="font-medium text-sm">Current Usage</p>
+          <UsageBar
+            label="Items"
+            current={usage.items.current}
+            limit={usage.items.limit}
+            percentage={usage.items.percentage}
+          />
+          <UsageBar
+            label="Collections"
+            current={usage.collections.current}
+            limit={usage.collections.limit}
+            percentage={usage.collections.percentage}
+          />
+        </div>
+      )}
+
+      <div className="text-sm text-muted-foreground">
+        <p className="font-medium mb-2">Free Tier Limits:</p>
+        <ul className="list-disc list-inside space-y-1">
+          <li>50 items</li>
+          <li>3 collections</li>
+          <li>No file uploads</li>
+          <li>No AI features</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 export function BillingSection() {
   const { data: session, isPending } = useSession();
   const [isLoading, setIsLoading] = useState(false);
@@ -82,112 +217,12 @@ export function BillingSection() {
       </h2>
 
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="font-medium">Current Plan</p>
-            <p className="text-sm text-muted-foreground">
-              {isPro ? "DevVault Pro" : "Free Tier"}
-            </p>
-          </div>
-          <span
-            className={`px-2 py-1 text-xs font-medium rounded ${
-              isPro
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-secondary-foreground"
-            }`}
-          >
-            {isPro ? "Pro" : "Free"}
-          </span>
-        </div>
+        <PlanBadge isPro={isPro} />
 
         {isPro ? (
-          <div className="space-y-4">
-            <div className="text-sm text-muted-foreground">
-              <p>You have access to all Pro features:</p>
-              <ul className="list-disc list-inside mt-2 space-y-1">
-                <li>Unlimited items and collections</li>
-                <li>File uploads (images and documents)</li>
-                <li>AI-powered features</li>
-                <li>Custom item types</li>
-                <li>Export functionality</li>
-              </ul>
-            </div>
-            <Button
-              variant="outline"
-              onClick={handleManageBilling}
-              disabled={isLoading}
-            >
-              Manage Subscription
-            </Button>
-          </div>
+          <ProSubscription onManageBilling={handleManageBilling} isLoading={isLoading} />
         ) : (
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="border border-border rounded-lg p-4 cursor-pointer hover:border-primary transition-colors">
-                <h3 className="font-medium">Monthly</h3>
-                <p className="text-sm text-muted-foreground">$8/month</p>
-                <Button
-                  className="w-full mt-4"
-                  onClick={() => handleUpgrade(false)}
-                  disabled={isLoading}
-                >
-                  Upgrade Monthly
-                </Button>
-              </div>
-
-              <div className="border border-primary rounded-lg p-4 cursor-pointer hover:border-primary transition-colors">
-                <h3 className="font-medium">Annual</h3>
-                <p className="text-sm text-muted-foreground">$72/year (Save 25%)</p>
-                <Button
-                  className="w-full mt-4"
-                  onClick={() => handleUpgrade(true)}
-                  disabled={isLoading}
-                >
-                  Upgrade Annual
-                </Button>
-              </div>
-            </div>
-
-            {billingStatus?.usage && (
-              <div className="space-y-2">
-                <p className="font-medium text-sm">Current Usage</p>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>Items</span>
-                    <span>{billingStatus.usage.items.current} / {billingStatus.usage.items.limit}</span>
-                  </div>
-                  <div className="w-full bg-secondary rounded-full h-2">
-                    <div
-                      className="bg-primary h-2 rounded-full transition-all"
-                      style={{ width: `${Math.min(billingStatus.usage.items.percentage, 100)}%` }}
-                    />
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span>Collections</span>
-                    <span>{billingStatus.usage.collections.current} / {billingStatus.usage.collections.limit}</span>
-                  </div>
-                  <div className="w-full bg-secondary rounded-full h-2">
-                    <div
-                      className="bg-primary h-2 rounded-full transition-all"
-                      style={{ width: `${Math.min(billingStatus.usage.collections.percentage, 100)}%` }}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="text-sm text-muted-foreground">
-              <p className="font-medium mb-2">Free Tier Limits:</p>
-              <ul className="list-disc list-inside space-y-1">
-                <li>50 items</li>
-                <li>3 collections</li>
-                <li>No file uploads</li>
-                <li>No AI features</li>
-              </ul>
-            </div>
-          </div>
+          <FreeTierInfo usage={billingStatus?.usage ?? null} onUpgrade={handleUpgrade} isLoading={isLoading} />
         )}
       </div>
     </section>

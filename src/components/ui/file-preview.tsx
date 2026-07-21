@@ -2,7 +2,7 @@
 
 import { X, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { formatFileSize } from "@/lib/format-utils"
+import { formatFileSize } from "@/lib/format-file-size"
 
 interface FilePreviewProps {
   type: "image" | "file"

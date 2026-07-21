@@ -14,6 +14,66 @@ interface EditorContentProps {
   aiAccess?: boolean;
 }
 
+function EditorInput({
+  itemTypeName,
+  editData,
+  setEditData,
+}: {
+  itemTypeName: string;
+  editData: EditData;
+  setEditData: (data: EditData) => void;
+}) {
+  if (CODE_TYPES.includes(itemTypeName)) {
+    return (
+      <CodeEditor
+        value={editData.content}
+        onChange={(v) => setEditData({ ...editData, content: v })}
+        language={editData.language || "plaintext"}
+        placeholder="Add content..."
+      />
+    );
+  }
+  return (
+    <MarkdownEditor
+      value={editData.content}
+      onChange={(v) => setEditData({ ...editData, content: v })}
+      placeholder="Add content..."
+    />
+  );
+}
+
+function ReadOnlyContent({
+  item,
+  aiAccess,
+  content,
+}: {
+  item: ItemDetail;
+  aiAccess: boolean;
+  content: string;
+}) {
+  if (CODE_TYPES.includes(item.itemType.name)) {
+    return (
+      <CodeExplainViewer
+        itemId={item.id}
+        itemType={item.itemType.name as "Snippet" | "Command"}
+        content={content}
+        language={item.language || undefined}
+        aiAccess={aiAccess}
+      />
+    );
+  }
+  if (item.itemType.name === "Prompt") {
+    return (
+      <PromptOptimizeViewer
+        itemId={item.id}
+        content={content}
+        aiAccess={aiAccess}
+      />
+    );
+  }
+  return <MarkdownEditor value={content} readOnly />;
+}
+
 export function EditorContent({
   item,
   isEditing,
@@ -23,42 +83,19 @@ export function EditorContent({
 }: EditorContentProps) {
   if (!EDITABLE_TYPES.includes(item.itemType.name)) return null;
 
+  const itemContent = item.content ?? "";
+
   return (
     <div className="space-y-2">
       <h3 className="text-sm font-medium text-foreground">Content</h3>
       {isEditing ? (
-        CODE_TYPES.includes(item.itemType.name) ? (
-          <CodeEditor
-            value={editData.content}
-            onChange={(v) => setEditData({ ...editData, content: v })}
-            language={editData.language || "plaintext"}
-            placeholder="Add content..."
-          />
-        ) : (
-          <MarkdownEditor
-            value={editData.content}
-            onChange={(v) => setEditData({ ...editData, content: v })}
-            placeholder="Add content..."
-          />
-        )
+        <EditorInput
+          itemTypeName={item.itemType.name}
+          editData={editData}
+          setEditData={setEditData}
+        />
       ) : item.content ? (
-        CODE_TYPES.includes(item.itemType.name) ? (
-          <CodeExplainViewer
-            itemId={item.id}
-            itemType={item.itemType.name as "Snippet" | "Command"}
-            content={item.content}
-            language={item.language || undefined}
-            aiAccess={aiAccess ?? false}
-          />
-        ) : item.itemType.name === "Prompt" ? (
-          <PromptOptimizeViewer
-            itemId={item.id}
-            content={item.content}
-            aiAccess={aiAccess ?? false}
-          />
-        ) : (
-          <MarkdownEditor value={item.content} readOnly />
-        )
+        <ReadOnlyContent item={item} aiAccess={aiAccess ?? false} content={itemContent} />
       ) : (
         <p className="text-sm text-muted-foreground/50 italic">No content</p>
       )}

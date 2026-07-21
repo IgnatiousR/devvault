@@ -7,12 +7,11 @@ import { cn } from "@/lib/utils";
 import { PasswordInput } from "./password-input";
 import { EmailInput } from "./email-input";
 import { registerSchema } from "@/lib/schemas";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { useAuthForm } from "@/hooks/use-auth-form";
 import { AuthFormField } from "./auth-form-field";
 import { AuthFormDivider } from "./auth-form-divider";
 import { RegistrationSuccess } from "./registration-success";
+import { FormErrorAlert, FormSubmitButton } from "./auth-form-components";
 
 interface RegisterFormProps {
   callbackURL?: string;
@@ -89,14 +88,7 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
         </p>
       </div>
 
-      {error && (
-        <div
-          role="alert"
-          className="rounded-md bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-500"
-        >
-          {error}
-        </div>
-      )}
+      <FormErrorAlert error={error} />
 
       <form onSubmit={handleEmailSignUp} className="space-y-4">
         <AuthFormField htmlFor="name" label="Name" error={fieldErrors.name}>
@@ -142,14 +134,11 @@ export function RegisterForm({ callbackURL = "/dashboard", className }: Register
           />
         </AuthFormField>
 
-        <Button
-          type="submit"
-          disabled={loading}
-          className="flex w-full items-center justify-center gap-2 rounded-md bg-red-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-600 disabled:opacity-50"
-        >
-          {loading && <Spinner size="sm" />}
-          {loading ? "Creating account..." : "Create Account"}
-        </Button>
+        <FormSubmitButton
+          loading={loading}
+          label="Create Account"
+          loadingLabel="Creating account..."
+        />
       </form>
 
       <AuthFormDivider callbackURL={callbackURL} />

@@ -9,11 +9,7 @@ import { getItemsByTypeCount } from "@/lib/db/items";
 import { getSidebarCollections } from "@/lib/db/collections";
 import { EditorPreferencesProvider } from "@/contexts/editor-preferences-context";
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -36,14 +32,9 @@ export default async function DashboardLayout({
     getSidebarCollections(session.user.id),
   ]);
 
-  const serializedCollections = collections.map((c) => ({
-    ...c,
-    mostUsedType: c.mostUsedType,
-  }));
-
   return (
     <SidebarProvider>
-      <AppSidebar itemTypes={itemTypesByCount} collections={serializedCollections} isPro={user.isPro} />
+      <AppSidebar itemTypes={itemTypesByCount} collections={collections} isPro={user.isPro} />
       <SidebarInset>
         <SearchWrapper isPro={user.isPro} />
         <main className="min-h-screen">

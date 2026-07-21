@@ -1,19 +1,18 @@
 import { NextRequest, NextResponse } from "next/server"
-import { headers } from "next/headers"
 import { PutObjectCommand } from "@aws-sdk/client-s3"
-import { auth } from "@/lib/auth"
+import { requireAuth } from "@/lib/api-utils"
 import { filebaseClient, FILEBASE_BUCKET, getFilebaseKey, validateFileUpload } from "@/lib/filebase"
 import { requireProForFeature } from "@/lib/usage-limits"
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth.api.getSession({ headers: await headers() })
-    if (!session?.user) {
+    const user = await requireAuth()
+    if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     try {
-      await requireProForFeature(session.user.id, "fileUpload")
+      await requireProForFeature(user.id, "fileUpload")
     } catch (error) {
       return NextResponse.json(
         { error: error instanceof Error ? error.message : "Pro subscription required" },
@@ -30,7 +29,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: validation.error }, { status: 400 })
     }
 
-    const key = getFilebaseKey(session.user.id, file!.name)
+    const key = getFilebaseKey(user.id, file!.name)
     const buffer = Buffer.from(await file!.arrayBuffer())
 
     await filebaseClient.send(

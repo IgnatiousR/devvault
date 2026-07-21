@@ -1,4 +1,4 @@
-import { formatFileSize } from "@/lib/format-utils";
+import { formatFileSize } from "@/lib/format-file-size";
 import { FILE_TYPES, IMAGE_TYPES } from "@/lib/item-types";
 import type { ItemDetail } from "@/types/dashboard";
 
